@@ -67,7 +67,6 @@ button {
   
   
   .left-footer{
-    top: 100%;
     display: flex;
     /* justify-content: space-between; */
     justify-content: center; 
@@ -253,42 +252,24 @@ a{
   @media screen and (max-width: 850px) {
     .container{
       position: relative;
-      display: flex;
+      display: block;
       flex-direction: row; /* Chuyển sang chế độ dàn trải theo hàng */
-      align-items: center;
-      justify-items: center; /* Canh giữa các phần tử theo chiều ngang */
-
-
       
     }
     .right-part{
       visibility: visible;
         position: absolute;
-        left: 15%;
         top: 0;
         order: 1;
         width: 100vw;
         height: 30vh;
         
       }
-      img{
-        width: 360px;
-        height: 120px;
-        border-radius: 10px;
-      }
   
       .left-part{
-        position: absolute;
-        align-items: center;
-
-        top: 13% ;
         order: 2;
-        width: 95vw;
-        font-size: 1.5vh;
+        width: 100vw;
+        font-size: 1.0vh;
         height:20%;
-    }
-    .left-footer{
-      position: absolute;
-      top: 600px;
     }
   }

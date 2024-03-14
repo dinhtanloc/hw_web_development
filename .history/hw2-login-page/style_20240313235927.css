@@ -253,18 +253,14 @@ a{
   @media screen and (max-width: 850px) {
     .container{
       position: relative;
-      display: flex;
+      display: block;
       flex-direction: row; /* Chuyển sang chế độ dàn trải theo hàng */
-      align-items: center;
-      justify-items: center; /* Canh giữa các phần tử theo chiều ngang */
-
-
       
     }
     .right-part{
       visibility: visible;
         position: absolute;
-        left: 15%;
+        align-items: center;
         top: 0;
         order: 1;
         width: 100vw;
@@ -272,23 +268,16 @@ a{
         
       }
       img{
-        width: 360px;
-        height: 120px;
-        border-radius: 10px;
+        width: 50%;
+        height: 50%;
       }
   
       .left-part{
         position: absolute;
-        align-items: center;
-
-        top: 13% ;
+        top: 50% ;
         order: 2;
-        width: 95vw;
-        font-size: 1.5vh;
+        width: 100vw;
+        font-size: 1.0vh;
         height:20%;
-    }
-    .left-footer{
-      position: absolute;
-      top: 600px;
     }
   }

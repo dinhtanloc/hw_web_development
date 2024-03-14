@@ -32,7 +32,7 @@ img {
 }
 .left-part-container{
     position: absolute;
-    top:-3%;
+    top:5%;
     padding: 3vw;
     width: 100%;
     height: 88%;
@@ -43,7 +43,7 @@ img {
 .right-part{
     background-color: ffff;
     width: 43vw; 
-    height: 120vh;
+    height: 95vh;
     justify-content: center; 
     /* align-items: left;  */
     /* display: block; */
@@ -60,23 +60,21 @@ button {
 
 
 .sign-in-btn,.google-login,.facebook-login{
-    width: 350px;
-    height:40px;
-  }
-  
-  
-  
-  .left-footer{
-    top: 100%;
+    width: 388px;
+    height:52px;
+}
+
+
+
+.left-footer{
     display: flex;
     /* justify-content: space-between; */
     justify-content: center; 
     align-items: center; 
     width: 100%
-  }
-  
-  .input-field{
-    height:10px;
+}
+
+.input-field{
     background-color: #F2F2F2;
     border: 0;
     padding: 15px;
@@ -253,42 +251,24 @@ a{
   @media screen and (max-width: 850px) {
     .container{
       position: relative;
-      display: flex;
+      display: block;
       flex-direction: row; /* Chuyển sang chế độ dàn trải theo hàng */
-      align-items: center;
-      justify-items: center; /* Canh giữa các phần tử theo chiều ngang */
-
-
       
     }
     .right-part{
-      visibility: visible;
+      visibility: hidden;
         position: absolute;
-        left: 15%;
         top: 0;
         order: 1;
         width: 100vw;
         height: 30vh;
         
       }
-      img{
-        width: 360px;
-        height: 120px;
-        border-radius: 10px;
-      }
   
       .left-part{
-        position: absolute;
-        align-items: center;
-
-        top: 13% ;
         order: 2;
-        width: 95vw;
-        font-size: 1.5vh;
+        width: 100vw;
+        font-size: 1.0vh;
         height:20%;
-    }
-    .left-footer{
-      position: absolute;
-      top: 600px;
     }
   }

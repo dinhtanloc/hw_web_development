@@ -288,7 +288,7 @@ a{
         height:20%;
     }
     .left-footer{
-      position: absolute;
-      top: 600px;
+      /* position: absolute; */
+      top: 260px;
     }
   }

@@ -3,7 +3,6 @@ body{
 }
 .container{
     display: grid;
-    flex-direction: column;
     grid-template-columns: 1fr 1fr; /* Tạo hai cột có kích thước bằng nhau */
     justify-items: center; /* Canh giữa các phần tử theo chiều ngang */
     align-items: center; /* Canh giữa các phần tử theo chiều dọc */
@@ -30,20 +29,10 @@ img {
     height: 100vh;
     /* display: block; */
 }
-.left-part-container{
-    position: absolute;
-    top:-3%;
-    padding: 3vw;
-    width: 100%;
-    height: 88%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
 .right-part{
     background-color: ffff;
     width: 43vw; 
-    height: 120vh;
+    height: 95vh;
     justify-content: center; 
     /* align-items: left;  */
     /* display: block; */
@@ -60,23 +49,29 @@ button {
 
 
 .sign-in-btn,.google-login,.facebook-login{
-    width: 350px;
-    height:40px;
-  }
-  
-  
-  
-  .left-footer{
-    top: 100%;
+    width: 388px;
+    height:52px;
+}
+
+.left-part-container{
+    padding: 3vw;
+    width: 100%;
+    height: 88%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.left-footer{
     display: flex;
     /* justify-content: space-between; */
     justify-content: center; 
     align-items: center; 
     width: 100%
-  }
-  
-  .input-field{
-    height:10px;
+}
+
+.input-field{
     background-color: #F2F2F2;
     border: 0;
     padding: 15px;
@@ -237,7 +232,7 @@ a{
 
   @media screen and (max-width: 1200px) {
     .right-part{
-        visibility: visible;
+        visibility: hidden;
         width: 0px;
         height: 0px;
     }
@@ -250,45 +245,18 @@ a{
     }
   }
 
-  @media screen and (max-width: 850px) {
-    .container{
-      position: relative;
-      display: flex;
-      flex-direction: row; /* Chuyển sang chế độ dàn trải theo hàng */
-      align-items: center;
-      justify-items: center; /* Canh giữa các phần tử theo chiều ngang */
-
-
-      
-    }
+  @media screen and (max-width: 844px) {
     .right-part{
-      visibility: visible;
-        position: absolute;
-        left: 15%;
-        top: 0;
-        order: 1;
-        width: 100vw;
-        height: 30vh;
-        
-      }
-      img{
-        width: 360px;
-        height: 120px;
-        border-radius: 10px;
-      }
-  
-      .left-part{
-        position: absolute;
-        align-items: center;
-
-        top: 13% ;
-        order: 2;
-        width: 95vw;
-        font-size: 1.5vh;
-        height:20%;
+        visibility: hidden;
+        width: 0px;
+        height: 0px;
     }
-    .left-footer{
-      position: absolute;
-      top: 600px;
+    .container{
+        display: block;
+    }
+    .left-part{
+        width: 100vw;
+        font-size: 1.5vh;
+        height:50vh;
     }
   }

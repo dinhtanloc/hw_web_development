@@ -281,14 +281,10 @@ a{
         position: absolute;
         align-items: center;
 
-        top: 13% ;
+        top: 12% ;
         order: 2;
-        width: 95vw;
-        font-size: 1.5vh;
+        width: 100vw;
+        font-size: 1.0vh;
         height:20%;
-    }
-    .left-footer{
-      position: absolute;
-      top: 600px;
     }
   }
