@@ -1,0 +1,39 @@
+Phân biệt State và Prop
+ 
+ Prop:
+ vd:
+
+ MyProfile.jsx
+    import lib // import package for prj
+    const MyProfile = (props) => {
+        <p>{props.name}</p>
+        <p>{props.age}</p>
+
+    }
+
+    export default MyProfile;
+
+props đóng vai trò như một tham số trong component
+
+State:
+state đóng vai trò khá giống một biến số được hiển thị tĩnh trên phần nội dung html
+
+    App.jsx
+    import package // import package for prj
+
+    function App() {
+    return (
+        <>
+        const [myvalue]= useState('Hello')
+        <p>{myvalue}</p> Hiển thị Hello
+        <MyProfile
+        name:20
+        age:30
+        />
+        </>
+    );
+    }
+
+    export default App;
+
+
