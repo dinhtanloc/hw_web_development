@@ -9,7 +9,7 @@ const LoginPage = () => {
     const onLoginClick = () => {
         console.log("email vua nhap: " + email)
         console.log("password vua nhap: " + password)
-        if (email === "admin@gmail.com" || password === "admin123"){
+        if (email === "admin@gmail.com" && password === "31221020226"){
             router.replace("/")
         }
         else{
