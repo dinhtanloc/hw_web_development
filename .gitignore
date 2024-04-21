@@ -1,3 +1,4 @@
 *.zip
 .history
 test
+.env
