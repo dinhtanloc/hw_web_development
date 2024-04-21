@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import "../styles/login.css";
+import { callAPI } from "../utils/api-caller";
+import axios from 'axios'
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isSignUpActive, setIsSignUpActive] = useState(false);
 
   const handleSignUpClick = () => {
@@ -14,9 +18,35 @@ const Login = () => {
     setIsSignUpActive(false);
   };
 
-  const handleLogin = () => {
-    // Xử lý logic đăng nhập ở đây
-    console.log(`Email: ${email}, Password: ${password}`);
+  // const handleLogin = () => {
+  //   // Xử lý logic đăng nhập ở đây
+  //   console.log(`Email: ${email}, Password: ${password}`);
+  // };
+  const URL_SERVER = 'http://localhost:8000';
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      // const response = await callAPI('/accounts/login/', 'POST', {
+      //   email: email,
+      //   password: password
+      // });
+      const response = await axios.post(`${URL_SERVER}/accounts/login/`, {
+        email: email,
+        password: password
+      });
+      console.log('bibi'); // Thực hiện xử lý dữ liệu trả về từ API
+      console.log(response.data); // Thực hiện xử lý dữ liệu trả về từ API
+
+      // Reset form fields
+      setEmail('');
+      setPassword('');
+      setError('');
+    } catch (error) {
+      console.error(error); // Xử lý lỗi nếu có
+      setError('Invalid credentials');
+    }
   };
 
   // Tạo một biến để lưu trạng thái "right-panel-active"
@@ -40,8 +70,10 @@ const Login = () => {
             <button className='Angel' onClick={handleSignUpClick}>Sign Up</button>
           </form>
         </div>
+
+        {/* form signin */}
         <div className="form-container sign-in-container">
-          <form className='form_title' action="#">
+          <form className='form_title' action="#" onSubmit={handleLogin}>
             <h1 className="h1_title">Sign in</h1>
             <div className="social-container">
               <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
@@ -49,8 +81,8 @@ const Login = () => {
               <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
             </div>
             <span className="span_title">or use your account</span>
-            <input className='input_title' type="email" placeholder="Email" />
-            <input className='input_title' type="password" placeholder="Password" />
+            <input className='input_title'  type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input className='input_title' type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <a className="a_title" href="#">Forgot your password?</a>
             <button className='Angel' onClick={handleSignInClick}>Sign In</button>
           </form>
