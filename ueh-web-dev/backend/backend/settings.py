@@ -64,8 +64,17 @@ MIDDLEWARE = [
     # 'accounts.middleware.jwt_middleware.JWTMiddleware',  # Thêm middleware của bạn vào đây
 
 ]
-REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": [
-    "rest_framework.permissions.AllowAny"]}
+
+AUTH_USER_MODEL = 'accounts.AppUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    }
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -96,7 +105,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_mame'),
+        'NAME': os.getenv('DB_name'),
         'USER': os.getenv('DB_user'),
         'PASSWORD': os.getenv('DB_password'),
         'HOST': 'localhost',
@@ -140,9 +149,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIR=[
-    os.path.join(FRONTEND_DIR,'public')
-]
+# STATICFILES_DIR=[
+#     # os.path.join(FRONTEND_DIR,'public')
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

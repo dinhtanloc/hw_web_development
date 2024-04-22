@@ -1,5 +1,5 @@
 *.zip
 .history
 test
-.env
+*.env
 __pycache__

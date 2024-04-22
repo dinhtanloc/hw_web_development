@@ -1,11 +1,11 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
 from . import views
 
-app_name = 'accounts'
 
+app_name='accounts'
 urlpatterns = [
-    path('login/', views.login_view,name='login'),
-    # path('logout/', auth_views.LogoutView.as_view(), name="logout"),
-    # path('signup/', views.SignUp.as_view(), name="signup"),
+	path('register/', views.UserRegister.as_view(), name='register'),
+	path('login/', views.UserLogin.as_view(), name='login'),
+	path('logout/', views.UserLogout.as_view(), name='logout'),
+	path('user/', views.UserView.as_view(), name='user'),
 ]

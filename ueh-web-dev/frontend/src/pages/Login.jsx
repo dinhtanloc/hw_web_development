@@ -3,6 +3,13 @@ import "../styles/login.css";
 import { callAPI } from "../utils/api-caller";
 import axios from 'axios'
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = true;
+
+const client = axios.create({
+  baseURL: "http://127.0.0.1:8000"
+});
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -22,32 +29,95 @@ const Login = () => {
   //   // Xử lý logic đăng nhập ở đây
   //   console.log(`Email: ${email}, Password: ${password}`);
   // };
-  const URL_SERVER = 'http://localhost:8000';
+  // const URL_SERVER = 'http://localhost:8000';
 
-  const handleLogin = async (e) => {
+  useEffect(() => {
+    client.get("/api/user")
+    .then(function(res) {
+      setCurrentUser(true);
+    })
+    .catch(function(error) {
+      setCurrentUser(false);
+    });
+  }, []);
+
+  function update_form_btn() {
+    if (registrationToggle) {
+      setRegistrationToggle(false);
+    } else {
+      setRegistrationToggle(true);
+    }
+  }
+
+  function submitRegistration(e) {
     e.preventDefault();
+    client.post(
+      "/api/register",
+      {
+        email: email,
+        username: username,
+        password: password
+      }
+    ).then(function(res) {
+      client.post(
+        "/api/login",
+        {
+          email: email,
+          password: password
+        }
+      ).then(function(res) {
+        setCurrentUser(true);
+      });
+    });
+  }
 
-    try {
-      // const response = await callAPI('/accounts/login/', 'POST', {
-      //   email: email,
-      //   password: password
-      // });
-      const response = await axios.post(`${URL_SERVER}/accounts/login/`, {
+  function submitLogin(e) {
+    e.preventDefault();
+    client.post(
+      "/api/login",
+      {
         email: email,
         password: password
-      });
-      console.log('bibi'); // Thực hiện xử lý dữ liệu trả về từ API
-      console.log(response.data); // Thực hiện xử lý dữ liệu trả về từ API
+      }
+    ).then(function(res) {
+      setCurrentUser(true);
+    });
+  }
+// to log out from our account
+  function submitLogout(e) {
+    e.preventDefault();
+    client.post(
+      "/api/logout",
+      {withCredentials: true}
+    ).then(function(res) {
+      setCurrentUser(false);
+    });
+  }
 
-      // Reset form fields
-      setEmail('');
-      setPassword('');
-      setError('');
-    } catch (error) {
-      console.error(error); // Xử lý lỗi nếu có
-      setError('Invalid credentials');
-    }
-  };
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // const response = await callAPI('/accounts/login/', 'POST', {
+  //     //   email: email,
+  //     //   password: password
+  //     // });
+  //     const response = await axios.post(`${URL_SERVER}/accounts/login/`, {
+  //       email: email,
+  //       password: password
+  //     });
+  //     console.log('bibi'); // Thực hiện xử lý dữ liệu trả về từ API
+  //     console.log(response.data); // Thực hiện xử lý dữ liệu trả về từ API
+
+  //     // Reset form fields
+  //     setEmail('');
+  //     setPassword('');
+  //     setError('');
+  //   } catch (error) {
+  //     console.error(error); // Xử lý lỗi nếu có
+  //     setError('Invalid credentials');
+  //   }
+  // };
 
   // Tạo một biến để lưu trạng thái "right-panel-active"
   const containerClassName = isSignUpActive ? 'container_title right-panel-active' : 'container_title';
@@ -55,8 +125,9 @@ const Login = () => {
   return (
     <>
       <div className={containerClassName}>
+      {/* // To sign up */}
         <div className="form-container sign-up-container">
-          <form className='form_title' action="#">
+          <form className='form_title' onSubmit={e => submitRegistration(e)}>
             <h1 className="h1_title">Create Account</h1>
             <div className="social-container">
               <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
@@ -64,16 +135,16 @@ const Login = () => {
               <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
             </div>
             <span className="span_title">or use your email for registration</span>
-            <input className='input_title' type="text" placeholder="Name" />
-            <input className='input_title' type="email" placeholder="Email" />
-            <input className='input_title' type="password" placeholder="Password" />
+            <input className='input_title' type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)} />
+            <input className='input_title' type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+            <input className='input_title' type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
             <button className='Angel' onClick={handleSignUpClick}>Sign Up</button>
           </form>
         </div>
 
         {/* form signin */}
         <div className="form-container sign-in-container">
-          <form className='form_title' action="#" onSubmit={handleLogin}>
+          <form className='form_title' action="#" onSubmit={e => submitLogin(e)}>
             <h1 className="h1_title">Sign in</h1>
             <div className="social-container">
               <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
