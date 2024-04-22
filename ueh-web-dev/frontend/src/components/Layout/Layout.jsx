@@ -24,8 +24,8 @@ const Layout = () => {
       {isLoginPage ? null : (
         <Fragment>
           <Header />
-          <Routers />
-          <Footer />
+          {/* <Routers /> */}
+          {/* <Footer /> */}
         </Fragment>
       )}
     </>

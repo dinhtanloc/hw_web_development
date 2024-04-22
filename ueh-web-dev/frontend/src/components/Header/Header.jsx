@@ -28,7 +28,7 @@ const navLinks = [
   },
 ];
 
-const Header = () => {
+const Header = ({ currentUser }) => {
   const menuRef = useRef(null);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
@@ -50,13 +50,35 @@ const Header = () => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                <Link to="/login" className=" d-flex align-items-center gap-1">
+              {currentUser ? (
+                  <>
+                    <span>Welcome, {currentUser.name}</span>
+                    <Link to="/profile">
+                      <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" />
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" className=" d-flex align-items-center gap-1">
+                      <i className="ri-login-circle-line"></i> Login
+                    </Link>
+
+                    <Link to="#" className=" d-flex align-items-center gap-1">
+                      <i className="ri-user-line"></i> Register
+                    </Link>
+                  </>
+                )}
+
+
+
+
+                {/* <Link to="/login" className=" d-flex align-items-center gap-1">
                   <i className="ri-login-circle-line"></i> Login
                 </Link>
 
                 <Link to="#" className=" d-flex align-items-center gap-1">
                   <i className="ri-user-line"></i> Register
-                </Link>
+                </Link> */}
               </div>
             </Col>
           </Row>

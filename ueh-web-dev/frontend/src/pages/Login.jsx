@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import "../styles/login.css";
-import { callAPI } from "../utils/api-caller";
 import axios from 'axios'
+import { useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
+  baseURL: "http://localhost:8000"
 });
 
 const Login = () => {
+  const [currentUser, setCurrentUser] = useState();
+  const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isSignUpActive, setIsSignUpActive] = useState(false);
 
   const handleSignUpClick = () => {
@@ -25,14 +32,8 @@ const Login = () => {
     setIsSignUpActive(false);
   };
 
-  // const handleLogin = () => {
-  //   // Xử lý logic đăng nhập ở đây
-  //   console.log(`Email: ${email}, Password: ${password}`);
-  // };
-  // const URL_SERVER = 'http://localhost:8000';
-
   useEffect(() => {
-    client.get("/api/user")
+    client.get("/accounts/user/")
     .then(function(res) {
       setCurrentUser(true);
     })
@@ -41,18 +42,10 @@ const Login = () => {
     });
   }, []);
 
-  function update_form_btn() {
-    if (registrationToggle) {
-      setRegistrationToggle(false);
-    } else {
-      setRegistrationToggle(true);
-    }
-  }
-
   function submitRegistration(e) {
     e.preventDefault();
     client.post(
-      "/api/register",
+      "/accounts/register/",
       {
         email: email,
         username: username,
@@ -60,7 +53,7 @@ const Login = () => {
       }
     ).then(function(res) {
       client.post(
-        "/api/login",
+        "/accounts/login/",
         {
           email: email,
           password: password
@@ -74,7 +67,7 @@ const Login = () => {
   function submitLogin(e) {
     e.preventDefault();
     client.post(
-      "/api/login",
+      "/accounts/login/",
       {
         email: email,
         password: password
@@ -83,45 +76,41 @@ const Login = () => {
       setCurrentUser(true);
     });
   }
-// to log out from our account
+
   function submitLogout(e) {
     e.preventDefault();
     client.post(
-      "/api/logout",
+      "/accounts/logout/",
       {withCredentials: true}
     ).then(function(res) {
       setCurrentUser(false);
     });
   }
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     // const response = await callAPI('/accounts/login/', 'POST', {
-  //     //   email: email,
-  //     //   password: password
-  //     // });
-  //     const response = await axios.post(`${URL_SERVER}/accounts/login/`, {
-  //       email: email,
-  //       password: password
-  //     });
-  //     console.log('bibi'); // Thực hiện xử lý dữ liệu trả về từ API
-  //     console.log(response.data); // Thực hiện xử lý dữ liệu trả về từ API
-
-  //     // Reset form fields
-  //     setEmail('');
-  //     setPassword('');
-  //     setError('');
-  //   } catch (error) {
-  //     console.error(error); // Xử lý lỗi nếu có
-  //     setError('Invalid credentials');
-  //   }
-  // };
-
   // Tạo một biến để lưu trạng thái "right-panel-active"
   const containerClassName = isSignUpActive ? 'container_title right-panel-active' : 'container_title';
-
+  if (currentUser) {
+    return (
+      <div>
+        <Navbar bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand>Authentication App</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+              <Navbar.Text>
+                <form onSubmit={e => submitLogout(e)}>
+                  <Button type="submit" variant="light">Log out</Button>
+                </form>
+              </Navbar.Text>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+          <div className="center">
+            <h2>You're logged in!</h2>
+          </div>
+        </div>
+    );
+  }
   return (
     <>
       <div className={containerClassName}>
