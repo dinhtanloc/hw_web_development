@@ -8,15 +8,36 @@ import Routers from "../../routers/Routers";
 
 const Layout = () => {
   const location = useLocation();
+  const [currentUser, setCurrentUser] = useState();
+  useEffect(() => {
+    client.get("/accounts/user/")
+    .then(function(res) {
+      setCurrentUser(true);
+    })
+    .catch(function(error) {
+      setCurrentUser(false);
+    });
+  }, []);
+
 
   // Kiểm tra xem URL hiện tại có phải là trang login không
+  if(currentUser){
+    return(
+      <Fragment>
+      <Header currentUser={currentUser} />
+      <Routers />
+      <Footer />
+    </Fragment>
+
+    )
+  }
   const isLoginPage = location.pathname === "/login";
   return (
+    
     <>
       {isLoginPage && (
         <div className="login_outside" style={{ width: '100vw', height: '100vh' }}>
           <Login />
-
         </div>
       )}
 
@@ -24,8 +45,8 @@ const Layout = () => {
       {isLoginPage ? null : (
         <Fragment>
           <Header />
-          {/* <Routers /> */}
-          {/* <Footer /> */}
+          <Routers />
+          <Footer />
         </Fragment>
       )}
     </>
