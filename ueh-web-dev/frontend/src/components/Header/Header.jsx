@@ -3,7 +3,7 @@ import { jwtDecode }  from "jwt-decode";
 import { Container, Row, Col } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
-import AuthContext from '../context/AuthContext'
+import AuthContext from '../../context/AuthContext.jsx'
 
 
 const navLinks = [
@@ -76,8 +76,9 @@ const Header = ({ currentUser }) => {
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}
+                    <span>Welcome, {currentUser}</span>
                     <Link to="/profile" className=" d-flex align-items-center gap-1">
-                      <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" />
+                      {/* <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" /> */}
                     </Link>
                     <Link to="#" className=" d-flex align-items-center gap-1">
                       <i className="ri-user-line"></i> Logout

@@ -80,7 +80,7 @@ INSTALLED_APPS = [
 
     # custom
     'app',
-    'accounts'
+    'accounts',
 
     # Third Party
     'import_export',
