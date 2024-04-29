@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
-
+import React, { useRef, useContext, useState } from "react";
+import { jwtDecode }  from "jwt-decode";
 import { Container, Row, Col } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
+import AuthContext from '../context/AuthContext'
+
 
 const navLinks = [
   {
@@ -28,7 +30,28 @@ const navLinks = [
   },
 ];
 
+
 const Header = ({ currentUser }) => {
+  const {user, logoutUser} = useContext(AuthContext);
+
+  const token = localStorage.getItem("authTokens")
+
+  if (token){
+    const decoded = jwtDecode(token) 
+    var user_id = decoded.user_id
+  }
+
+
+  const handleLogout = e => {
+    e.preventDefault()
+    
+    setCurrentUser(false)
+    logoutUser()
+
+  
+  }
+
+
   const menuRef = useRef(null);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
@@ -52,9 +75,12 @@ const Header = ({ currentUser }) => {
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
               {currentUser ? (
                   <>
-                    <span>Welcome, {currentUser.name}</span>
-                    <Link to="/profile">
+                    {/* <span>Welcome, {currentUser.name}</span> */}
+                    <Link to="/profile" className=" d-flex align-items-center gap-1">
                       <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" />
+                    </Link>
+                    <Link to="#" className=" d-flex align-items-center gap-1">
+                      <i className="ri-user-line"></i> Logout
                     </Link>
                   </>
                 ) : (

@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import "../styles/login.css";
 import axios from 'axios'
+import { jwtDecode }  from "jwt-decode";
+import AuthContext from '../context/AuthContext'
+import useAxios from "../utils/useAxios"
+
 import { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -8,21 +12,24 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+// axios.defaults.withCredentials = true;
 
 const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
 const Login = () => {
+  const {loginUser} = useContext(AuthContext);
+  const { registerUser } = useContext(AuthContext);
+  const {user, logoutUser} = useContext(AuthContext);
+
   const [currentUser, setCurrentUser] = useState();
   const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignUpActive, setIsSignUpActive] = useState(false);
 
   const handleSignUpClick = () => {
     setIsSignUpActive(true);
@@ -32,85 +39,39 @@ const Login = () => {
     setIsSignUpActive(false);
   };
 
-  useEffect(() => {
-    client.get("/accounts/user/")
-    .then(function(res) {
-      setCurrentUser(true);
-    })
-    .catch(function(error) {
-      setCurrentUser(false);
-    });
-  }, []);
+  // useEffect(() => {
+  //   client.get("/accounts/user/")
+  //   .then(function(res) {
+  //     setCurrentUser(true);
+  //   })
+  //   .catch(function(error) {
+  //      });setCurrentUser(false);
+   
+  // }, []);
 
   function submitRegistration(e) {
-    e.preventDefault();
-    client.post(
-      "/accounts/register/",
-      {
-        email: email,
-        username: username,
-        password: password
-      }
-    ).then(function(res) {
-      client.post(
-        "/accounts/login/",
-        {
-          email: email,
-          password: password
-        }
-      ).then(function(res) {
-        setCurrentUser(true);
-      });
-    });
+    e.preventDefault()
+    registerUser(email, username, password)
   }
 
   function submitLogin(e) {
-    e.preventDefault();
-    client.post(
-      "/accounts/login/",
-      {
-        email: email,
-        password: password
-      }
-    ).then(function(res) {
-      setCurrentUser(true);
-    });
+    e.preventDefault()
+    // const email = e.target.email.value
+    // const password = e.target.password.value
+
+    email.length > 0 && loginUser(email, password)
+    setCurrentUser(true)
+    // console.log('bibi')
+    // const response = await api.get("/test/")
+    // console.log(response.data.response);
+
+    console.log(email)
+    console.log(password)
   }
 
-  function submitLogout(e) {
-    e.preventDefault();
-    client.post(
-      "/accounts/logout/",
-      {withCredentials: true}
-    ).then(function(res) {
-      setCurrentUser(false);
-    });
-  }
 
   // Tạo một biến để lưu trạng thái "right-panel-active"
   const containerClassName = isSignUpActive ? 'container_title right-panel-active' : 'container_title';
-  if (currentUser) {
-    return (
-      <div>
-        <Navbar bg="dark" variant="dark">
-          <Container>
-            <Navbar.Brand>Authentication App</Navbar.Brand>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-              <Navbar.Text>
-                <form onSubmit={e => submitLogout(e)}>
-                  <Button type="submit" variant="light">Log out</Button>
-                </form>
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-          <div className="center">
-            <h2>You're logged in!</h2>
-          </div>
-        </div>
-    );
-  }
   return (
     <>
       <div className={containerClassName}>

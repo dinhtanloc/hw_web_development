@@ -1,54 +1,47 @@
-from django.contrib.auth import get_user_model, login, logout
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.views import APIView
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import User
+
+from .serializers import MyTokenObtainPairSerializer, RegisterSerializer
+
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
-from rest_framework import permissions, status
-from .validations import custom_validation, validate_email, validate_password
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
 
 
-class UserRegister(APIView):
-	permission_classes = (permissions.AllowAny,)
-	@csrf_exempt
-	def post(self, request):
-		clean_data = custom_validation(request.data)
-		serializer = UserRegisterSerializer(data=clean_data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.create(clean_data)
-			if user:
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(status=status.HTTP_400_BAD_REQUEST)
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
-class UserLogin(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
-	@csrf_exempt
-	def post(self, request):
-		data = request.data
-		assert validate_email(data)
-		assert validate_password(data)
-		serializer = UserLoginSerializer(data=data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.check_user(data)
-			login(request, user)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 
 
-class UserLogout(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = ()
-	@csrf_exempt
-	def post(self, request):
-		logout(request)
-		return Response(status=status.HTTP_200_OK)
+# Get All Routes
+
+@api_view(['GET'])
+def getRoutes(request):
+    routes = [
+        '/api/token/',
+        '/api/register/',
+        '/api/token/refresh/'
+    ]
+    return Response(routes)
 
 
-class UserView(APIView):
-	permission_classes = (permissions.IsAuthenticated,)
-	authentication_classes = (SessionAuthentication,)
-	##
-	def get(self, request):
-		serializer = UserSerializer(request.user)
-		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
-
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def testEndPoint(request):
+    if request.method == 'GET':
+        data = f"Congratulation {request.user}, your API just responded to GET request"
+        return Response({'response': data}, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        text = "Hello buddy"
+        data = f'Congratulation your API just responded to POST request with text: {text}'
+        return Response({'response': data}, status=status.HTTP_200_OK)
+    return Response({}, status.HTTP_400_BAD_REQUEST)
