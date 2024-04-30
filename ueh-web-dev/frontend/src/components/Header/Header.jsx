@@ -1,9 +1,11 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useRef, useContext, useState,useEffect } from "react";
 import { jwtDecode }  from "jwt-decode";
 import { Container, Row, Col } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
 import AuthContext from '../../context/AuthContext.jsx'
+import useAxios from "../../utils/useAxios"
+
 
 
 const navLinks = [
@@ -31,8 +33,12 @@ const navLinks = [
 ];
 
 
-const Header = ({ currentUser }) => {
+const Header = () => {
   const {user, logoutUser} = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useState();
+
+  const api = useAxios();
+
 
   const token = localStorage.getItem("authTokens")
 
@@ -50,6 +56,25 @@ const Header = ({ currentUser }) => {
 
   
   }
+
+    useEffect(() => {
+    console.log('okk')
+    const fetchData = async () => {
+      try {
+        console.log('chuan bi truy cap')
+        const res = await api.get("/test/");
+        setCurrentUser(true);
+        const user_login = res.data;
+        console.log('bibi' + user_login);
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
   const menuRef = useRef(null);
@@ -76,7 +101,7 @@ const Header = ({ currentUser }) => {
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}
-                    <span>Welcome, {currentUser}</span>
+                    <span>Welcome, {'Loc'}</span>
                     <Link to="/profile" className=" d-flex align-items-center gap-1">
                       {/* <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" /> */}
                     </Link>

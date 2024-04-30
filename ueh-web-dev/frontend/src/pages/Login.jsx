@@ -24,6 +24,8 @@ const Login = () => {
   const {loginUser} = useContext(AuthContext);
   const { registerUser } = useContext(AuthContext);
   const {user, logoutUser} = useContext(AuthContext);
+  const [isSignUpActive, setIsSignUpActive] = useState(false);
+
 
   const [currentUser, setCurrentUser] = useState();
   const [registrationToggle, setRegistrationToggle] = useState(false);
@@ -40,8 +42,9 @@ const Login = () => {
   };
 
   // useEffect(() => {
-  //   client.get("/accounts/user/")
+  //   client.get("/accounts/test/")
   //   .then(function(res) {
+  //     console.log(res.data);
   //     setCurrentUser(true);
   //   })
   //   .catch(function(error) {
@@ -52,6 +55,8 @@ const Login = () => {
   function submitRegistration(e) {
     e.preventDefault()
     registerUser(email, username, password)
+    setIsSignUpActive(false);
+
   }
 
   function submitLogin(e) {

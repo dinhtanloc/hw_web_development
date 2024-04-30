@@ -9,6 +9,7 @@ const AuthContext = createContext();
 export default AuthContext
 
 export const AuthProvider = ({ children }) => {
+    const navigate =useNavigate()
     const [authTokens, setAuthTokens] = useState(() =>
         localStorage.getItem("authTokens")
             ? JSON.parse(localStorage.getItem("authTokens"))
@@ -46,6 +47,7 @@ export const AuthProvider = ({ children }) => {
             setAuthTokens(data)
             setUser(jwtDecode (data.access))
             localStorage.setItem("authTokens", JSON.stringify(data))
+            console.log('da log in')
             navigate("/") // chuyen trang
             Swal.fire({
                 title: "Login Successful",
