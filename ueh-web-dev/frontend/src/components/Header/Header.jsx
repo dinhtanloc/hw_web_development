@@ -36,6 +36,8 @@ const navLinks = [
 const Header = () => {
   const {user, logoutUser} = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState();
+  const [nameuser, setName] = useState('');
+  const [img,setImage]=useState('');
 
   const api = useAxios();
 
@@ -59,13 +61,15 @@ const Header = () => {
 
     useEffect(() => {
     console.log('okk')
-    const fetchData = async () => {
+    const fetchUser = async () => {
       try {
         console.log('chuan bi truy cap')
         const res = await api.get("/test/");
         setCurrentUser(true);
-        const user_login = res.data;
-        console.log('bibi' + user_login);
+        const name_login = res.data.response.username;
+        console.log('du lieu o day')
+        console.log(name_login);
+        setName(name_login)
       } catch (error) {
         setCurrentUser(false);
         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
@@ -73,14 +77,34 @@ const Header = () => {
       }
     };
 
-    fetchData();
+    const fetchProfile = async () => {
+      try {
+        console.log('chuan bi truy cap vao profile')
+        const res = await api.get("/profile/");
+        setCurrentUser(true);
+        const profile = res.data;
+        var imgUrl = profile.image
+        console.log('profile o day')
+        console.log(imgUrl);
+        setImage(imgUrl)
+        // setName(profile)
+      } catch (error) {
+        setCurrentUser(false);
+        console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
+
+      }
+    };
+
+    fetchUser();
+    fetchProfile();
   }, []);
 
 
   const menuRef = useRef(null);
+  // import img from './default.jpg'
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
-
+  console.log('bibi'+ nameuser)
   return (
     <header className="header">
       {/* ============ header top ============ */}
@@ -101,12 +125,14 @@ const Header = () => {
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}
-                    <span>Welcome, {'Loc'}</span>
+                    {/* <span>{nameuser}</span> */}
+                    
                     <Link to="/profile" className=" d-flex align-items-center gap-1">
-                      {/* <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" /> */}
+                      <img src={img} style ={{width:'20px',height:'20px', marginBottom:'2px'}} alt="Default Image" ></img>
+                      <span>{nameuser}</span>
                     </Link>
                     <Link to="#" className=" d-flex align-items-center gap-1">
-                      <i className="ri-user-line"></i> Logout
+                      <i className="ri-login-circle-line"></i> Logout
                     </Link>
                   </>
                 ) : (
