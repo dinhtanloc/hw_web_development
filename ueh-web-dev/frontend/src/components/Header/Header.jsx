@@ -66,6 +66,8 @@ const Header = () => {
         console.log('chuan bi truy cap')
         const res = await api.get("/test/");
         setCurrentUser(true);
+        console.log('id')
+        console.log(res.data)
         const name_login = res.data.response.username;
         console.log('du lieu o day')
         console.log(name_login);
@@ -131,7 +133,7 @@ const Header = () => {
                       <img src={img} style ={{width:'20px',height:'20px', marginBottom:'2px'}} alt="Default Image" ></img>
                       <span>{nameuser}</span>
                     </Link>
-                    <Link to="#" className=" d-flex align-items-center gap-1">
+                    <Link to="#" className=" d-flex align-items-center gap-1" onClick={handleLogout}>
                       <i className="ri-login-circle-line"></i> Logout
                     </Link>
                   </>

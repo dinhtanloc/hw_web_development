@@ -10,14 +10,18 @@ import NotFound from "../pages/NotFound";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import EditProfile from "../pages/EditProfile";
+import PrivateRoute from "../utils/PrivateRoute";
 
 const Routers = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="/login" element={<Login />} />
+      {/* <PrivateRoute path='/profile/' children = {<Profile />}/> */}
+      <Route path="/profile/" element={<Profile />} />
+      <Route path="/profile/edit/" element={<EditProfile />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/cars" element={<CarListing />} />
       <Route path="/cars/:slug" element={<CarDetails />} />
