@@ -1,13 +1,77 @@
 import React from "react";
 
 const EditProfile = () => {
+    const [formData, setFormData] = useState({
+        full_name: '',
+        username: '',
+        email: '',
+        current_password: '',
+        new_password: '',
+        confirm_password: '',
+        phone:'',
+        job:'',
+        address:'',
+        image:null,
+        bio:''
+    });
 
+    useEffect(() => {
+        fetchUserProfile();
+    }, []);
+
+    const fetchUserProfile = async () => {
+        try {
+            const response = await axios.get('/profile/');
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                full_name: response.data.full_name,
+                username: response.data.username,
+                current_password:response.data.password,
+                email: response.data.email,
+                phone: response.data.phone,
+                job: response.data.job,
+                address: response.data.address,
+                image: response.data.image,
+                bio: response.data.bio
+            }));
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    
     const handleImageChange = (event) => {
-        console.log('chon duoc anh')
-        // const selectedImage = event.target.files[0];
-        // setImage(selectedImage);
-        };
-
+        const selectedImage = event.target.files[0];
+        setFormData({ ...formData, image: selectedImage }); // Lưu hình ảnh vào formData
+    };
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const formDataToSubmit = new FormData();
+            formDataToSubmit.append('full_name', formData.full_name);
+            formDataToSubmit.append('username', formData.username);
+            formDataToSubmit.append('email', formData.email);
+            formDataToSubmit.append('password', formData.password);
+            formDataToSubmit.append('phone', formData.phone);
+            formDataToSubmit.append('job', formData.job);
+            formDataToSubmit.append('address', formData.address);
+            formDataToSubmit.append('image', formData.image); // Thêm hình ảnh vào formData
+            formDataToSubmit.append('bio', formData.bio); // Thêm hình ảnh vào formData
+            await axios.put('/profile/', formDataToSubmit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
+                }
+            });
+            alert('Profile updated successfully');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
   return <>
   <div className="container">
         <div className="row flex-lg-nowrap">
@@ -64,14 +128,20 @@ const EditProfile = () => {
                                     </ul>
                                     <div className="tab-content pt-3">
                                         <div className="tab-pane active">
-                                            <form className="form" noValidate>
+                                            <form className="form" onSubmit={handleSubmit} noValidate>
                                                 <div className="row">
                                                     <div className="col">
                                                         <div className="row">
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Full Name</label>
-                                                                    <input className="form-control" type="text" name="name" placeholder="John Smith" value="" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="text" 
+                                                                    name="full_name"
+                                                                    value={formData.full_name}
+                                                                    onChange={handleChange} 
+                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="col">
@@ -93,7 +163,12 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Email</label>
-                                                                    <input className="form-control" type="text" placeholder="user@example.com" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="text"
+                                                                    defaultValue={formData.email}
+                                                                    placeholder="user@example.com"
+                                                                    disabled />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -124,7 +199,14 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Current Password</label>
-                                                                    <input className="form-control" type="password" placeholder="••••••" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="password"
+                                                                    name="current_password"
+                                                                    value={formData.current_password}
+                                                                    onChange={handleChange}
+                                                                    placeholder="••••••" />
+                                                                    {errors.confirm_password && <p className="error">{errors.current_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -132,7 +214,14 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>New Password</label>
-                                                                    <input className="form-control" type="password" placeholder="••••••" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="password" 
+                                                                    name="new_password"
+                                                                    value={formData.new_password}
+                                                                    onChange={handleChange}
+                                                                    placeholder="••••••" />
+                                                                    {errors.new_password && <p className="error">{errors.new_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -140,7 +229,14 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Confirm <span className="d-none d-xl-inline">Password</span></label>
-                                                                    <input className="form-control" type="password" placeholder="••••••" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="password"
+                                                                    name="confirm_password"
+                                                                    value={formData.confirm_password}
+                                                                    onChange={handleChange} 
+                                                                    placeholder="••••••" />
+                                                                    {errors.confirm_password && <p className="error">{errors.confirm_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>

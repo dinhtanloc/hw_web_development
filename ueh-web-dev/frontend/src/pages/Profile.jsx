@@ -1,11 +1,29 @@
-import React from "react";
+import {React, useEffect} from "react";
 import { Link } from 'react-router-dom';
 import '../styles/profile.css'
+import useAxios from "../../utils/useAxios"
+
 
 
 
 const Profile =()=>{
-    console.log('o trang profile')
+    const [userProfile, setUserProfile] = useState({});
+    const profileAPI = useAxios();
+
+
+    useEffect(() => {
+        fetchUserProfile();
+    }, []);
+
+    const fetchUserProfile = async () => {
+        try {
+            const response = await profileAPI.get('/profile/');
+            setUserProfile(response.data);
+            console.log(userProfile)
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
 
     return(
         <div className="body_div">
@@ -25,9 +43,9 @@ const Profile =()=>{
                                 <div className="d-flex flex-column align-items-center text-center">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="rounded-circle" width="150"/>
                                     <div className="mt-3">
-                                        <h4>John Doe</h4>
-                                        <p className="text-secondary mb-1">Full Stack Developer</p>
-                                        <p className="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                                        <h4>{userProfile.username && userProfile.username}</h4>
+                                        <p className="text-secondary mb-1">{userProfile.job && userProfile.job}</p>
+                                        <p className="text-muted font-size-sm">{userProfile.address && userProfile.address}</p>
                                         <button className="btn btn-primary" style={{marginRight:'6px'}}>Follow</button>
                                         <button className="btn btn-outline-primary">Message</button>
                                     </div>
@@ -67,7 +85,7 @@ const Profile =()=>{
                                     <h6 className="mb-0">Full Name</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                    Kenneth Valdez
+                                    {userProfile.full_name && userProfile.full_name}
                                     </div>
                                 </div>
                                 <hr/>
@@ -94,7 +112,7 @@ const Profile =()=>{
                                     <h6 className="mb-0">Mobile</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                    (320) 380-4539
+                                    {userProfile.phone && userProfile.phone}
                                     </div>
                                 </div>
                                 <hr/>
@@ -103,7 +121,7 @@ const Profile =()=>{
                                     <h6 className="mb-0">Address</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                    Bay Area, San Francisco, CA
+                                    {userProfile.address && userProfile.address}
                                     </div>
                                 </div>
                                 <hr/>

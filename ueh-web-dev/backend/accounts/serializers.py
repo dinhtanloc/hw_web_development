@@ -55,7 +55,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
     
 class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source='user.email', read_only=True)
+    password = serializers.CharField(source='user.password', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Profile
-        fields = ['user', 'full_name', 'bio', 'image',
+        fields = ['user', 'full_name','phone','address','job','username','email','password', 'bio', 'image',
         'verified']

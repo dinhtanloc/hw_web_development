@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User,Profile
 
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer,ProfileSerializer
+from .serializers import MyTokenObtainPairSerializer, RegisterSerializer,ProfileSerializer,ChangePasswordSerializer
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
@@ -93,16 +93,24 @@ def testEndPoint(request):
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])    
 def profileView(request):
-    if request.method =="GET":
+    if request.method == "GET":
         user_profile = Profile.objects.get(user=request.user)
         serializer = ProfileSerializer(user_profile)
         return Response(serializer.data)
-    elif request.method =="PUT":
+    elif request.method == "PUT":
         user_profile = Profile.objects.get(user=request.user)
         serializer = ProfileSerializer(user_profile, data=request.data)
+        if 'current_password' in request.data and 'new_password' in request.data and 'confirm_password' in request.data:
+            password_serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+            if password_serializer.is_valid():
+                request.user.set_password(request.data['new_password'])
+                request.user.save()
+                return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response(password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
