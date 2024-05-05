@@ -60,17 +60,13 @@ const Header = () => {
   }
 
     useEffect(() => {
-    console.log('okk')
     const fetchUser = async () => {
       try {
-        console.log('chuan bi truy cap')
         const res = await api.get("/test/");
         setCurrentUser(true);
-        console.log('id')
-        console.log(res.data)
+        // console.log(res.data)
         const name_login = res.data.response.username;
-        console.log('du lieu o day')
-        console.log(name_login);
+        // console.log(name_login);
         setName(name_login)
       } catch (error) {
         setCurrentUser(false);
@@ -81,13 +77,11 @@ const Header = () => {
 
     const fetchProfile = async () => {
       try {
-        console.log('chuan bi truy cap vao profile')
         const res = await api.get("/profile/");
         setCurrentUser(true);
         const profile = res.data;
         var imgUrl = profile.image
-        console.log('profile o day')
-        console.log(imgUrl);
+        // console.log(imgUrl);
         setImage(imgUrl)
         // setName(profile)
       } catch (error) {
@@ -106,7 +100,6 @@ const Header = () => {
   // import img from './default.jpg'
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
-  console.log('bibi'+ nameuser)
   return (
     <header className="header">
       {/* ============ header top ============ */}

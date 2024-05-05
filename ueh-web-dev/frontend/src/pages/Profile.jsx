@@ -41,7 +41,7 @@ const Profile =()=>{
                         <div className="card">
                             <div className="card-body">
                                 <div className="d-flex flex-column align-items-center text-center">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="rounded-circle" width="150"/>
+                                    <img src={userProfile.image && userProfile.image} alt="Admin" className="rounded-circle" width="150"/>
                                     <div className="mt-3">
                                         <h4>{userProfile.username && userProfile.username}</h4>
                                         <p className="text-secondary mb-1">{userProfile.job && userProfile.job}</p>
@@ -94,22 +94,13 @@ const Profile =()=>{
                                     <h6 className="mb-0">Email</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                    fip@jukmuh.al
+                                    {userProfile.email && userProfile.email}
                                     </div>
                                 </div>
                                 <hr/>
                                 <div className="row">
                                     <div className="col-sm-3">
                                     <h6 className="mb-0">Phone</h6>
-                                    </div>
-                                    <div className="col-sm-9 text-secondary">
-                                    (239) 816-9029
-                                    </div>
-                                </div>
-                                <hr/>
-                                <div className="row">
-                                    <div className="col-sm-3">
-                                    <h6 className="mb-0">Mobile</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
                                     {userProfile.phone && userProfile.phone}
@@ -122,6 +113,15 @@ const Profile =()=>{
                                     </div>
                                     <div className="col-sm-9 text-secondary">
                                     {userProfile.address && userProfile.address}
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div className="row">
+                                    <div className="col-sm-3">
+                                    <h6 className="mb-0">Job</h6>
+                                    </div>
+                                    <div className="col-sm-9 text-secondary">
+                                    {userProfile.job && userProfile.job}
                                     </div>
                                 </div>
                                 <hr/>

@@ -10,7 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('id', 'username', 'email','date_joined')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -63,9 +63,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.CharField(source='user.email', read_only=True)
     password = serializers.CharField(source='user.password', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
+    date_joined = serializers.DateTimeField(source='user.date_joined', read_only=True)
     class Meta:
         model = Profile
-        fields = ['user', 'full_name','phone','address','job','username','email','password', 'bio', 'image',
+        fields = ['user', 'full_name','phone','address','job','username','email','password', 'bio', 'image','date_joined',
         'verified']
 
 class ChangePasswordSerializer(serializers.Serializer):

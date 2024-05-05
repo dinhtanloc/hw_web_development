@@ -1,9 +1,14 @@
 import {React, useState, useEffect} from "react";
 import useAxios from "../utils/useAxios"
+import moment from 'moment';
+
 
 
 const EditProfile = () => {
     const [errors, setErrors] = useState(null);
+    const [dateString, setDateString] = useState("");
+    const [fDate, setfDate] = useState("");
+
     const profileAPI = useAxios();
 
 
@@ -18,7 +23,8 @@ const EditProfile = () => {
         job:'',
         address:'',
         image:null,
-        bio:''
+        bio:'',
+        date_joined:''
     });
 
     useEffect(() => {
@@ -32,21 +38,35 @@ const EditProfile = () => {
                 ...prevFormData,
                 full_name: response.data.full_name,
                 username: response.data.username,
-                current_password:response.data.password,
+                // current_password:response.data.password,
                 email: response.data.email,
                 phone: response.data.phone,
                 job: response.data.job,
                 address: response.data.address,
                 image: response.data.image,
-                bio: response.data.bio
+                bio: response.data.bio,
+                date_joined:response.data.date_joined
             }));
+            setDateString(formData.date_joined)
+            console.log(formData.date_joined)
+            setfDate(moment(dateString,'YYYY-MM-DD[T]HH:mm:ss').format("DD MMM YYYY"))
+            console.log(fDate)
+            
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }
     };
+    // const formattedDate=moment(dateString).format("DD MMM YYYY");
+    // setfDate(formattedDate)
+    // console.log(dateString)
+ 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleNotify = (e) => {
+        alert('Da bat thong bao');
     };
 
     
@@ -68,17 +88,20 @@ const EditProfile = () => {
             formDataToSubmit.append('address', formData.address);
             formDataToSubmit.append('image', formData.image); // Thêm hình ảnh vào formData
             formDataToSubmit.append('bio', formData.bio); // Thêm hình ảnh vào formData
-            await axios.put('/profile/', formDataToSubmit, {
-                headers: {
-                    'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
-                }
-            });
+            console.log('check su thay doi')
+            console.log(formDataToSubmit)
+            // await axios.put('/profile/', formDataToSubmit, {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
+            //     }
+            // });
             alert('Profile updated successfully');
         } catch (error) {
             console.error('Error updating profile:', error);
         }
     };
   return <>
+  
   <div className="container">
         <div className="row flex-lg-nowrap">
             <div className="col-12 col-lg-auto mb-3" style={{width: "200px"}}>
@@ -103,13 +126,14 @@ const EditProfile = () => {
                                             <div className="mx-auto" style={{width: "140px"}}>
                                                 <div className="d-flex justify-content-center align-items-center rounded" style={{height: "140px", backgroundColor : "rgb(233, 236, 239)"}}>
                                                     <span style={{color: "rgb(166, 168, 170)", font: "bold 8pt Arial"}}>140x140</span>
+                                                    {/* <img ></img> */}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                             <div className="text-center text-sm-left mb-2 mb-sm-0">
-                                                <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                                                <p className="mb-0">@johnny.s</p>
+                                                <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">{formData.full_name && formData.full_name}</h4>
+                                                {/* <p className="mb-0">{nickname && nickname}</p> */}
                                                 <div className="text-muted">
                                                     <small>Last seen 2 hours ago</small>
                                                 </div>
@@ -124,7 +148,8 @@ const EditProfile = () => {
                                             <div className="text-center text-sm-right">
                                                 <span className="badge badge-secondary">administrator</span>
                                                 <div className="text-muted">
-                                                    <small>Joined 09 Dec 2017</small>
+                                                    <small>Joined {fDate}</small>
+                                                    {/* <small>{formData.date_joined && formData.date_joined}</small> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -170,6 +195,7 @@ const EditProfile = () => {
                                                                     <input 
                                                                     className="form-control"
                                                                     type="text"
+                                                                    name="phone"
                                                                     value={formData.phone}
                                                                     onChange={handleChange} 
                                                                     />
@@ -194,7 +220,8 @@ const EditProfile = () => {
                                                                     <label>Address</label>
                                                                     <input 
                                                                     className="form-control" 
-                                                                    type="text" 
+                                                                    type="text"
+                                                                    name="address"
                                                                     value={formData.address}
                                                                     onChange={handleChange}    
                                                                     />
@@ -205,7 +232,14 @@ const EditProfile = () => {
                                                             <div className="col mb-3">
                                                                 <div className="form-group">
                                                                     <label>About</label>
-                                                                    <textarea className="form-control" rows="5" placeholder="My Bio"></textarea>
+                                                                    <textarea 
+                                                                    className="form-control" 
+                                                                    rows="5" 
+                                                                    placeholder="My Bio"
+                                                                    name="bio"
+                                                                    value={formData.bio} 
+                                                                    onChange={handleChange}
+                                                                    ></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -226,7 +260,7 @@ const EditProfile = () => {
                                                                     name="current_password"
                                                                     value={formData.current_password}
                                                                     onChange={handleChange}
-                                                                    placeholder="••••••" />
+                                                                    />
                                                                     {errors && errors.confirm_password && <p className="error">{errors.current_password}</p>}
                                                                 </div>
                                                             </div>
@@ -241,7 +275,7 @@ const EditProfile = () => {
                                                                     name="new_password"
                                                                     value={formData.new_password}
                                                                     onChange={handleChange}
-                                                                    placeholder="••••••" />
+                                                                    />
                                                                     {errors && errors.new_password && <p className="error">{errors.new_password}</p>}
                                                                 </div>
                                                             </div>
@@ -256,7 +290,7 @@ const EditProfile = () => {
                                                                     name="confirm_password"
                                                                     value={formData.confirm_password}
                                                                     onChange={handleChange} 
-                                                                    placeholder="••••••" />
+                                                                   />
                                                                     {errors && errors.confirm_password && <p className="error">{errors.confirm_password}</p>}
                                                                 </div>
                                                             </div>
@@ -271,15 +305,15 @@ const EditProfile = () => {
                                                                 <label>Email Notifications</label>
                                                                 <div className="custom-controls-stacked px-2">
                                                                     <div className="custom-control custom-checkbox">
-                                                                        <input type="checkbox" className="custom-control-input" id="notifications-blog" checked />
+                                                                        <input type="checkbox" className="custom-control-input" id="notifications-blog" checked onChange={handleNotify} />
                                                                         <label className="custom-control-label" htmlFor="notifications-blog">Blog posts</label>
                                                                     </div>
                                                                     <div className="custom-control custom-checkbox">
-                                                                        <input type="checkbox" className="custom-control-input" id="notifications-news" checked />
+                                                                        <input type="checkbox" className="custom-control-input" id="notifications-news" checked onChange={handleNotify} />
                                                                         <label className="custom-control-label" htmlFor="notifications-news">Newsletter</label>
                                                                     </div>
                                                                     <div className="custom-control custom-checkbox">
-                                                                        <input type="checkbox" className="custom-control-input" id="notifications-offers" checked />
+                                                                        <input type="checkbox" className="custom-control-input" id="notifications-offers" checked onChange={handleNotify} />
                                                                         <label className="custom-control-label" htmlFor="notifications-offers">Personal Offers</label>
                                                                     </div>
                                                                 </div>
@@ -289,7 +323,7 @@ const EditProfile = () => {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col d-flex justify-content-end">
-                                                        <button className="btn btn-primary" type="submit">Save Changes</button>
+                                                        <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Save Changes</button>
                                                     </div>
                                                 </div>
                                             </form>
