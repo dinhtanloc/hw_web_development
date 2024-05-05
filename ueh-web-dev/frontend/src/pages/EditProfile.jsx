@@ -1,6 +1,12 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
+import useAxios from "../utils/useAxios"
+
 
 const EditProfile = () => {
+    const [errors, setErrors] = useState(null);
+    const profileAPI = useAxios();
+
+
     const [formData, setFormData] = useState({
         full_name: '',
         username: '',
@@ -21,7 +27,7 @@ const EditProfile = () => {
 
     const fetchUserProfile = async () => {
         try {
-            const response = await axios.get('/profile/');
+            const response = await profileAPI.get('/profile/');
             setFormData(prevFormData => ({
                 ...prevFormData,
                 full_name: response.data.full_name,
@@ -147,7 +153,13 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Username</label>
-                                                                    <input className="form-control" type="text" name="username" placeholder="johnny.s" value="" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="text" 
+                                                                    name="username" 
+                                                                    value={formData.username}
+                                                                    onChange={handleChange} 
+                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -155,7 +167,12 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Phone</label>
-                                                                    <input className="form-control" type="text" placeholder="0938922399" />
+                                                                    <input 
+                                                                    className="form-control"
+                                                                    type="text"
+                                                                    value={formData.phone}
+                                                                    onChange={handleChange} 
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -167,7 +184,6 @@ const EditProfile = () => {
                                                                     className="form-control" 
                                                                     type="text"
                                                                     defaultValue={formData.email}
-                                                                    placeholder="user@example.com"
                                                                     disabled />
                                                                 </div>
                                                             </div>
@@ -176,7 +192,12 @@ const EditProfile = () => {
                                                             <div className="col">
                                                                 <div className="form-group">
                                                                     <label>Address</label>
-                                                                    <input className="form-control" type="text" placeholder="123 Nguyen Tri Phuong Viet Nam" />
+                                                                    <input 
+                                                                    className="form-control" 
+                                                                    type="text" 
+                                                                    value={formData.address}
+                                                                    onChange={handleChange}    
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -206,7 +227,7 @@ const EditProfile = () => {
                                                                     value={formData.current_password}
                                                                     onChange={handleChange}
                                                                     placeholder="••••••" />
-                                                                    {errors.confirm_password && <p className="error">{errors.current_password}</p>}
+                                                                    {errors && errors.confirm_password && <p className="error">{errors.current_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -221,7 +242,7 @@ const EditProfile = () => {
                                                                     value={formData.new_password}
                                                                     onChange={handleChange}
                                                                     placeholder="••••••" />
-                                                                    {errors.new_password && <p className="error">{errors.new_password}</p>}
+                                                                    {errors && errors.new_password && <p className="error">{errors.new_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -236,7 +257,7 @@ const EditProfile = () => {
                                                                     value={formData.confirm_password}
                                                                     onChange={handleChange} 
                                                                     placeholder="••••••" />
-                                                                    {errors.confirm_password && <p className="error">{errors.confirm_password}</p>}
+                                                                    {errors && errors.confirm_password && <p className="error">{errors.confirm_password}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>

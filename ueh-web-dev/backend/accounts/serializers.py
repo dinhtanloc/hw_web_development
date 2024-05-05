@@ -2,6 +2,8 @@ from .models import User,Profile
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
+from django.contrib.auth import authenticate
+
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -20,6 +22,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         token['email'] = user.email
         token['bio'] = user.profile.bio
+        token['phone'] = user.profile.phone
+        token['address'] = user.profile.address
+        token['job'] = user.profile.job
         token['image'] = str(user.profile.image)
         token['verified'] = user.profile.verified
         # ...
@@ -62,3 +67,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['user', 'full_name','phone','address','job','username','email','password', 'bio', 'image',
         'verified']
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=False)
+    confirm_password = serializers.CharField(required=False)
+
+    def validate(self, data):
+        if 'new_password' in data and 'confirm_password' in data:
+            if data['new_password'] != data['confirm_password']:
+                raise serializers.ValidationError({'confirm_password': 'Passwords do not match'})
+
+        user = authenticate(username=self.context['request'].user.username, password=data['current_password'])
+        if not user:
+            raise serializers.ValidationError({'current_password': 'Incorrect current password'})
