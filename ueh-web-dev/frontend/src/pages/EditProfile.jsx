@@ -12,6 +12,9 @@ const EditProfile = () => {
     const profileAPI = useAxios();
 
 
+    useEffect(() => {
+        fetchUserProfile();
+    }, []);
     const [formData, setFormData] = useState({
         full_name: '',
         username: '',
@@ -22,14 +25,11 @@ const EditProfile = () => {
         phone:'',
         job:'',
         address:'',
-        image:null,
+        image:'',
         bio:'',
         date_joined:''
     });
 
-    useEffect(() => {
-        fetchUserProfile();
-    }, []);
 
     const fetchUserProfile = async () => {
         try {
@@ -47,6 +47,8 @@ const EditProfile = () => {
                 bio: response.data.bio,
                 date_joined:response.data.date_joined
             }));
+            console.log(formData.image)
+            console.log(formData.username)
             setDateString(formData.date_joined)
             console.log(formData.date_joined)
             setfDate(moment(dateString,'YYYY-MM-DD[T]HH:mm:ss').format("DD MMM YYYY"))
@@ -73,6 +75,18 @@ const EditProfile = () => {
     const handleImageChange = (event) => {
         const selectedImage = event.target.files[0];
         setFormData({ ...formData, image: selectedImage }); // Lưu hình ảnh vào formData
+        console.log('co anh duoc chon')
+        console.log(selectedImage)
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imgInp = document.getElementById('imgInp');
+            if (imgInp) {
+                imgInp.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(selectedImage);
+       
     };
     
     const handleSubmit = async (e) => {
@@ -88,8 +102,11 @@ const EditProfile = () => {
             formDataToSubmit.append('address', formData.address);
             formDataToSubmit.append('image', formData.image); // Thêm hình ảnh vào formData
             formDataToSubmit.append('bio', formData.bio); // Thêm hình ảnh vào formData
+            console.log(formData)
             console.log('check su thay doi')
-            console.log(formDataToSubmit)
+            for (var pair of formDataToSubmit.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
             // await axios.put('/profile/', formDataToSubmit, {
             //     headers: {
             //         'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
@@ -125,7 +142,8 @@ const EditProfile = () => {
                                         <div className="col-12 col-sm-auto mb-3">
                                             <div className="mx-auto" style={{width: "140px"}}>
                                                 <div className="d-flex justify-content-center align-items-center rounded" style={{height: "140px", backgroundColor : "rgb(233, 236, 239)"}}>
-                                                    <span style={{color: "rgb(166, 168, 170)", font: "bold 8pt Arial"}}>140x140</span>
+                                                    {/* <span style={{color: "rgb(166, 168, 170)", font: "bold 8pt Arial"}}>140x140</span> */}
+                                                    <img id="imgInp" style={{width: "140px", height:"140px"}} src= {formData.image && formData.image} alt="Avatar" />
                                                     {/* <img ></img> */}
                                                 </div>
                                             </div>
@@ -138,11 +156,11 @@ const EditProfile = () => {
                                                     <small>Last seen 2 hours ago</small>
                                                 </div>
                                                 <div className="mt-2">
-                                                <label htmlFor="fileInput" className="btn btn-primary">
+                                                <label htmlFor="fileInput" className="btn btn-primary" style={{backgroundColor:"#081868"}}>
                                                     <i className="fa fa-fw fa-camera"></i>
                                                     <span>Change Photo</span>
                                                 </label>
-                                                <input id="fileInput" type="file" style={{ display: 'none' }} onChange={handleImageChange} />
+                                                <input id="fileInput"  type="file" style={{ display: 'none' }} onChange={handleImageChange} />
                                                 </div>
                                             </div>
                                             <div className="text-center text-sm-right">
@@ -197,6 +215,20 @@ const EditProfile = () => {
                                                                     type="text"
                                                                     name="phone"
                                                                     value={formData.phone}
+                                                                    onChange={handleChange} 
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col">
+                                                                <div className="form-group">
+                                                                    <label>Job</label>
+                                                                    <input 
+                                                                    className="form-control"
+                                                                    type="text"
+                                                                    name="job"
+                                                                    value={formData.job}
                                                                     onChange={handleChange} 
                                                                     />
                                                                 </div>
@@ -323,7 +355,7 @@ const EditProfile = () => {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col d-flex justify-content-end">
-                                                        <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Save Changes</button>
+                                                        <button className="btn btn-primary" style={{backgroundColor:"#081868"}} type="submit" onClick={handleSubmit}>Save Changes</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -348,7 +380,7 @@ const EditProfile = () => {
                         <div className="card-body">
                             <h6 className="card-title font-weight-bold">Support</h6>
                             <p className="card-text">Get fast, free help from our friendly assistants.</p>
-                            <button type="button" className="btn btn-primary">Contact Us</button>
+                            <button type="button" className="btn btn-primary" style={{backgroundColor:"#081868"}}>Contact Us</button>
                         </div>
                         </div>
                     </div>

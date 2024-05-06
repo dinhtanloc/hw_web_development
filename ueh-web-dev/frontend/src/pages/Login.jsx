@@ -132,9 +132,9 @@ const Login = () => {
       <footer className='footer_title'>
         <p className='p_title'>
           Created with <i className="fa fa-heart"></i> by
-          <a className="a_title" target="_blank" href="https://florin-pop.com">Florin Pop</a>
-          - Read how I created this and how you can join the challenge
-          <a className="a_title" target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+          <a className="a_title" target="_blank" href="https://www.facebook.com/profile.php?id=100010680972124"> Loc Dinh </a>
+          - Read how I created this and give me ten points in Web programming subject
+          {/* <a className="a_title" target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>. */}
         </p>
       </footer>
     </>
