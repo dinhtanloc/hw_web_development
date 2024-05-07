@@ -15,7 +15,7 @@
 
 .become__driver-title {
   font-size: 2.8rem;
-  color: #fff;
+  color: #fff !important;
   line-height: 65px;
 }
 

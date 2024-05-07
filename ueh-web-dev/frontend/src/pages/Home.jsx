@@ -73,6 +73,7 @@ const Home = () => {
       {/* =========== testimonial section =========== */}
       <section>
         <Container>
+          <div style={{marginBottom:'2%'}}></div>
           <Row>
             <Col lg="12" className="mb-4 text-center">
               <h6 className="section__subtitle">Our clients says</h6>

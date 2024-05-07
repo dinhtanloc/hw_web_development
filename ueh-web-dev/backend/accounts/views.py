@@ -90,43 +90,45 @@ def testEndPoint(request):
 #             return Response(serializer.data)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])    
 def profileView(request):
     if request.method == "GET":
         user_profile = Profile.objects.get(user=request.user)
         serializer = ProfileSerializer(user_profile)
         return Response(serializer.data)
-    elif request.method == "PUT":
+    elif request.method == "PATCH":
         user_profile = Profile.objects.get(user=request.user)
-        serializer = ProfileSerializer(user_profile, data=request.data)
-        if request.files.get('image'):
+        serializer = ProfileSerializer(user_profile, data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:print(serializer.data)
+        if request.FILES.get('image'):
             image_file = request.FILES.get('image')
             user_profile = Profile.objects.get(id=request.user.id)
             user_profile.image = image_file
             user_profile.save()
-        if 'current_password' in request.data and 'new_password' in request.data and 'confirm_password' in request.data:
-            password_serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
-            if password_serializer.is_valid():
-                request.user.set_password(request.data['new_password'])
-                request.user.save()
-                return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
-            else:
-                return Response(password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if 'current_password' in request.data and 'new_password' in request.data and 'confirm_password' in request.data:
+        #     password_serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        #     if password_serializer.is_valid():
+        #         request.user.set_password(request.data['new_password'])
+        #         request.user.save()
+        #         return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+        #     else:
+        #         return Response(password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+       
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])    
-def upload_image(request):
-    image_file = request.FILES.get('image')
-    if image_file:
-        user_profile = Profile.objects.get(id=request.user.id)
-        user_profile.image = image_file
-        user_profile.save()
-        return Response({'message': 'Image uploaded successfully.'}, status=status.HTTP_200_OK)
-    return Response({'message': 'No image uploaded.'}, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])    
+# def upload_image(request):
+#     image_file = request.FILES.get('image')
+#     if image_file:
+#         user_profile = Profile.objects.get(id=request.user.id)
+#         user_profile.image = image_file
+#         user_profile.save()
+#         return Response({'message': 'Image uploaded successfully.'}, status=status.HTTP_200_OK)
+#     return Response({'message': 'No image uploaded.'}, status=status.HTTP_400_BAD_REQUEST)
 

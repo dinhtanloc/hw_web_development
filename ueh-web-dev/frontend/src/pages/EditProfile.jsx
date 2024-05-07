@@ -1,6 +1,9 @@
 import {React, useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import useAxios from "../utils/useAxios"
 import moment from 'moment';
+import Swal from "sweetalert2";  
+
 
 
 
@@ -10,6 +13,8 @@ const EditProfile = () => {
     const [fDate, setfDate] = useState("");
 
     const profileAPI = useAxios();
+    const navigate =useNavigate()
+
 
 
     useEffect(() => {
@@ -96,7 +101,7 @@ const EditProfile = () => {
             formDataToSubmit.append('full_name', formData.full_name);
             formDataToSubmit.append('username', formData.username);
             formDataToSubmit.append('email', formData.email);
-            formDataToSubmit.append('password', formData.password);
+            formDataToSubmit.append('password', formData.current_password);
             formDataToSubmit.append('phone', formData.phone);
             formDataToSubmit.append('job', formData.job);
             formDataToSubmit.append('address', formData.address);
@@ -107,12 +112,22 @@ const EditProfile = () => {
             for (var pair of formDataToSubmit.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
-            // await axios.put('/profile/', formDataToSubmit, {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
-            //     }
-            // });
-            alert('Profile updated successfully');
+            await profileAPI.patch('/profile/', formDataToSubmit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
+                }
+            });
+            // alert('Profile updated successfully');
+            Swal.fire({
+                title: "Eđit Successful",
+                icon: "success",
+                toast: true,
+                timer: 2000,
+                position: 'top-right',
+                timerProgressBar: true,
+                showConfirmButton: false,
+            })
+            navigate('/profile/')
         } catch (error) {
             console.error('Error updating profile:', error);
         }
@@ -202,6 +217,7 @@ const EditProfile = () => {
                                                                     name="username" 
                                                                     value={formData.username}
                                                                     onChange={handleChange} 
+                                                                    // disabled
                                                                      />
                                                                 </div>
                                                             </div>
