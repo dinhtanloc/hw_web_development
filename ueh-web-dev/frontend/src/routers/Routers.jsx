@@ -13,7 +13,7 @@ import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import PrivateRoute from "../utils/PrivateRoute";
 
-const Routers = () => {
+const Routers = ({ searchTerm }) => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
@@ -29,7 +29,7 @@ const Routers = () => {
       {/* <Route path="/profile/edit/" element={<EditProfile />} /> */}
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
-      <Route path="/cars" element={<CarListing />} />
+      <Route path="/cars" element={<CarListing searchTerm={searchTerm} />} />
       <Route path="/cars/:slug" element={<CarDetails />} />
       <Route path="/blogs" element={<Blog />} />
       <Route path="/blogs/:slug" element={<BlogDetails />} />

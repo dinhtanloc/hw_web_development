@@ -18,39 +18,13 @@ const client = axios.create({
 const Layout = () => {
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState();
-
-  
-  // useEffect(() => {
-  //   console.log('okk')
-  //   const fetchData = async () => {
-  //     try {
-  //       console.log('chuan bi truy cap')
-  //       const res = await api.get("/test/");
-  //       setCurrentUser(true);
-  //       const user_login = res.data;
-  //       console.log('bibi' + user_login);
-  //     } catch (error) {
-  //       setCurrentUser(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-
-  // Kiểm tra xem URL hiện tại có phải là trang login không
-  // if(currentUser){
-  //   return(
-  //     <Fragment>
-  //     <Header currentUser={user_login} />
-  //     <Routers />
-  //     <Footer />
-  //   </Fragment>
-
-  //   )
-  // }
-  // else{
-    const isLoginPage = location.pathname === "/login";
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    console.log('toi dang o Layout')
+    console.log(searchTerm)
+  };
+  const isLoginPage = location.pathname === "/login";
     return (
       
       <>
@@ -63,8 +37,8 @@ const Layout = () => {
         {/* Sử dụng toán tử ba ngôi để kiểm tra điều kiện */}
         {isLoginPage ? null : (
           <Fragment>
-            <Header />
-            <Routers />
+            <Header onSearch={handleSearch} />
+            <Routers searchTerm={searchTerm} />
             <Footer />
           </Fragment>
         )}

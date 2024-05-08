@@ -33,16 +33,26 @@ const navLinks = [
 ];
 
 
-const Header = () => {
+const Header = ({ onSearch }) => {
   const {user, logoutUser} = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState();
   const [nameuser, setName] = useState('');
   const [img,setImage]=useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const api = useAxios();
 
 
   const token = localStorage.getItem("authTokens")
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    onSearch(searchTerm);
+  };
+
 
   if (token){
     const decoded = jwtDecode(token) 
@@ -242,10 +252,15 @@ const Header = () => {
 
             <div className="nav__right">
               <div className="search__box">
-                <input type="text" placeholder="Search" />
-                <span>
+                <input 
+                type="text" 
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                 />
+                <button onClick={handleSearchSubmit}>
                   <i className="ri-search-line"></i>
-                </span>
+                </button>
               </div>
             </div>
           </div>
