@@ -4,10 +4,20 @@ import "../../styles/blog-item.css";
 import { Link } from "react-router-dom";
 import blogData from "../../assets/data/blogData";
 
-const BlogList = () => {
+const BlogList = ({searchTerm}) => {
+  const filteredBlogs = searchTerm
+  ? blogData.filter((blog) =>{
+    const match =blog.title && blog.title.toLowerCase().includes(searchTerm.toLowerCase());
+    // console.log(blog.title);
+    // console.log('hello')
+    // console.log(match);
+    return match;
+  }
+)
+: blogData;
   return (
     <>
-      {blogData.map((item) => (
+      {filteredBlogs.map((item) => (
         <BlogItem item={item} key={item.id} />
       ))}
     </>

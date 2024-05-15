@@ -31,7 +31,7 @@ const Routers = ({ searchTerm }) => {
       <Route path="/about" element={<About />} />
       <Route path="/cars" element={<CarListing searchTerm={searchTerm} />} />
       <Route path="/cars/:slug" element={<CarDetails />} />
-      <Route path="/blogs" element={<Blog />} />
+      <Route path="/blogs" element={<Blog searchTerm={searchTerm} />} />
       <Route path="/blogs/:slug" element={<BlogDetails />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />

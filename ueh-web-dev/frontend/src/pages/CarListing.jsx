@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState} from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
@@ -19,12 +19,25 @@ const CarListing = ({searchTerm}) => {
     });
   };
 
+  // console.log('bibi');
+  // console.log(searchTerm);
+  // if(car.name.toString().toLowerCase().includes(searchTerm.toLowerCase())){
+  //   console.log('đã tìm ra')
+  // }
+  // console.log(car.name);
+  
   const filteredCars = searchTerm
-    ? carData.filter((car) =>
-        car.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : carData;
-
+  ? carData.filter((car) =>{
+    const match =car.carName && car.carName.toLowerCase().includes(searchTerm.toLowerCase());
+    // console.log(car.carName);
+    // console.log('hello')
+    // console.log(match);
+    return match;
+  }
+)
+: carData;
+  console.log(searchTerm);
+  console.log(filteredCars)
   const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
 
   return (

@@ -7,7 +7,7 @@ const blogData = [
   {
     id: 1,
     title: "The best way to drive cars",
-    author: "Phuong Tuan",
+    author: "Duc Tuan",
     date: "12 Dec, 2020",
     time: "9pm",
     imgUrl: img01,
