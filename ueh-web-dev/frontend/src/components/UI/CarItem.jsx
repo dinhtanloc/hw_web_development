@@ -5,6 +5,14 @@ import "../../styles/car-item.css";
 
 const CarItem = (props) => {
   const { imgUrl, model, carName, automatic, speed, price } = props.item;
+  console.log(imgUrl)
+  const PUBLIC_URL='../../../public'
+  
+  const filePath = `${PUBLIC_URL}${imgUrl}`;
+
+  // const hello = `../${carName}`; // Tạo đường dẫn tương đối cho ảnh
+  console.log(filePath)
+
 
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">

@@ -1,12 +1,29 @@
-import {React, useState} from "react";
+import {React, useState,useEffect} from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import CarItem from "../components/UI/CarItem";
-import carData from "../assets/data/carData";
+// import carData from "../assets/data/carData";
+import axios from "axios";
+
 
 const CarListing = ({searchTerm}) => {
   const [sortBy, setSortBy] = useState(""); // Trạng thái lưu trữ cách sắp xếp
+  const [carData, setCardata] = useState([]);
+  useEffect(() => {
+    axios.get('http://localhost:8000/categories/')
+        .then(response => {
+            console.log(response.data);
+            setCardata(response.data)
+            // console.log('hello bibi')
+            // console.log(hello)
+            // console.log('hello abc')
+        })
+        .catch(error => {
+            console.error("There was an error fetching the data!", error);
+        });
+}, []);
+
 
   // Hàm để sắp xếp danh sách xe dựa trên giá
   const sortCarsByPrice = (cars, order) => {
@@ -25,6 +42,10 @@ const CarListing = ({searchTerm}) => {
   //   console.log('đã tìm ra')
   // }
   // console.log(car.name);
+
+  // console.log('hello updated:');
+  // console.log(hello);
+  // console.log('check updates')
   
   const filteredCars = searchTerm
   ? carData.filter((car) =>{

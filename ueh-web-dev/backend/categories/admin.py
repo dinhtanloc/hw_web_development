@@ -3,12 +3,12 @@ from .models import Product
 
 # Register your models here.
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('brand', 'car_name', 'model', 'price', 'rating')
-    search_fields = ('car_name', 'brand', 'model')
+    list_display = ('brand', 'carName', 'model', 'price', 'rating')
+    search_fields = ('carName', 'brand', 'model')
     list_filter = ('brand', 'automatic')
     ordering = ('brand',)
     fields = (
-        ('brand', 'car_name', 'model'),
+        ('brand', 'carName', 'model'),
         'price',
         'rating',
         'speed',
@@ -16,10 +16,10 @@ class CarAdmin(admin.ModelAdmin):
         'seat_type',
         'automatic',
         'description',
-        'img_url'
+        'imgUrl'
     )
     readonly_fields = ('rating',)
     list_editable = ('price',)
-    prepopulated_fields = {'car_name': ('brand', 'model')}
+    prepopulated_fields = {'carName': ('brand', 'model')}
 
 admin.site.register(Product, CarAdmin)
