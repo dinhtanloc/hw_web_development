@@ -1,10 +1,30 @@
-import React from "react";
+import {React, useState,useEffect} from "react";
+import axios from "axios";
 import { Col } from "reactstrap";
 import "../../styles/blog-item.css";
 import { Link } from "react-router-dom";
-import blogData from "../../assets/data/blogData";
+// import blogData from "../../assets/data/blogData";
 
 const BlogList = ({searchTerm}) => {
+  const [blogData, setBlogdata] = useState([]);
+  useEffect(() => {
+    axios.get('http://localhost:8000/blogs/')
+        .then(response => {
+            console.log(response.data);
+            setBlogdata(response.data)
+            // console.log('hello bibi')
+            // console.log(hello)
+            // console.log('hello abc')
+        })
+        .catch(error => {
+            console.error("There was an error fetching the data!", error);
+        });
+}, []);
+
+
+
+
+
   const filteredBlogs = searchTerm
   ? blogData.filter((blog) =>{
     const match =blog.title && blog.title.toLowerCase().includes(searchTerm.toLowerCase());

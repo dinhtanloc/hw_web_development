@@ -83,8 +83,9 @@ INSTALLED_APPS = [
     # custom
     'app',
     'accounts',
-    'orders',
+    'blogs',
     'categories',
+    'orders',
 
     # Third Party
     'import_export',

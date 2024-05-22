@@ -17,6 +17,7 @@ class Product(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.car_name
+        return self.carName
     
+
 

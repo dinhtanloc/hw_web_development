@@ -1,4 +1,3 @@
-from .models import Product
 
 car_data = [
     {
@@ -101,8 +100,3 @@ car_data = [
 
     },
 ]
-
-for car in car_data:
-    Product.objects.create(**car)
-
-print('Process successfull')
