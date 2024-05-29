@@ -43,7 +43,7 @@ const Footer = () => {
                 <Link to="/home" className=" d-flex align-items-center gap-2">
                   <i className="ri-car-line"></i>
                   <span>
-                    Car retail <br /> Service
+                  Auto dealership <br /> Service
                   </span>
                 </Link>
               </h1>

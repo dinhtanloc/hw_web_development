@@ -178,7 +178,7 @@ const Header = ({ onSearch }) => {
                   <Link to="/home" className=" d-flex align-items-center gap-2">
                     <i className="ri-car-line"></i>
                     <span>
-                      Rent Car <br /> Service
+                    Auto dealership <br /> Service
                     </span>
                   </Link>
                 </h1>
@@ -203,7 +203,7 @@ const Header = ({ onSearch }) => {
                   <i className="ri-time-line"></i>
                 </span>
                 <div className="header__location-content">
-                  <h4>Sunday to Friday</h4>
+                  <h4>Monday to Friday</h4>
                   <h6>10am - 7pm</h6>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import PrivateRoute from "../utils/PrivateRoute";
+import Confirmation from "../pages/Confirmation";
 
 const Routers = ({ searchTerm }) => {
   return (
@@ -33,6 +34,10 @@ const Routers = ({ searchTerm }) => {
       <Route path="/cars/:slug" element={<CarDetails />} />
       <Route path="/blogs" element={<Blog searchTerm={searchTerm} />} />
       <Route path="/blogs/:slug" element={<BlogDetails />} />
+      {/* <Route path="/confirmation" element={<Confirmation />} /> */}
+      <Route exact path='/confirmation' element={<PrivateRoute/>}>
+            <Route exact path='/confirmation' element={<Confirmation/>}/>
+      </Route>
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

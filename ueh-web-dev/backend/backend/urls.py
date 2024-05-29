@@ -27,10 +27,12 @@ urlpatterns = [
     path('categories/', include('categories.urls')),
     path('orders/', include('orders.urls')),
     path('blogs/', include('blogs.urls')),
-
     #authentication
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
+
+
+
 ]
 
 urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
