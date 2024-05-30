@@ -57,15 +57,6 @@ const CarDetails = () => {
                   <h6 className="rent__price fw-bold fs-4">
                     ${singleCarItem.price}.00 / Day
                   </h6>
-                  <select
-                    value={selectedColor}
-                    onChange={handleColorChange}
-                    className="w-100"
-                  >
-                    <option className="black-option" value="black">Black</option>
-                    <option className="white-option" value="white">White</option>
-                    <option className="red-option" value="red">Red</option>
-                  </select>
 
                   <span className=" d-flex align-items-center gap-2">
                     <span style={{ color: "#f9a826" }}>
@@ -78,6 +69,15 @@ const CarDetails = () => {
                     ({singleCarItem.rating} ratings)
                   </span>
                 </div>
+                  <select
+                    value={selectedColor}
+                    onChange={handleColorChange}
+                    className="w-100"
+                  >
+                    <option className="black-option" value="black">Black</option>
+                    <option className="white-option" value="white">White</option>
+                    <option className="red-option" value="red">Red</option>
+                  </select>
 
                 <p className="section__description">
                   {singleCarItem.description}

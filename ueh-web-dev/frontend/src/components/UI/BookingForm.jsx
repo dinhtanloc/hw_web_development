@@ -22,14 +22,14 @@ const BookingForm = () => {
         <input type="number" placeholder="Phone Number" />
       </FormGroup>
 
-      <FormGroup className="booking__form d-inline-block me-4 mb-4">
+      {/* <FormGroup className="booking__form d-inline-block me-4 mb-4">
         <input type="text" placeholder="From Address" />
-      </FormGroup>
-      <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+      </FormGroup> */}
+      <FormGroup className="address__input d-inline-block mb-4">
         <input type="text" placeholder="To Address" />
       </FormGroup>
 
-      <FormGroup className="booking__form d-inline-block me-4 mb-4">
+      {/* <FormGroup className="booking__form d-inline-block me-4 mb-4">
         <select name="" id="">
           <option value="1 person">1 Person</option>
           <option value="2 person">2 Person</option>
@@ -57,7 +57,7 @@ const BookingForm = () => {
           placeholder="Journey Time"
           className="time__picker"
         />
-      </FormGroup>
+      </FormGroup> */}
 
       <FormGroup>
         <textarea

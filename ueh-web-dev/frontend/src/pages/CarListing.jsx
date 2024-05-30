@@ -90,7 +90,7 @@ const CarListing = ({searchTerm}) => {
               <CarItem 
               item={item} 
               key={item.id} 
-              handleChangeColor={handleChangeColor} 
+              // handleChangeColor={handleChangeColor} 
               />
             ))}
           </Row>

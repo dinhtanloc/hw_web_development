@@ -2,6 +2,17 @@
   width: 47.5%;
 }
 
+.address__input {
+  width: 100%;
+}
+
+.address__input input {
+  padding: 8px 15px;
+  border: 1px solid #7c8a972a;
+  color: #7c8a97;
+  width: 100%;
+}
+
 .booking__form input {
   padding: 8px 15px;
   border: 1px solid #7c8a972a;
@@ -29,10 +40,20 @@
 .booking__form select:focus {
   outline: none;
 }
+.address__input input:focus,
+.address__input select:focus {
+  outline: none;
+}
 
 @media only screen and (max-width: 768px) {
   .booking__form {
     width: 100%;
+  }
+  .address__input {
+    width: 100%;
+  }
+  .address__input input{
+    font-size: 0.8rem;
   }
 
   .booking__form input,
