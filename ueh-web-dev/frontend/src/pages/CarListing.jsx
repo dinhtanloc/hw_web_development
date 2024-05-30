@@ -36,16 +36,20 @@ const CarListing = ({searchTerm}) => {
     });
   };
 
-  // console.log('bibi');
-  // console.log(searchTerm);
-  // if(car.name.toString().toLowerCase().includes(searchTerm.toLowerCase())){
-  //   console.log('đã tìm ra')
-  // }
-  // console.log(car.name);
-
-  // console.log('hello updated:');
-  // console.log(hello);
-  // console.log('check updates')
+  const handleChangeColor = (productId,carName, color) => {
+    axios
+      .post(`http://localhost:8000/categories/${productId}/change-color/`, {
+        carName:carName,
+        color: color,
+      })
+      .then((response) => {
+        // Xử lý phản hồi từ backend nếu cần
+        console.log(response)
+      })
+      .catch((error) => {
+        // Xử lý lỗi nếu có
+      });
+  };
   
   const filteredCars = searchTerm
   ? carData.filter((car) =>{
@@ -83,7 +87,11 @@ const CarListing = ({searchTerm}) => {
             </Col>
 
             {filteredCars.map((item) => (
-              <CarItem item={item} key={item.id} />
+              <CarItem 
+              item={item} 
+              key={item.id} 
+              handleChangeColor={handleChangeColor} 
+              />
             ))}
           </Row>
         </Container>

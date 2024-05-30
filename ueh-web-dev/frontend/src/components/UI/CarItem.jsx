@@ -3,8 +3,11 @@ import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "../../styles/car-item.css";
 
-const CarItem = (props) => {
+const CarItem = (props, handleChangeColor) => {
   const { imgUrl, model, carName, automatic, speed, price } = props.item;
+
+
+
   console.log(imgUrl)
   const PUBLIC_URL='../../../public'
   
@@ -18,7 +21,7 @@ const CarItem = (props) => {
     <Col lg="4" md="4" sm="6" className="mb-5">
       <div className="car__item">
         <div className="car__img">
-          <img src={imgUrl} alt="" className="w-100" />
+          <img style={{backgroundColor:'white', width:'400px',height:'213px'}} src={imgUrl} alt="" className="w-100" />
         </div>
 
         <div className="car__item-content mt-4">
@@ -38,6 +41,15 @@ const CarItem = (props) => {
               <i className="ri-timer-flash-line"></i> {speed}
             </span>
           </div>
+
+          {/* <select
+            onChange={(e) => handleChangeColor(item.id,carName, e.target.value)}
+            className="w-100"
+          >
+            <option className="black-option" value="red"></option>
+            <option className="white-option" value="green"></option>
+            <option className="red-option" value="yellow"></option>
+          </select> */}
 
           <button className=" w-50 car__item-btn car__btn-rent">
             <Link to={`/cars/${carName}`}>Rent</Link>

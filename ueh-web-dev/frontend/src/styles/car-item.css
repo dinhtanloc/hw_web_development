@@ -44,6 +44,16 @@
   font-weight: 600;
 }
 
+.black-option{
+  background-color: 'black';
+}
+.white-option{
+  background-color: 'white';
+}
+.red-option{
+  background-color: 'red';
+}
+
 @media only screen and (max-width: 992px) {
   .car__item h4 {
     font-size: 1.1rem;

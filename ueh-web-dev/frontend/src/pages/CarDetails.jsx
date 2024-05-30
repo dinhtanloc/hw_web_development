@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import carData from "../assets/data/carData";
 import { Container, Row, Col } from "reactstrap";
@@ -9,8 +10,31 @@ import PaymentMethod from "../components/UI/PaymentMethod";
 
 const CarDetails = () => {
   const { slug } = useParams();
-
+  const [selectedColor, setSelectedColor] = useState("");
   const singleCarItem = carData.find((item) => item.carName === slug);
+  const [changecolorImage, setSelectedCar]=useState(singleCarItem.imgUrl)
+
+  // console.log('check dataa')
+  // console.log(singleCarItem)
+
+  const handleColorChange = async (e) => {
+    const newColor = e.target.value;
+    setSelectedColor(newColor);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/categories/${singleCarItem.id}/change-color/`,
+        {
+          carName: singleCarItem.carName,
+          color: newColor,
+        }
+      );
+      setSelectedCar(response.data.response);
+    } catch (error) {
+      console.error("There was an error changing the color!", error);
+    }
+  };
+
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,7 +46,7 @@ const CarDetails = () => {
         <Container>
           <Row>
             <Col lg="6">
-              <img src={singleCarItem.imgUrl} alt="" className="w-100" />
+              <img src={changecolorImage} alt="" className="w-100" />
             </Col>
 
             <Col lg="6">
@@ -33,6 +57,15 @@ const CarDetails = () => {
                   <h6 className="rent__price fw-bold fs-4">
                     ${singleCarItem.price}.00 / Day
                   </h6>
+                  <select
+                    value={selectedColor}
+                    onChange={handleColorChange}
+                    className="w-100"
+                  >
+                    <option className="black-option" value="black">Black</option>
+                    <option className="white-option" value="white">White</option>
+                    <option className="red-option" value="red">Red</option>
+                  </select>
 
                   <span className=" d-flex align-items-center gap-2">
                     <span style={{ color: "#f9a826" }}>

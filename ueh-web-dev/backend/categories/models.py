@@ -6,6 +6,7 @@ from django.db.models.functions import Replace
 class Product(models.Model):
     brand = models.CharField(max_length=100)
     rating = models.IntegerField()
+    quantity=models.IntegerField(default=0)
     carName = models.CharField(max_length=100)
     imgUrl = models.URLField()
     model = models.CharField(max_length=100)
