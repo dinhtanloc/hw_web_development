@@ -6,12 +6,26 @@ import masterCard from "../../assets/all-images/master-card.jpg";
 import paypal from "../../assets/all-images/paypal.jpg";
 import "../../styles/payment-method.css";
 
-const PaymentMethod = () => {
+const PaymentMethod = (orderData, itemsData) => {
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate("/confirmation");
-  };
+  const handleCreateOrder = async () => {
+    try {
+        const response = await axios.post('http://localhost:8000/orders/create-order/', {
+            order: orderData,
+            items: itemsData
+        });
+        console.log('Order created:', response.data);
+        navigate(`/confirmation/${response.data.orderId}`);
+
+    } catch (error) {
+        console.error('Error creating order:', error);
+    }
+};
+
+  // const handleButtonClick = () => {
+  //   navigate("/confirmation");
+  // };
   return (
     <>
       <div className="payment">
@@ -42,7 +56,7 @@ const PaymentMethod = () => {
         <img src={paypal} alt="" />
       </div>
       <div className="payment text-end mt-5">
-        <button onClick={handleButtonClick}>Reserve Now</button>
+        <button onClick={handleCreateOrder}>Reserve Now</button>
       </div>
     </>
   );

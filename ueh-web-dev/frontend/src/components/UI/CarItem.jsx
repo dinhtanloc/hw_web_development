@@ -3,7 +3,7 @@ import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "../../styles/car-item.css";
 
-const CarItem = (props, handleChangeColor) => {
+const CarItem = (props) => {
   const { imgUrl, model, carName, automatic, speed, price } = props.item;
 
 

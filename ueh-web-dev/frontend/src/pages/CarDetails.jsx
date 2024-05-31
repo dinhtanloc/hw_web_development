@@ -7,12 +7,28 @@ import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import BookingForm from "../components/UI/BookingForm";
 import PaymentMethod from "../components/UI/PaymentMethod";
+import { useCart } from "../utils/cartContext";
 
 const CarDetails = () => {
   const { slug } = useParams();
+  const { addToCart } = useCart();
   const [selectedColor, setSelectedColor] = useState("");
   const singleCarItem = carData.find((item) => item.carName === slug);
   const [changecolorImage, setSelectedCar]=useState(singleCarItem.imgUrl)
+  // const [orderData, setOrderData] = useState({/* ... */});
+  // const [itemsData, setItemsData] = useState([{/* ... */}]);
+
+  // const handleCreateOrder = async () => {
+  //     try {
+  //         const response = await axios.post('http://localhost:8000/orders/create-order/', {
+  //             order: orderData,
+  //             items: itemsData
+  //         });
+  //         console.log('Order created:', response.data);
+  //     } catch (error) {
+  //         console.error('Error creating order:', error);
+  //     }
+  // };
 
   // console.log('check dataa')
   // console.log(singleCarItem)
@@ -32,6 +48,16 @@ const CarDetails = () => {
     } catch (error) {
       console.error("There was an error changing the color!", error);
     }
+  };
+
+  const handleAddToCart = () => {
+    const newItem = {
+      carName: singleCarItem.carName,
+      price: singleCarItem.price,
+      color: selectedColor,
+      imgUrl: changecolorImage,
+    };
+    addToCart(newItem);
   };
 
 
@@ -137,10 +163,12 @@ const CarDetails = () => {
                     {singleCarItem.brand}
                   </span>
                 </div>
+                <button onClick={handleAddToCart}>Add to Cart</button>
+
               </div>
             </Col>
 
-            <Col lg="7" className="mt-5">
+            {/* <Col lg="7" className="mt-5">
               <div className="booking-info mt-5">
                 <h5 className="mb-4 fw-bold ">Booking Information</h5>
                 <BookingForm />
@@ -150,9 +178,11 @@ const CarDetails = () => {
             <Col lg="5" className="mt-5">
               <div className="payment__info mt-5">
                 <h5 className="mb-4 fw-bold ">Payment Information</h5>
-                <PaymentMethod />
+                <PaymentMethod
+                orderData={orderData}
+                itemsData={itemsData} />
               </div>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </section>
