@@ -7,12 +7,13 @@ import "../styles/booking-form.css";
 import masterCard from "../assets/all-images/master-card.jpg";
 import paypal from "../assets/all-images/paypal.jpg";
 import "../styles/payment-method.css";
+import { useCart } from "../utils/cartContext";
 
 
 
 
 const Confirmation = () => {
-  const { orderId } = useParams();
+  const {cartItems} = useCart();
   const [orderItems, setOrderItems] = useState([]);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -24,17 +25,7 @@ const Confirmation = () => {
     paymentMethod: ""
   });
 
-  const fetchOrderItems = async () => {
-      try {
-          const response = await axios.get(`http://localhost:8000/orders/${orderId}/items/`);
-          setOrderItems(response.data);
-      } catch (error) {
-          console.error('Error fetching order items:', error);
-      }
-  };
-  useEffect(() => {
-    fetchOrderItems();
-}, [orderId]);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
