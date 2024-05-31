@@ -12,11 +12,18 @@ PAYMENT_METHOD_CHOICES = [
 # Create your models here.
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Firstname=models.CharField(max_length=100)
+    Lastname=models.CharField(max_length=100)
+    email = models.EmailField()
+    phoneNumber=models.CharField(max_length=100)
+    address=models.CharField(max_length=100)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payment_method=models.CharField(null=True)
     shipping_deadline = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    note=models.CharField(max_length=1000)
+
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
@@ -28,14 +35,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    Firstname=models.CharField(max_length=100)
-    Lastname=models.CharField(max_length=100)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)  # Thêm trường unit_price
     color = models.CharField()
     quantity = models.PositiveIntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)  # Thêm trường total_price
-    note=models.CharField(max_length=1000)
 
 
     def __str__(self):

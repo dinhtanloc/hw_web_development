@@ -6,6 +6,8 @@ const OrderDetails = () =>{
     const [orderItems, setOrderItems] = useState([]);
 
     const fetchOrderItems = async () => {
+          // Tạm thời bỏ qua để không ảnh hưởng đến dữ liệu
+
         try {
             const response = await axios.get(`http://localhost:8000/orders/${orderId}/items/`);
             setOrderItems(response.data);
@@ -28,7 +30,7 @@ const OrderDetails = () =>{
                 <hr />
                 <h4 className="mt-4">Your Cart Items:</h4>
                 <hr />
-                <div className="cart-item my-1">
+                {/* <div className="cart-item my-1">
                   <div className="row">
                     <div className="col-4 col-lg-2">
                       <img src="./images/airpords.jpg" alt="Laptop" height="45" width="65" />
@@ -40,7 +42,15 @@ const OrderDetails = () =>{
                       <p>1 x $89.99 = <b>$89.99</b></p>
                     </div>
                   </div>
-                </div>
+                </div> */}
+
+                {/* {filteredCars.map((item) => (
+                    <CarItem 
+                    item={item} 
+                    key={item.id} 
+              // handleChangeColor={handleChangeColor} 
+                    />
+                ))} */}
                 <hr />
                 {/* <div className="col-span-2 sm:col-span-1">
                                       <label for="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>

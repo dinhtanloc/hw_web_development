@@ -13,6 +13,7 @@ import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import PrivateRoute from "../utils/PrivateRoute";
 import Confirmation from "../pages/Confirmation";
+import OrderDetails from "../pages/OrderDetails";
 
 const Routers = ({ searchTerm }) => {
   return (
@@ -37,6 +38,9 @@ const Routers = ({ searchTerm }) => {
       {/* <Route path="/confirmation" element={<Confirmation />} /> */}
       <Route exact path='/confirmation' element={<PrivateRoute/>}>
             <Route exact path='/confirmation' element={<Confirmation/>}/>
+      </Route>
+      <Route exact path='/confirmation/:slug' element={<PrivateRoute/>}>
+            <Route exact path='/confirmation/:slug' element={<OrderDetails/>}/>
       </Route>
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />

@@ -8,13 +8,14 @@ import masterCard from "../assets/all-images/master-card.jpg";
 import paypal from "../assets/all-images/paypal.jpg";
 import "../styles/payment-method.css";
 import { useCart } from "../utils/cartContext";
+import ViewOrderItems from "../components/UI/ViewOrderItems";
 
 
 
 
 const Confirmation = () => {
   const {cartItems} = useCart();
-  const [orderItems, setOrderItems] = useState([]);
+  const [orderItems, setOrderItems] = useState(cartItems);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,6 +25,8 @@ const Confirmation = () => {
     notes: "",
     paymentMethod: ""
   });
+  console.log('Day la trang xac nhan')
+  console.log(cartItems);
 
   
 
@@ -32,29 +35,33 @@ const Confirmation = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const submitHandler =()=>{
+
+  };
+
 
   const handleCreateOrder = async (e) => {
     e.preventDefault();
     const orderData = {
-      shippingInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        Firstname: formData.firstName,
+        Lastname: formData.lastName,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
         notes: formData.notes,
-      },
-      paymentMethod: formData.paymentMethod,
-      items: orderItems,
+        paymentMethod: formData.paymentMethod,
+        items: orderItems,
     };
-
-    try {
-      const response = await axios.post("http://localhost:8000/orders/create-order/", orderData);
-      console.log("Order created:", response.data);
-      navigate(`/confirmation/${response.data.orderId}`);
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
+    console.log('Order Items');
+    console.log(orderData);
+    // Tạm thời bỏ qua để không ảnh hưởng đến dữ liệu
+    // try {
+    //   const response = await axios.post("http://localhost:8000/orders/create-order/", orderData);
+    //   console.log("Order created:", response.data);
+    //   navigate(`/confirmation/${response.data.orderId}`);
+    // } catch (error) {
+    //   console.error("Error creating order:", error);
+    // }
   };
 
   return (
@@ -65,14 +72,14 @@ const Confirmation = () => {
           <div className="container-fluid">
             <div className="row d-flex justify-content-between">
               <div className="col-12 col-lg-8 mt-5 order-confirm">
-                <h4 className="mb-3">Shipping Info</h4>
-                <p><b>Name:</b> </p>
+                {/* <h4 className="mb-3">Shipping Info</h4> */}
+                {/* <p><b>Name:</b> </p>
                 <p><b>Phone:</b> </p>
-                <p className="mb-4"><b>Address:</b> </p>
-                <hr />
+                <p className="mb-4"><b>Address:</b> </p> */}
+                {/* <hr />  */}
                 <h4 className="mt-4">Your Cart Items:</h4>
                 <hr />
-                <div className="cart-item my-1">
+                {/* <div className="cart-item my-1">
                   <div className="row">
                     <div className="col-4 col-lg-2">
                       <img src="./images/airpords.jpg" alt="Laptop" height="45" width="65" />
@@ -84,7 +91,15 @@ const Confirmation = () => {
                       <p>1 x $89.99 = <b>$89.99</b></p>
                     </div>
                   </div>
-                </div>
+                </div> */}
+
+                {orderItems.map((item) => (
+                    <ViewOrderItems 
+                    item={item} 
+                    key={item.id} 
+              // handleChangeColor={handleChangeColor} 
+                    />
+                ))}
                 <hr />
                 {/* <div className="col-span-2 sm:col-span-1">
                                       <label for="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
@@ -132,37 +147,6 @@ const Confirmation = () => {
                       <FormGroup className="address__input d-inline-block mb-4">
                         <input type="text" placeholder="To Address" name="address" value={formData.address} onChange={handleInputChange} />
                       </FormGroup>
-
-                      {/* <FormGroup className="booking__form d-inline-block me-4 mb-4">
-                        <select name="" id="">
-                          <option value="1 person">1 Person</option>
-                          <option value="2 person">2 Person</option>
-                          <option value="3 person">3 Person</option>
-                          <option value="4 person">4 Person</option>
-                          <option value="5+ person">5+ Person</option>
-                        </select>
-                      </FormGroup>
-                      <FormGroup className="booking__form d-inline-block ms-1 mb-4">
-                        <select name="" id="">
-                          <option value="1 luggage">1 luggage</option>
-                          <option value="2 luggage">2 luggage</option>
-                          <option value="3 luggage">3 luggage</option>
-                          <option value="4 luggage">4 luggage</option>
-                          <option value="5+ luggage">5+ luggage</option>
-                        </select>
-                      </FormGroup>
-
-                      <FormGroup className="booking__form d-inline-block me-4 mb-4">
-                        <input type="date" placeholder="Journey Date" />
-                      </FormGroup>
-                      <FormGroup className="booking__form d-inline-block ms-1 mb-4">
-                        <input
-                          type="time"
-                          placeholder="Journey Time"
-                          className="time__picker"
-                        />
-                      </FormGroup> */}
-
                       <FormGroup>
                         <textarea
                           rows={5}

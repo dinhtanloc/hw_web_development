@@ -8,13 +8,13 @@ const CarItem = (props) => {
 
 
 
-  console.log(imgUrl)
+  // console.log(imgUrl)
   const PUBLIC_URL='../../../public'
   
   const filePath = `${PUBLIC_URL}${imgUrl}`;
 
   // const hello = `../${carName}`; // Tạo đường dẫn tương đối cho ảnh
-  console.log(filePath)
+  // console.log(filePath)
 
 
   return (

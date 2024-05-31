@@ -13,7 +13,7 @@ const CarListing = ({searchTerm}) => {
   useEffect(() => {
     axios.get('http://localhost:8000/categories/')
         .then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             setCardata(response.data)
             // console.log('hello bibi')
             // console.log(hello)
@@ -61,8 +61,8 @@ const CarListing = ({searchTerm}) => {
   }
 )
 : carData;
-  console.log(searchTerm);
-  console.log(filteredCars)
+  // console.log(searchTerm);
+  // console.log(filteredCars)
   const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
 
   return (

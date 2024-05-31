@@ -10,7 +10,7 @@ const BlogList = ({searchTerm}) => {
   useEffect(() => {
     axios.get('http://localhost:8000/blogs/')
         .then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             setBlogdata(response.data)
             // console.log('hello bibi')
             // console.log(hello)

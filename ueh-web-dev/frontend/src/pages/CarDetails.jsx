@@ -8,30 +8,19 @@ import { useParams } from "react-router-dom";
 import BookingForm from "../components/UI/BookingForm";
 import PaymentMethod from "../components/UI/PaymentMethod";
 import { useCart } from "../utils/cartContext";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";  
+
 
 const CarDetails = () => {
   const { slug } = useParams();
-  const { addToCart } = useCart();
+  const { addToCart,cartItems } = useCart();
   const [selectedColor, setSelectedColor] = useState("");
   const singleCarItem = carData.find((item) => item.carName === slug);
   const [changecolorImage, setSelectedCar]=useState(singleCarItem.imgUrl)
-  // const [orderData, setOrderData] = useState({/* ... */});
-  // const [itemsData, setItemsData] = useState([{/* ... */}]);
+  const navigate = useNavigate();
 
-  // const handleCreateOrder = async () => {
-  //     try {
-  //         const response = await axios.post('http://localhost:8000/orders/create-order/', {
-  //             order: orderData,
-  //             items: itemsData
-  //         });
-  //         console.log('Order created:', response.data);
-  //     } catch (error) {
-  //         console.error('Error creating order:', error);
-  //     }
-  // };
 
-  // console.log('check dataa')
-  // console.log(singleCarItem)
 
   const handleColorChange = async (e) => {
     const newColor = e.target.value;
@@ -53,12 +42,30 @@ const CarDetails = () => {
   const handleAddToCart = () => {
     const newItem = {
       carName: singleCarItem.carName,
-      price: singleCarItem.price,
+      unit_price: singleCarItem.price,
+      quantity: singleCarItem.quantity,
       color: selectedColor,
       imgUrl: changecolorImage,
+      total_price: quantity *unit_price
     };
     addToCart(newItem);
+    console.log('Moi them don hang moi')
+    console.log(cartItems)
+    Swal.fire({
+      title: "Add Successful",
+      icon: "success",
+      toast: true,
+      timer: 6000,
+      position: 'top-right',
+      timerProgressBar: true,
+      showConfirmButton: false,
+  })
   };
+
+  const chageconfirmation = () =>{
+    navigate('/confirmation')
+
+  }
 
 
 
@@ -104,6 +111,11 @@ const CarDetails = () => {
                     <option className="white-option" value="white">White</option>
                     <option className="red-option" value="red">Red</option>
                   </select>
+
+                  <div className="col-span-2 sm:col-span-1">
+                      <label for="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
+                      <input value={singleCarItem.quantity} type="number" name="quantity" id="quantity" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required=""/>
+                  </div> 
 
                 <p className="section__description">
                   {singleCarItem.description}
@@ -164,6 +176,7 @@ const CarDetails = () => {
                   </span>
                 </div>
                 <button onClick={handleAddToCart}>Add to Cart</button>
+                <button onClick={chageconfirmation}>Confirmation</button>
 
               </div>
             </Col>
