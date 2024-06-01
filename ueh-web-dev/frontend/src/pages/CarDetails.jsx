@@ -62,14 +62,6 @@ const CarDetails = () => {
       showConfirmButton: false,
   })
   };
-
-  const chageconfirmation = () =>{
-    navigate('/confirmation')
-
-  }
-
-
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [singleCarItem]);
@@ -177,7 +169,6 @@ const CarDetails = () => {
                   </span>
                 </div>
                 <button onClick={handleAddToCart}>Add to Cart</button>
-                <button onClick={chageconfirmation}>Confirmation</button>
 
               </div>
             </Col>

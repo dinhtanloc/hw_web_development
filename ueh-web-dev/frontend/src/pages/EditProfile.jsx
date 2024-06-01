@@ -38,7 +38,7 @@ const EditProfile = () => {
 
     const fetchUserProfile = async () => {
         try {
-            const response = await profileAPI.get('/profile/');
+            const response = await profileAPI.get('accounts/profile/');
             setFormData(prevFormData => ({
                 ...prevFormData,
                 full_name: response.data.full_name,

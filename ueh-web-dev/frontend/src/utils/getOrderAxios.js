@@ -4,9 +4,9 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-const baseURL = "http://127.0.0.1:8000/";
+const baseURL = "http://127.0.0.1:8000/orders";
 
-const useAxios = () => {
+const getOrderAxios = () => {
   const { authTokens, setUser, setAuthTokens } = useContext(AuthContext);
 
   const axiosInstance = axios.create({
@@ -41,4 +41,4 @@ const useAxios = () => {
   return axiosInstance;
 };
 
-export default useAxios;
+export default getOrderAxios;

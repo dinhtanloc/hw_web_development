@@ -1,21 +1,26 @@
 import {React,useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col,Form, FormGroup  } from "reactstrap";
+import { useCart } from "../utils/cartContext";
+import ViewOrderItems from "../components/UI/ViewOrderItems";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import PaymentMethod from "../components/UI/PaymentMethod";
 import BookingForm from "../components/UI/BookingForm";
 import "../styles/booking-form.css";
 import masterCard from "../assets/all-images/master-card.jpg";
 import paypal from "../assets/all-images/paypal.jpg";
 import "../styles/payment-method.css";
-import { useCart } from "../utils/cartContext";
-import ViewOrderItems from "../components/UI/ViewOrderItems";
-
+import getOrderAxios from "../utils/getOrderAxios";
+import useAxios from "../utils/useAxios";
 
 
 
 const Confirmation = () => {
   const {cartItems} = useCart();
+  const navigate = useNavigate();
   // const [orderItems, setOrderItems] = useState(cartItems);
+  const getOrder=useAxios();
 
   const calculateTotalPrice = (orderItems) => {
     let totalPrice = 0;
@@ -37,8 +42,9 @@ const Confirmation = () => {
     email: "",
     phoneNumber: "",
     address: "",
+    total_price:0,
+    paymentMethod: "",
     notes: "",
-    paymentMethod: ""
   });
   console.log('Day la trang xac nhan')
   console.log(cartItems);
@@ -54,10 +60,14 @@ const Confirmation = () => {
 
   };
 
+  const handlePaymentMethodChange = (e) => {
+    setFormData({ ...formData, paymentMethod: e.target.value });
+  };
 
   const handleCreateOrder = async (e) => {
     e.preventDefault();
     const orderData = {
+      order:{
         Firstname: formData.firstName,
         Lastname: formData.lastName,
         email: formData.email,
@@ -65,7 +75,9 @@ const Confirmation = () => {
         address: formData.address,
         notes: formData.notes,
         paymentMethod: formData.paymentMethod,
-        items: cartItems,
+
+      },
+        items: cartItems      
     };
     console.log('Order Items');
     console.log(orderData);
@@ -73,10 +85,18 @@ const Confirmation = () => {
     // try {
     //   const response = await axios.post("http://localhost:8000/orders/create-order/", orderData);
     //   console.log("Order created:", response.data);
-    //   navigate(`/confirmation/${response.data.orderId}`);
+    //   // navigate(`/confirmation/${response.data.orderId}`);
     // } catch (error) {
     //   console.error("Error creating order:", error);
     // }
+    
+    response =await getOrder.post('orders/create-order/', orderData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
+      }
+      // navigate(`/confirmation/${response.data.orderId}`);
+    });
+    console.log(response.data)
   };
 
   return (
@@ -108,12 +128,11 @@ const Confirmation = () => {
                   </div>
                 </div> */}
 
-                {cartItems.map((item) => (
-                    <ViewOrderItems 
+                {cartItems.map((item, index) => (
+                  <ViewOrderItems 
                     item={item} 
-                    key={item.id} 
-              // handleChangeColor={handleChangeColor} 
-                    />
+                    key={item.id || index}  // Use item.id if available, otherwise fall back to index
+                  />
                 ))}
                 <hr />
                 {/* <div className="col-span-2 sm:col-span-1">
@@ -127,9 +146,9 @@ const Confirmation = () => {
                   <hr />
                   <p>Subtotal: <span className="order-summary-values">${totalPrice}</span></p>
                   <p>Shipping: <span className="order-summary-values">$25</span></p>
-                  <p>Tax: <span className="order-summary-values">$0</span></p>
+                  <p>Tax: <span className="order-summary-values">${totalPrice*0.1}</span></p>
                   <hr />
-                  <p>Total: <span className="order-summary-values">$114.99</span></p>
+                  <p>Total: <span className="order-summary-values">${1.1*totalPrice+25}</span></p>
                   <hr />
                   <button id="checkout_btn" className="btn btn-primary btn-block" onClick={handleCreateOrder}>Proceed to Payment</button>
                 </div>
@@ -153,7 +172,7 @@ const Confirmation = () => {
                         <input type="email" placeholder="Email" name="email" value={formData.email} onChange={handleInputChange} />
                       </FormGroup>
                       <FormGroup className="booking__form d-inline-block ms-1 mb-4">
-                        <input type="number" placeholder="Phone Number" />
+                        <input type="number" placeholder="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
                       </FormGroup>
 
                       {/* <FormGroup className="booking__form d-inline-block me-4 mb-4">
@@ -178,42 +197,65 @@ const Confirmation = () => {
             </Col>
 
             <Col lg="5" className="mt-5">
-                  <div className="payment__info mt-5">
-                    <h5 className="mb-4 fw-bold ">Payment Information</h5>
+              <div className="payment__info mt-5">
+                <h5 className="mb-4 fw-bold">Payment Information</h5>
+                <div className="payment">
+                  <label htmlFor="directBankTransfer" className="d-flex align-items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="bank_transfer"
+                      checked={formData.paymentMethod === "bank_transfer"}
+                      onChange={handlePaymentMethodChange}
+                    />
+                    Direct Bank Transfer
+                  </label>
+                </div>
+                <div className="payment mt-3">
+                  <label htmlFor="chequePayment" className="d-flex align-items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cheque"
+                      checked={formData.paymentMethod === "cheque"}
+                      onChange={handlePaymentMethodChange}
+                    />
+                    Cheque Payment
+                  </label>
+                </div>
+                <div className="payment mt-3 d-flex align-items-center justify-content-between">
+                  <label htmlFor="masterCard" className="d-flex align-items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="mastercard"
+                      checked={formData.paymentMethod === "mastercard"}
+                      onChange={handlePaymentMethodChange}
+                    />
+                    Master Card
+                  </label>
+                  <img src={masterCard} alt="Master Card" />
+                </div>
+                <div className="payment mt-3 d-flex align-items-center justify-content-between">
+                  <label htmlFor="paypal" className="d-flex align-items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="paypal"
+                      checked={formData.paymentMethod === "paypal"}
+                      onChange={handlePaymentMethodChange}
+                    />
+                    Paypal
+                  </label>
 
-                    <div className="payment">
-                      <label htmlFor="" className="d-flex align-items-center gap-2">
-                        <input type="radio" /> Direct Bank Transfer
-                      </label>
-                    </div>
-
-                    <div className="payment mt-3">
-                      <label htmlFor="" className="d-flex align-items-center gap-2">
-                        <input type="radio" /> Cheque Payment
-                      </label>
-                    </div>
-
-                    <div className="payment mt-3 d-flex align-items-center justify-content-between">
-                      <label htmlFor="" className="d-flex align-items-center gap-2">
-                        <input type="radio" /> Master Card
-                      </label>
-
-                      <img src={masterCard} alt="" />
-                    </div>
-
-                    <div className="payment mt-3 d-flex align-items-center justify-content-between">
-                      <label htmlFor="" className="d-flex align-items-center gap-2">
-                        <input type="radio" /> Paypal
-                      </label>
-
-                      <img src={paypal} alt="" />
-                    </div>
-                    <div className="payment text-end mt-5">
-                      {/* <button onClick={handleCreateOrder}>Reserve Now</button> */}
-                    </div>
-                {/* <PaymentMethod
-                orderData={orderData}
-                itemsData={itemsData} /> */}
+                        <img src={paypal} alt="" />
+                      </div>
+                      <div className="payment text-end mt-5">
+                        {/* <button onClick={handleCreateOrder}>Reserve Now</button> */}
+                      </div>
+                  {/* <PaymentMethod
+                  orderData={orderData}
+                  itemsData={itemsData} /> */}
               </div>
             </Col>
         </Row>

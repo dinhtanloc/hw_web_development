@@ -72,7 +72,7 @@ const Header = ({ onSearch }) => {
     useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await api.get("/test/");
+        const res = await api.get("accounts/test/");
         setCurrentUser(true);
         // console.log(res.data)
         const name_login = res.data.response.username;
@@ -87,7 +87,7 @@ const Header = ({ onSearch }) => {
 
     const fetchProfile = async () => {
       try {
-        const res = await api.get("/profile/");
+        const res = await api.get("accounts/profile/");
         setCurrentUser(true);
         const profile = res.data;
         var imgUrl = profile.image
