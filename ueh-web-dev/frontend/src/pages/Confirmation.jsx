@@ -11,7 +11,6 @@ import "../styles/booking-form.css";
 import masterCard from "../assets/all-images/master-card.jpg";
 import paypal from "../assets/all-images/paypal.jpg";
 import "../styles/payment-method.css";
-import getOrderAxios from "../utils/getOrderAxios";
 import useAxios from "../utils/useAxios";
 
 
