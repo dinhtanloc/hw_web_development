@@ -18,6 +18,7 @@ const CarDetails = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const singleCarItem = carData.find((item) => item.carName === slug);
   const [changecolorImage, setSelectedCar]=useState(singleCarItem.imgUrl)
+  const [quantity, setQuantity] = useState(singleCarItem.quantity || 1); // Sử dụng state để quản lý giá trị quantity
   const navigate = useNavigate();
 
 
@@ -43,10 +44,10 @@ const CarDetails = () => {
     const newItem = {
       carName: singleCarItem.carName,
       unit_price: singleCarItem.price,
-      quantity: singleCarItem.quantity,
+      quantity: quantity,
       color: selectedColor,
       imgUrl: changecolorImage,
-      total_price: quantity *unit_price
+      total_price: quantity *singleCarItem.price
     };
     addToCart(newItem);
     console.log('Moi them don hang moi')
@@ -113,8 +114,8 @@ const CarDetails = () => {
                   </select>
 
                   <div className="col-span-2 sm:col-span-1">
-                      <label for="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                      <input value={singleCarItem.quantity} type="number" name="quantity" id="quantity" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required=""/>
+                      <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
+                      <input value={singleCarItem.quantity} onChange={(e) => setQuantity(Number(e.target.value))}  type="number" name="quantity" id="quantity" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Quantity" required=""/>
                   </div> 
 
                 <p className="section__description">

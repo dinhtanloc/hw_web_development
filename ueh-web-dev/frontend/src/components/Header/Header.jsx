@@ -127,6 +127,9 @@ const Header = ({ onSearch }) => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
+              <Link to="/confirmation" className="d-flex align-items-center gap-1">
+                <i className="ri-shopping-cart-line"></i> Order
+              </Link>
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}

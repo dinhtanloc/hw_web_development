@@ -15,7 +15,22 @@ import ViewOrderItems from "../components/UI/ViewOrderItems";
 
 const Confirmation = () => {
   const {cartItems} = useCart();
-  const [orderItems, setOrderItems] = useState(cartItems);
+  // const [orderItems, setOrderItems] = useState(cartItems);
+
+  const calculateTotalPrice = (orderItems) => {
+    let totalPrice = 0;
+    orderItems.forEach((item) => {
+      totalPrice += item.total_price;
+    });
+    return totalPrice;
+  };
+
+  const totalPrice = calculateTotalPrice(cartItems);
+
+
+
+
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -50,7 +65,7 @@ const Confirmation = () => {
         address: formData.address,
         notes: formData.notes,
         paymentMethod: formData.paymentMethod,
-        items: orderItems,
+        items: cartItems,
     };
     console.log('Order Items');
     console.log(orderData);
@@ -93,7 +108,7 @@ const Confirmation = () => {
                   </div>
                 </div> */}
 
-                {orderItems.map((item) => (
+                {cartItems.map((item) => (
                     <ViewOrderItems 
                     item={item} 
                     key={item.id} 
@@ -110,7 +125,7 @@ const Confirmation = () => {
                 <div id="order_summary">
                   <h4>Order Summary</h4>
                   <hr />
-                  <p>Subtotal: <span className="order-summary-values">$89.99</span></p>
+                  <p>Subtotal: <span className="order-summary-values">${totalPrice}</span></p>
                   <p>Shipping: <span className="order-summary-values">$25</span></p>
                   <p>Tax: <span className="order-summary-values">$0</span></p>
                   <hr />
