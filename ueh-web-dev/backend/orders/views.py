@@ -16,9 +16,11 @@ def create_order(request):
     print(user)
 
     # Validate order data
-    order_serializer = OrderSerializer(data=order_data, partial=True,context={'user': user})
+    order_serializer = OrderSerializer(data=order_data, partial=True)
+    print('du lieu nhap vao')
+    print(order_data)
     if not order_serializer.is_valid():
-        print('toi o day')
+        print('toi o day ne')
         return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # Create the order

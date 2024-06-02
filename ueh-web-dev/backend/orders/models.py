@@ -2,6 +2,8 @@ from django.db import models
 from accounts.models import User
 from categories.models import Product
 from datetime import timedelta
+from django.utils import timezone
+
 
 
 PAYMENT_METHOD_CHOICES = [
@@ -36,9 +38,9 @@ class Order(models.Model):
 
    
     def save(self, *args, **kwargs):
-        # print(self.Firstname)
-        print('toi o day')
-        if not self.shipping_deadline:
+        if not self.id:  # Only calculate shipping_deadline when creating a new order
+            print('o day')
+            self.created_at = timezone.now()
             self.shipping_deadline = self.created_at.date() + timedelta(days=21)
         super().save(*args, **kwargs)
 

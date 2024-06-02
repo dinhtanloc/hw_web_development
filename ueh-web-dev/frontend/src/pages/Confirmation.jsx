@@ -89,12 +89,7 @@ const Confirmation = () => {
     //   console.error("Error creating order:", error);
     // }
     
-    response =await getOrder.post('orders/create-order/', orderData, {
-      headers: {
-        'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
-      }
-      // navigate(`/confirmation/${response.data.orderId}`);
-    });
+    response =await getOrder.post('orders/create-order/', orderData);
     console.log(response.data)
   };
 
