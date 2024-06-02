@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     'accounts',
     'blogs',
     'categories',
-    'orders',
+    'order',
 
     # Third Party
     'import_export',

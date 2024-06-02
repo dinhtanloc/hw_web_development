@@ -45,9 +45,11 @@ const CarDetails = () => {
       carName: singleCarItem.carName,
       unit_price: singleCarItem.price,
       quantity: quantity,
-      color: selectedColor,
+      // color: selectedColor,
+      color: "white",
       imgUrl: changecolorImage,
-      total_price: quantity *singleCarItem.price
+      total_price: quantity *singleCarItem.price,
+      product:singleCarItem.id
     };
     addToCart(newItem);
     console.log('Moi them don hang moi')

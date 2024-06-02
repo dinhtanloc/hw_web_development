@@ -63,6 +63,7 @@ const Confirmation = () => {
     setFormData({ ...formData, paymentMethod: e.target.value });
   };
 
+
   const handleCreateOrder = async (e) => {
     e.preventDefault();
     const orderData = {

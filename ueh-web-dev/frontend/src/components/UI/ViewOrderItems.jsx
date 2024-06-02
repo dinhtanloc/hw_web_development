@@ -1,6 +1,8 @@
 import React from "react";
+import { useCart } from "../../utils/cartContext";
 
 const ViewOrderItems = ({ item }) => {
+  const {removeFromCart} =useCart();
     if (!item) {
       return <div>Invalid item</div>;
     }
@@ -20,6 +22,8 @@ const ViewOrderItems = ({ item }) => {
                 <p>{quantity} x ${unit_price} = <b>${total_price}</b></p>
               </div>
             </div>
+            <button onClick={removeFromCart}>Delete</button>
+
           </div>
     );
 }

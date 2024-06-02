@@ -25,7 +25,8 @@ urlpatterns = [
     path('app/', include('app.urls')),
     path('accounts/', include('accounts.urls')),
     path('categories/', include('categories.urls')),
-    path('orders/', include('orders.urls')),
+    # path('orders/', include('orders.urls')),
+    path('orders/', include('order.urls')),
     path('blogs/', include('blogs.urls')),
     #authentication
     path('ckeditor/', include('ckeditor_uploader.urls')),
