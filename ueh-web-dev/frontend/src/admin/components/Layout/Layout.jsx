@@ -1,6 +1,6 @@
 import "../../styles/page.css"
-import { useState } from "react";
-import { useMode } from "./theme";
+import { useState, Fragment } from "react";
+import { useMode } from "../../theme";
 
 import Routers from "../../routers/Router";
 import Topbar from "../global/Topbar"
@@ -11,6 +11,8 @@ const Layout =() =>{
     const [isSidebar, setIsSidebar] = useState(true);
 
     return(
+        <Fragment>
+
         <div className="app">
           <Sidebar isSidebar={isSidebar} />
           <main className="content">
@@ -31,6 +33,7 @@ const Layout =() =>{
             </Routes> */}
           </main>
         </div>
+        </Fragment>
     )
 
 }

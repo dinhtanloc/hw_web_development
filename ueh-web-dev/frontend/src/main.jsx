@@ -8,9 +8,8 @@ import "remixicon/fonts/remixicon.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter as Router } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';
-import CartProvider from './utils/cartContext.jsx';
-
+import { AuthProvider } from './client/context/AuthContext.jsx';
+import CartProvider from './client/utils/cartContext.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

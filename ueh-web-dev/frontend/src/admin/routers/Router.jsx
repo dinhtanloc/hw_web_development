@@ -10,11 +10,11 @@ import Line from "../pages/Linepage";
 import Pie from "../pages/Piepage";
 import FAQ from "../pages/Faqpage";
 import Geography from "../pages/Geographypage";
+import Calendar from "../pages/Calendarpage";
 
 const Routers = () => {
     return (
       <Routes>
-        <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contacts" element={<Contacts />} />
@@ -26,7 +26,6 @@ const Routers = () => {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
-            </Routes>
       </Routes>
     );
   };
