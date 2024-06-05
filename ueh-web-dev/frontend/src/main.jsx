@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+// import App from './App.jsx'
 import './index.css'
 import "bootstrap/dist/css/bootstrap.min.css";
 // import 'swiper/swiper-bundle.min.css';
@@ -9,22 +9,43 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from './client/context/AuthContext.jsx';
+import Clientpage from './client/Clientpage.jsx';
+import Adminpage from './admin/AdminPage.jsx'
 import CartProvider from './client/utils/cartContext.jsx';
+// import Clientpage from './client/Clientpage.jsx';
+
+const url = window.location.pathname;
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+if (url.startsWith('/admin')) {
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
     <Router>
-        <AuthProvider>
-          <CartProvider>
-            <App />
+      <AuthProvider>
+          <Adminpage />
 
-          </CartProvider>
-        
-
-        </AuthProvider>
+      </AuthProvider>
 
     </Router>
+    </React.StrictMode>
+    );
+} else {
+  // ReactDOM.render(<Appclientpage />, document.getElementById('root'));
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <Router>
+          <AuthProvider>
+            <CartProvider>
+              <Clientpage />
+  
+            </CartProvider>
+          
+  
+          </AuthProvider>
+  
+      </Router>
+  
+    </React.StrictMode>,
+  )
+}
 
-  </React.StrictMode>,
-)

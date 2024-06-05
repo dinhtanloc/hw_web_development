@@ -15,17 +15,17 @@ import Calendar from "../pages/Calendarpage";
 const Routers = () => {
     return (
       <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
+              <Route path="/admin" element={<Dashboard />} />
+              <Route path="/admin/team" element={<Team />} />
+              <Route path="/admin/contacts" element={<Contacts />} />
+              <Route path="/admin/invoices" element={<Invoices />} />
+              <Route path="/admin/form" element={<Form />} />
+              <Route path="/admin/bar" element={<Bar />} />
+              <Route path="/admin/pie" element={<Pie />} />
+              <Route path="/admin/line" element={<Line />} />
+              <Route path="/admin/faq" element={<FAQ />} />
+              <Route path="/admin/calendar" element={<Calendar />} />
+              <Route path="/admin/geography" element={<Geography />} />
       </Routes>
     );
   };
