@@ -416,6 +416,20 @@ JAZZMIN_SETTINGS = {
     "site_header": "Django & React JWT Authentication ",
     "site_brand": "Think | Create | Inspire",
     "copyright": "www.desphixs.com",
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "React Admin", "url": "http://localhost:3000/admin", "new_window": False},
+    ],
+    "usermenu_links": [
+        {"name": "Profile", "url": "admin:auth_user_change", "permissions": ["auth.view_user"]},
+        {"name": "React Admin", "url": "http://localhost:3000/admin", "new_window": False},
+    ],
+    "custom_links": {
+        "app_name": [
+            {"name": "React Admin", "url": "http://localhost:3000/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
+        ]
+    },
+    
 }
 
 

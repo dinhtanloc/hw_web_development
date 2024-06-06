@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboardpage";
 import Team from "../pages/Teampage";
 import Invoices from "../pages/Invoicespage";
-import Contacts from "../pages/Contactpage";
+import Contacts from "../pages/Productpage";
 import Bar from "../pages/Barpage";
 import Form from "../pages/Formpage";
 import Line from "../pages/Linepage";
@@ -17,7 +17,7 @@ const Routers = () => {
       <Routes>
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/team" element={<Team />} />
-              <Route path="/admin/contacts" element={<Contacts />} />
+              <Route path="/admin/products" element={<Contacts />} />
               <Route path="/admin/invoices" element={<Invoices />} />
               <Route path="/admin/form" element={<Form />} />
               <Route path="/admin/bar" element={<Bar />} />
