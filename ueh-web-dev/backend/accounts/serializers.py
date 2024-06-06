@@ -8,9 +8,10 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField(source='user.is_staff', read_only=True)
     class Meta:
         model = User
-        fields = ('id', 'username', 'email','date_joined')
+        fields = ('id', 'username', 'email','date_joined','is_staff')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -29,6 +30,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['verified'] = user.profile.verified
         # ...
         return token
+    
+class StaffTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        if not self.user.is_staff:
+            raise serializers.ValidationError('User is not staff')
+        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -49,7 +57,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['username'],
+            useacrname=validated_data['username'],
             email=validated_data['email']
 
         )

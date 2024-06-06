@@ -17,7 +17,7 @@ const Profile =()=>{
 
     const fetchUserProfile = async () => {
         try {
-            const response = await profileAPI.get('/profile/');
+            const response = await profileAPI.get('accounts/profile/');
             setUserProfile(response.data);
             console.log(userProfile)
         } catch (error) {

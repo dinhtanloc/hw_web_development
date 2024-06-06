@@ -1,3 +1,4 @@
+import React, { useEffect, useContext,useState } from "react";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { mockTransactions } from "../assets/data/mockData";
@@ -12,11 +13,40 @@ import GeographyChart from "../components/UI/GeographyChart";
 import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
+// import useAxios from "../utils/useAxios";
+import useAxios from "../../client/utils/useAxios";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const isStaff = useAxios() 
+  const [checkedStaff, checkStaff ] = useState(false)
 
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+      try {
+          const response = await isStaff.get('accounts/staff/');
+          // setUserProfile(response.data);
+          checkStaff(response.data.is_staff)
+          
+          console.log(checkedStaff)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
+  // useEffect(() => {
+  //   refreshTokens(); // Làm mới token khi trang được tải
+  // }, [refreshTokens]);
+
+ 
+  if(!checkedStaff){
+    return(<div>You can not access here</div>);
+  }
   return (
     <Box m="20px">
       {/* HEADER */}

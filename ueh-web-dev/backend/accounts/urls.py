@@ -17,5 +17,8 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('test/', views.testEndPoint, name='test'),
     path('profile/', views.profileView, name='profile'),
+    path('staff/', views.isStaffEndpoint, name='staff'),
+    path('staff-list/', views.staff_list_view, name='list'),
+
     path('', views.getRoutes),
 ]

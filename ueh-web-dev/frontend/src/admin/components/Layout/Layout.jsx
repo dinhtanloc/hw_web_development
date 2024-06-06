@@ -1,15 +1,51 @@
 import "../../styles/page.css"
-import { useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useMode } from "../../theme";
 
 import Routers from "../../routers/Router";
 import Topbar from "../global/Topbar"
 import Sidebar from "../global/Sidebar"
+import useAxios from "../../../client/utils/useAxios";
 
 const Layout =() =>{
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
+    const isStaff = useAxios() 
+    const [checkedStaff, checkStaff ] = useState(false)
 
+
+
+    useEffect(() => {
+      fetchStaffChecking();
+      fetchStafflist();
+    }, []);
+
+    const fetchStaffChecking = async () => {
+        try {
+            const response = await isStaff.get('accounts/staff/');
+            // setUserProfile(response.data);
+            checkStaff(response.data.is_staff)
+            
+            console.log(checkedStaff)
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+    const fetchStafflist = async () => {
+        try {
+            const response = await isStaff.get('accounts/staff-list/');
+            // setUserProfile(response.data);
+            // checkStaff(response.data.is_staff)
+            
+            console.log(response)
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+    
+    if(!checkedStaff){
+      return(<div>You can not access here</div>);
+    }
     return(
         <Fragment>
 

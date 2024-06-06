@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User,Profile
 
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer,ProfileSerializer,ChangePasswordSerializer
+from .serializers import MyTokenObtainPairSerializer, RegisterSerializer,ProfileSerializer,ChangePasswordSerializer, StaffTokenObtainPairSerializer,UserSerializer
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
@@ -12,6 +12,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from .permissions import IsStaffUser
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -65,7 +66,22 @@ def testEndPoint(request):
         return Response({'response': data}, status=status.HTTP_200_OK)
     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def isStaffEndpoint(request):
+    if request.method == 'GET':
+        is_staff = request.user.is_staff
+        # Bạn có thể sử dụng giá trị is_staff ở đây để thực hiện các xử lý phù hợp.
+        return Response({"is_staff": is_staff})
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsStaffUser])  # Chỉ cho phép nhân viên truy cập
+def staff_list_view(request):
+    if request.method == 'GET':
+        staff_users = User.objects.filter(is_staff=True)
+        serializer = UserSerializer(staff_users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 # def get_profile(request):
