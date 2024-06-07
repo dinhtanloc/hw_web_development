@@ -31,17 +31,7 @@ const Layout =() =>{
             console.error('Error fetching user profile:', error);
         }
     };
-    const fetchStafflist = async () => {
-        try {
-            const response = await isStaff.get('accounts/staff-list/');
-            // setUserProfile(response.data);
-            // checkStaff(response.data.is_staff)
-            
-            console.log(response)
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
+    
     
     if(!checkedStaff){
       return(<div>You can not access here</div>);

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboardpage";
-import Team from "../pages/Teampage";
-import Invoices from "../pages/Invoicespage";
+import Teampage from "../pages/Teampage";
+import Invoicespage from "../pages/Invoicespage";
 import Contacts from "../pages/Productpage";
 import Bar from "../pages/Barpage";
 import Form from "../pages/Formpage";
@@ -17,10 +17,10 @@ const Routers = () => {
     return (
       <Routes>
               <Route path="/admin" element={<Dashboard />} />
-              <Route path="/admin/team" element={<Team />} />
-              <Route path="/admin/products" element={<Contacts />} />
+              <Route path="/admin/team" element={<Teampage />} />
+              <Route path="/admin/products" element={<ProductPage />} />
               <Route path="/admin/create-products" element={<Addproduct />} />
-              <Route path="/admin/invoices" element={<Invoices />} />
+              <Route path="/admin/invoices" element={<Invoicespage />} />
               <Route path="/admin/form" element={<Form />} />
               <Route path="/admin/bar" element={<Bar />} />
               <Route path="/admin/pie" element={<Pie />} />

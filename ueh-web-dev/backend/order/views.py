@@ -73,7 +73,7 @@ def get_order_items(request, order_id):
 class OrderAdminViewSet(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsStaffUser]
 
     # Xem đơn hàng
     def retrieve(self, request, *args, **kwargs):
@@ -87,15 +87,30 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         })
 
     # Hủy đơn hàng
-    def destroy(self, request, *args, **kwargs):
+    @action(detail=True, methods=['post'], url_path='cancel')
+    def cancel_order(self, request, pk=None):
         instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if instance.status == 'pending':
+            instance.status = 'cancelled'
+            instance.save()
+            return Response({'status': 'Order cancelled'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Order cannot be cancelled'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Hoàn thành đơn hàng
     @action(detail=True, methods=['post'], url_path='complete')
     def complete_order(self, request, pk=None):
         instance = self.get_object()
-        instance.status = 'completed'  # Giả sử có một trường 'status' trong model Orders
-        instance.save()
-        return Response({'status': 'Order completed'}, status=status.HTTP_200_OK)
+        if instance.status == 'pending':
+            instance.status = 'completed'
+            instance.save()
+            return Response({'status': 'Order completed'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Order cannot be completed'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Overriding the destroy method to use cancel_order logic
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.status == 'pending':
+            instance.status = 'cancelled'
+            instance.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'error': 'Order cannot be cancelled'}, status=status.HTTP_400_BAD_REQUEST)

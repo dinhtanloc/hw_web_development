@@ -1,4 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
+import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import { mockDataTeam } from "../assets/data/mockData";
@@ -6,24 +7,54 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
+import useAxios from "../../client/utils/useAxios";
 
-const Team = () => {
+const Teampage = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const isStaff = useAxios() 
+  const [staffList, Makestafflist] = useState([]);
+
+
+
+    useEffect(() => {
+      fetchStafflist();
+    }, []);
+
+
+  const fetchStafflist = async () => {
+    try {
+        const response = await isStaff.get('accounts/staff-list/');
+        // setUserProfile(response.data);
+        // checkStaff(response.data.is_staff)
+        console.log(response)
+        // Makestafflist(response)
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+    }
+};
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "username",
+      headerName: "Username",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
+      field: "email",
+      headerName: "Email",
+      flex:1,
+    },
+    {
+      field: "first_name",
+      headerName: "First name",
+      flex:1,
+    },
+    {
+      field: "last_name",
+      headerName: "Last name",
+      flex:1,
     },
     {
       field: "phone",
@@ -36,10 +67,10 @@ const Team = () => {
       flex: 1,
     },
     {
-      field: "accessLevel",
+      field: "is_superuser",
       headerName: "Access Level",
       flex: 1,
-      renderCell: ({ row: { access } }) => {
+      renderCell: ({ row: { is_superuser } }) => {
         return (
           <Box
             width="60%"
@@ -48,19 +79,19 @@ const Team = () => {
             display="flex"
             justifyContent="center"
             backgroundColor={
-              access === "admin"
+              is_superuser
                 ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
                 : colors.greenAccent[700]
             }
             borderRadius="4px"
           >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
+            {is_superuser ? (
+              <AdminPanelSettingsOutlinedIcon />
+            ) : (
+              <SecurityOutlinedIcon />
+            )}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
+              {is_superuser ? "Admin" : "Staff"}
             </Typography>
           </Box>
         );
@@ -106,4 +137,4 @@ const Team = () => {
   );
 };
 
-export default Team;
+export default Teampage;

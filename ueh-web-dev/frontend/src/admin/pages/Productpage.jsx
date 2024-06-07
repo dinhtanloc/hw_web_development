@@ -7,10 +7,10 @@ import Header from "./Header";
 import { useTheme } from "@mui/material";
 import useAxios from "../../client/utils/useAxios";
 
-const Contacts = () => {
+const ProductPage = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const[products,setProducts] = useState();
+  const[products,setProducts] = useState([]);
   const [editRowIndex, setEditRowIndex] = useState(null);
   
 
@@ -240,4 +240,4 @@ const Contacts = () => {
   );
 };
 
-export default Contacts;
+export default ProductPage;

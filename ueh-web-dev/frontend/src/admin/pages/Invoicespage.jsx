@@ -6,34 +6,91 @@ import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
 
-const Invoices = () => {
+const Invoicespage = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
 
-  const productList = useAxios()
+
+  const orderList = useAxios()
 
   useEffect(() => {
-    fetchOdertList();
+    fetchOderList();
   }, []);
 
-  const fetchOdertList = async () => {
+  const fetchOderList = async () => {
       try {
-          const response = await productList.get('categories/admin/products/');
+          const response = await orderList.get('categories/admin/products/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
           console.log('meomeo')
           console.log(response)
+          // setOrders(response)
           
           // console.log(checkedStaff)
       } catch (error) {
           console.error('Error fetching user profile:', error);
       }
   };
+
+  const completeOrder = async (orderId) => {
+      try{
+        const response = await orderList.post('orders/admin/orders/${orderId}/complete/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+        console.log('meomeo')
+        console.log(response)
+
+      } catch(error){
+        console.error('Error complete user order:', error);
+
+      }
+    };
+
+
+    const cancelOrder = async (orderId) => {
+      try{
+        const response = await orderList.post('orders/admin/orders/${orderId}/cancel/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+        console.log('meomeo')
+        console.log(response)
+
+      } catch(error){
+        console.error('Error cancel user order:', error);
+
+      }
+
+  };
+
+  const handleCompleteOrders = async () => {
+    for (const orderId of selectedOrders) {
+      await completeOrder(orderId);
+    }
+    // Fetch the updated order list
+    fetchOrderList();
+  };
+
+  const handleCancelOrders = async () => {
+    for (const orderId of selectedOrders) {
+      await cancelOrder(orderId);
+    }
+    // Fetch the updated order list
+    fetchOrderList();
+  };
+
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "Firstname",
+      headerName: "First name",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "Lastname",
+      headerName: "Last name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
@@ -48,7 +105,12 @@ const Invoices = () => {
       flex: 1,
     },
     {
-      field: "cost",
+      field: "address",
+      headerName: "Address",
+      flex: 1,
+    },
+    {
+      field: "total_price",
       headerName: "Cost",
       flex: 1,
       renderCell: (params) => (
@@ -58,15 +120,54 @@ const Invoices = () => {
       ),
     },
     {
-      field: "date",
-      headerName: "Date",
+      field: "payment_method",
+      headerName: "Payment",
       flex: 1,
     },
+    {
+      field: "shipping_deadline",
+      headerName: "Ship date",
+      flex: 1,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => {
+        if (params.row.status === "completed") {
+          return <CheckCircleIcon style={{ color: "green" }} />;
+        } else if (params.row.status === "cancelled") {
+          return <Typography color="red">Hủy đơn hàng</Typography>;
+        } else {
+          return null; // Nếu status là 'pending' thì không hiển thị gì
+        }
+      },
+    },
   ];
+
+  const columnNames = columns.map(column => column.field);
+    
+  // Lọc mockDataContacts để chỉ giữ lại các keys có trong columnNames
+  const OrderFilterlist = orders.map(contact =>
+    Object.keys(contact).reduce((acc, key) => {
+      if (columnNames.includes(key)) {
+        acc[key] = contact[key];
+      }
+      return acc;
+    }, {})
+  );
 
   return (
     <Box m="20px">
       <Header title="INVOICES" subtitle="List of Invoice Balances" />
+      <Box mb="20px">
+        <Button variant="contained" color="primary" onClick={handleCompleteOrders}>
+          Complete Selected Orders
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleCancelOrders}>
+          Cancel Selected Orders
+        </Button>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -96,10 +197,17 @@ const Invoices = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataInvoices} columns={columns} />
+        <DataGrid 
+        checkboxSelection 
+        rows={mockDataInvoices} 
+        columns={columns} 
+        onSelectionModelChange={(newSelection) => {
+            setSelectedOrders(newSelection.selectionModel);
+          }}
+        />
       </Box>
     </Box>
   );
 };
 
-export default Invoices;
+export default Invoicespage;
