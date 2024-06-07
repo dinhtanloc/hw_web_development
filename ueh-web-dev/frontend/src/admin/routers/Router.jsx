@@ -11,6 +11,7 @@ import Pie from "../pages/Piepage";
 import FAQ from "../pages/Faqpage";
 import Geography from "../pages/Geographypage";
 import Calendar from "../pages/Calendarpage";
+import Addproduct from "../pages/Addproduct";
 
 const Routers = () => {
     return (
@@ -18,6 +19,7 @@ const Routers = () => {
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/team" element={<Team />} />
               <Route path="/admin/products" element={<Contacts />} />
+              <Route path="/admin/create-products" element={<Addproduct />} />
               <Route path="/admin/invoices" element={<Invoices />} />
               <Route path="/admin/form" element={<Form />} />
               <Route path="/admin/bar" element={<Bar />} />
