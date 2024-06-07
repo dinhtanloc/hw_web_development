@@ -1,12 +1,34 @@
+import { useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
+import useAxios from "../../client/utils/useAxios";
 
 const Invoices = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const productList = useAxios()
+
+  useEffect(() => {
+    fetchOdertList();
+  }, []);
+
+  const fetchOdertList = async () => {
+      try {
+          const response = await productList.get('categories/admin/products/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          console.log('meomeo')
+          console.log(response)
+          
+          // console.log(checkedStaff)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
   const columns = [
     { field: "id", headerName: "ID" },
     {

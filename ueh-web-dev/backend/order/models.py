@@ -27,6 +27,7 @@ class Orders(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     note=models.CharField(max_length=1000)
+    # status=models.CharField(max_length=50, default='incompleted')
 
 
     def __str__(self):

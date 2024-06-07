@@ -1,13 +1,46 @@
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import { mockDataContacts } from "../assets/data/mockData";
 import Header from "./Header";
 import { useTheme } from "@mui/material";
+import useAxios from "../../client/utils/useAxios";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const productList = useAxios()
+
+  useEffect(() => {
+    fetchproductList();
+  }, []);
+
+  const fetchproductList = async () => {
+      try {
+          const response = await productList.get('categories/admin/products/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          console.log('meomeo')
+          console.log(response)
+          
+          // console.log(checkedStaff)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+  // const fetchStafflist = async () => {
+  //     try {
+  //         const response = await isStaff.get('accounts/staff-list/');
+  //         // setUserProfile(response.data);
+  //         // checkStaff(response.data.is_staff)
+          
+  //         console.log(response)
+  //     } catch (error) {
+  //         console.error('Error fetching user profile:', error);
+  //     }
+  // };
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },

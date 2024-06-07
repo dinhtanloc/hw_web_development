@@ -1,10 +1,12 @@
-from rest_framework import status
-from rest_framework.decorators import api_view,permission_classes
+from rest_framework import status,viewsets
+from rest_framework.decorators import api_view,permission_classes, action
 from rest_framework.response import Response
 from .models import Orders, OrdersItem
 from .serializers import OrdersSerializer, OrdersItemSerializer
 from datetime import datetime, timedelta
 from rest_framework.permissions import IsAuthenticated
+from accounts.permissions import IsStaffUser
+
 
 
 @api_view(['POST'])
@@ -66,3 +68,34 @@ def get_order_items(request, order_id):
     order_items = OrdersItem.objects.filter(order=order)
     serializer = OrdersItemSerializer(order_items, many=True)
     return Response(serializer.data)
+
+
+class OrderAdminViewSet(viewsets.ModelViewSet):
+    queryset = Orders.objects.all()
+    serializer_class = OrdersSerializer
+    permission_classes = [IsAuthenticated]
+
+    # Xem đơn hàng
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        order_items = OrdersItem.objects.filter(order=instance)
+        order_serializer = self.get_serializer(instance)
+        items_serializer = OrdersItemSerializer(order_items, many=True)
+        return Response({
+            'order': order_serializer.data,
+            'items': items_serializer.data
+        })
+
+    # Hủy đơn hàng
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # Hoàn thành đơn hàng
+    @action(detail=True, methods=['post'], url_path='complete')
+    def complete_order(self, request, pk=None):
+        instance = self.get_object()
+        instance.status = 'completed'  # Giả sử có một trường 'status' trong model Orders
+        instance.save()
+        return Response({'status': 'Order completed'}, status=status.HTTP_200_OK)
