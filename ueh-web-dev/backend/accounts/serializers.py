@@ -7,11 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-class UserSerializer(serializers.ModelSerializer):
-    is_staff = serializers.BooleanField(source='user.is_staff', read_only=True)
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email','date_joined','is_staff')
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -90,3 +86,15 @@ class ChangePasswordSerializer(serializers.Serializer):
         user = authenticate(username=self.context['request'].user.username, password=data['current_password'])
         if not user:
             raise serializers.ValidationError({'current_password': 'Incorrect current password'})
+        
+
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
+    profile = ProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email','date_joined','is_staff','is_superuser','profile')

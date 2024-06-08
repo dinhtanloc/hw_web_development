@@ -6,9 +6,13 @@ import { mockDataContacts } from "../assets/data/mockData";
 import Header from "./Header";
 import { useTheme } from "@mui/material";
 import useAxios from "../../client/utils/useAxios";
+import {Button} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 const ProductPage = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const colors = tokens(theme.palette.mode);
   const[products,setProducts] = useState([]);
   const [editRowIndex, setEditRowIndex] = useState(null);
@@ -18,11 +22,11 @@ const ProductPage = () => {
   const productList = useAxios()
 
   useEffect(() => {
-    fetchproductList();
+    fetchProductList();
   }, []);
 
   const handleCellDoubleClick = (params) => {
-    const rowIndex = params.rowIndex;
+    const rowIndex = params.id;
     setEditRowIndex(rowIndex);
   };
 
@@ -31,14 +35,14 @@ const ProductPage = () => {
     };
 
 
-  const fetchproductList = async () => {
+  const fetchProductList = async () => {
       try {
           const response = await productList.get('categories/admin/products/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
           console.log('meomeo')
           console.log(response)
-          setProducts(response);
+          setProducts(response.data);
           
           // console.log(checkedStaff)
       } catch (error) {
@@ -220,7 +224,7 @@ const ProductPage = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={filteredMockData}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           onCellDoubleClick={handleCellDoubleClick}

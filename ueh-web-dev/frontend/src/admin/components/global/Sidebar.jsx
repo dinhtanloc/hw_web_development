@@ -134,7 +134,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Manage Team"
-              to="/team"
+              to="admin/team"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -148,7 +148,7 @@ const Sidebar = () => {
             />
             <Item
               title="Order Listing"
-              to="/orders"
+              to="admin/orders"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -163,21 +163,21 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Staff Dashboard"
-              to="/staff-dashboard"
+              to="admin/staff-dashboard"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Product Dashboard"
-              to="/product-dashboard"
+              to="admin/product-dashboard"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Order Dashboard"
-              to="/order-dashboard"
+              to="admin/order-dashboard"
               icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

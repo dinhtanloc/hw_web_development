@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
+import {Button} from "@mui/material";
 
 const Invoicespage = () => {
   const theme = useTheme();
@@ -21,12 +22,12 @@ const Invoicespage = () => {
 
   const fetchOderList = async () => {
       try {
-          const response = await orderList.get('categories/admin/products/');
+          const response = await orderList.get('orders/admin/orders/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
           console.log('meomeo')
           console.log(response)
-          // setOrders(response)
+          setOrders(response.data)
           
           // console.log(checkedStaff)
       } catch (error) {
@@ -115,7 +116,7 @@ const Invoicespage = () => {
       flex: 1,
       renderCell: (params) => (
         <Typography color={colors.greenAccent[500]}>
-          ${params.row.cost}
+          ${params.row.total_price}
         </Typography>
       ),
     },
@@ -139,7 +140,7 @@ const Invoicespage = () => {
         } else if (params.row.status === "cancelled") {
           return <Typography color="red">Hủy đơn hàng</Typography>;
         } else {
-          return null; // Nếu status là 'pending' thì không hiển thị gì
+          return <Typography color="gray">Chờ</Typography>;; // Nếu status là 'pending' thì không hiển thị gì
         }
       },
     },
@@ -199,7 +200,7 @@ const Invoicespage = () => {
       >
         <DataGrid 
         checkboxSelection 
-        rows={mockDataInvoices} 
+        rows={OrderFilterlist} 
         columns={columns} 
         onSelectionModelChange={(newSelection) => {
             setSelectedOrders(newSelection.selectionModel);

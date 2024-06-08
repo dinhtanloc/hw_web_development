@@ -24,11 +24,11 @@ const Teampage = () => {
 
   const fetchStafflist = async () => {
     try {
-        const response = await isStaff.get('accounts/staff-list/');
+        const response = await isStaff.get('accounts/admin/staff-list/');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log(response)
-        // Makestafflist(response)
+        console.log(response.data)
+        Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);
     }
@@ -47,13 +47,8 @@ const Teampage = () => {
       flex:1,
     },
     {
-      field: "first_name",
-      headerName: "First name",
-      flex:1,
-    },
-    {
-      field: "last_name",
-      headerName: "Last name",
+      field: "full_name",
+      headerName: "Full name",
       flex:1,
     },
     {
@@ -62,10 +57,15 @@ const Teampage = () => {
       flex: 1,
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "address",
+      headerName: "Address",
       flex: 1,
     },
+    // {
+    //   field: "email",
+    //   headerName: "Email",
+    //   flex: 1,
+    // },
     {
       field: "is_superuser",
       headerName: "Access Level",
@@ -99,6 +99,25 @@ const Teampage = () => {
     },
   ];
 
+  // const columnNames = columns.map(column => column.field);
+    
+  //     // Lọc mockDataContacts để chỉ giữ lại các keys có trong columnNames
+  //     const filteredStaffData = staffList.map(contact =>
+  //       Object.keys(contact).reduce((acc, key) => {
+  //         if (columnNames.includes(key)) {
+  //           acc[key] = contact[key];
+  //         }
+  //         return acc;
+  //       }, {})
+  //     );
+
+    const formatStaffData = staffList.map((staff) => ({
+      ...staff,
+      full_name: staff.profile?.full_name || "",
+      address: staff.profile?.address || "",
+      job: staff.profile?.job || "",
+    }));
+
   return (
     <Box m="20px">
       <Header title="TEAM" subtitle="Managing the Team Members" />
@@ -131,7 +150,7 @@ const Teampage = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid checkboxSelection rows={formatStaffData} columns={columns} />
       </Box>
     </Box>
   );

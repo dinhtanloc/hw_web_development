@@ -17,7 +17,6 @@ const Layout =() =>{
 
     useEffect(() => {
       fetchStaffChecking();
-      fetchStafflist();
     }, []);
 
     const fetchStaffChecking = async () => {
