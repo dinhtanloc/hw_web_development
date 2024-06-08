@@ -6,6 +6,7 @@ import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
 import {Button} from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import CheckCircleIcon
 
 const Invoicespage = () => {
   const theme = useTheme();
@@ -37,7 +38,7 @@ const Invoicespage = () => {
 
   const completeOrder = async (orderId) => {
       try{
-        const response = await orderList.post('orders/admin/orders/${orderId}/complete/');
+        const response = await orderList.post(`orders/admin/orders/${orderId}/complete/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
         console.log('meomeo')
@@ -52,7 +53,7 @@ const Invoicespage = () => {
 
     const cancelOrder = async (orderId) => {
       try{
-        const response = await orderList.post('orders/admin/orders/${orderId}/cancel/');
+        const response = await orderList.post(`orders/admin/orders/${orderId}/cancel/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
         console.log('huy don day')

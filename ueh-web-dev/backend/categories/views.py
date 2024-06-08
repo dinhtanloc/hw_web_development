@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Count,Sum
 from rest_framework import viewsets
 from .models import Product
 from .serializers import ProductSerializer
@@ -84,3 +85,21 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='top-selling')
+    def top_selling(self, request):
+        top_products = Product.objects.annotate(
+            total_sales=Count('orderitem')
+        ).order_by('-total_sales')[:10]
+
+        serializer = self.get_serializer(top_products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+    @action(detail=False, methods=['get'], url_path='inventory-quantity-stats')
+    def inventory_quantity_stats(self, request):
+        stats = Product.objects.values('category').annotate(
+            total_quantity=Sum('quantity')
+        ).order_by('category')
+
+        return Response(stats, status=status.HTTP_200_OK)

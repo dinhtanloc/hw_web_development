@@ -3,7 +3,9 @@ from rest_framework.decorators import api_view,permission_classes, action
 from rest_framework.response import Response
 from .models import Orders, OrdersItem
 from .serializers import OrdersSerializer, OrdersItemSerializer
+from django.db.models.functions import TruncDate
 from datetime import datetime, timedelta
+from django.db.models import Count, Sum
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsStaffUser
 
@@ -114,3 +116,43 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
             instance.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'error': 'Order cannot be cancelled'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    @action(detail=False, methods=['get'], url_path='statistics')
+    def order_statistics(self, request):
+        stats = Orders.objects.values('status').annotate(
+            count=Count('status'),
+            total_revenue=Sum('total_price')
+        )
+        return Response(stats, status=status.HTTP_200_OK)
+    
+
+    @action(detail=False, methods=['get'], url_path='time-series')
+    def order_time_series(self, request):
+        completed_orders = Orders.objects.filter(status='completed').annotate(
+            date=TruncDate('completed_date')
+        ).values('date').annotate(
+            count=Count('id'),
+            total_revenue=Sum('total_price')
+        ).order_by('date')
+
+        cancelled_orders = Orders.objects.filter(status='cancelled').annotate(
+            date=TruncDate('cancelled_date')
+        ).values('date').annotate(
+            count=Count('id'),
+            total_revenue=Sum('total_price')
+        ).order_by('date')
+
+        return Response({
+            'completed_orders': completed_orders,
+            'cancelled_orders': cancelled_orders
+        }, status=status.HTTP_200_OK)
+    
+
+    @action(detail=False, methods=['get'], url_path='payment-method-stats')
+    def payment_method_stats(self, request):
+        stats = Orders.objects.values('payment_method').annotate(
+            count=Count('id')
+        ).order_by('payment_method')
+
+        return Response(stats, status=status.HTTP_200_OK)
