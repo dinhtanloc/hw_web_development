@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import useAxios from "../../client/utils/useAxios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import { Box, TextField, Button } from "@mui/material";
 
 const Addproduct = () => {
     const productList = useAxios()
@@ -18,7 +18,7 @@ const Addproduct = () => {
       });
 
     const ReturnProductPage = () => {
-    navigate('/producrs'); // Điều hướng đến trang '/other-page' khi bấm nút
+    navigate('/products'); // Điều hướng đến trang '/other-page' khi bấm nút
     };
 
 
@@ -48,6 +48,7 @@ const Addproduct = () => {
     }
     };
 
+    return (
     <Box mt={2}>
         <TextField
           name="brand"
@@ -81,6 +82,7 @@ const Addproduct = () => {
         <Button variant="contained" onClick={handleAddProduct}>Add Product</Button>
         <Button variant="contained" onClick={ReturnProductPage}>Return Page</Button>
       </Box>
+      );
 
 }
 

@@ -17,10 +17,10 @@ const Invoicespage = () => {
   const orderList = useAxios()
 
   useEffect(() => {
-    fetchOderList();
+    fetchOrderList();
   }, []);
 
-  const fetchOderList = async () => {
+  const fetchOrderList = async () => {
       try {
           const response = await orderList.get('orders/admin/orders/');
           // setUserProfile(response.data);
@@ -55,7 +55,7 @@ const Invoicespage = () => {
         const response = await orderList.post('orders/admin/orders/${orderId}/cancel/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-        console.log('meomeo')
+        console.log('huy don day')
         console.log(response)
 
       } catch(error){
@@ -74,7 +74,10 @@ const Invoicespage = () => {
   };
 
   const handleCancelOrders = async () => {
+    console.log('bam don')
+    console.log(selectedOrders)
     for (const orderId of selectedOrders) {
+      console.log(orderId)
       await cancelOrder(orderId);
     }
     // Fetch the updated order list
@@ -199,12 +202,20 @@ const Invoicespage = () => {
         }}
       >
         <DataGrid 
-        checkboxSelection 
         rows={OrderFilterlist} 
-        columns={columns} 
-        onSelectionModelChange={(newSelection) => {
-            setSelectedOrders(newSelection.selectionModel);
-          }}
+        columns={columns}
+        checkboxSelection 
+        // selectionModel={selectedOrders} 
+        // onSelectionModelChange={(ids) => {
+        //     console.log(ids)
+        //     setSelectedOrders(ids);
+        //   }}
+
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectedOrders(newRowSelectionModel);
+        }}
+        rowSelectionModel={selectedOrders}
+          // {...data}
         />
       </Box>
     </Box>

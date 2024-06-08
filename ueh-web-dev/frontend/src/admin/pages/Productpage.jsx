@@ -31,7 +31,7 @@ const ProductPage = () => {
   };
 
   const GotoAddproductPage = () => {
-    navigate('/create-producrs'); // Điều hướng đến trang '/other-page' khi bấm nút
+    navigate('create-products/'); // Điều hướng đến trang '/other-page' khi bấm nút
     };
 
 
