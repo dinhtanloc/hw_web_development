@@ -44,8 +44,10 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+   
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
+          height:`125vh`,
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -161,13 +163,13 @@ const Sidebar = () => {
             >
               Pages
             </Typography>
-            <Item
+            {/* <Item
               title="Staff Dashboard"
               to="admin/staff-dashboard"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Product Dashboard"
               to="admin/product-dashboard"

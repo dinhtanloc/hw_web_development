@@ -130,14 +130,14 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='time-series')
     def order_time_series(self, request):
         completed_orders = Orders.objects.filter(status='completed').annotate(
-            date=TruncDate('completed_date')
+            date=TruncDate('created_at')
         ).values('date').annotate(
             count=Count('id'),
             total_revenue=Sum('total_price')
         ).order_by('date')
 
         cancelled_orders = Orders.objects.filter(status='cancelled').annotate(
-            date=TruncDate('cancelled_date')
+            date=TruncDate('created_at')
         ).values('date').annotate(
             count=Count('id'),
             total_revenue=Sum('total_price')

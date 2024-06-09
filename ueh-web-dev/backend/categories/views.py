@@ -56,7 +56,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ProductAdminViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
         # Phương thức tạo sản phẩm
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -98,8 +98,8 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='inventory-quantity-stats')
     def inventory_quantity_stats(self, request):
-        stats = Product.objects.values('category').annotate(
+        stats = Product.objects.values('id').annotate(
             total_quantity=Sum('quantity')
-        ).order_by('category')
+        ).order_by('id')
 
         return Response(stats, status=status.HTTP_200_OK)
