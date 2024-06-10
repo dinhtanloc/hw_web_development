@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import random
 
 
 
@@ -53,7 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            useacrname=validated_data['username'],
+            username=validated_data['username'],
             email=validated_data['email']
 
         )

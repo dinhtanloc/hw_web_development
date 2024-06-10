@@ -25,9 +25,9 @@ const OrderDashboard = () =>{
     const colors = tokens(theme.palette.mode); 
     const isOrders = useAxios() 
     const [orderList, MakeorderList] = useState([]);
-    const [orderList, MakeorderList] = useState([]);
-    const [orderList, MakeorderList] = useState([]);
-    const [orderList, MakeorderList] = useState([]);
+    // const [orderList, MakeorderList] = useState([]);
+    // const [orderList, MakeorderList] = useState([]);
+    // const [orderList, MakeorderList] = useState([]);
     useEffect(() => {
         fetchOrderlist();
       }, []);

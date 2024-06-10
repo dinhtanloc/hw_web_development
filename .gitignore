@@ -3,3 +3,4 @@
 test
 *.env
 __pycache__
+# migrations
