@@ -113,7 +113,7 @@ MIDDLEWARE = [
 ]
 
 
-
+DATA_GENERATION = False
 
 
 ROOT_URLCONF = 'backend.urls'

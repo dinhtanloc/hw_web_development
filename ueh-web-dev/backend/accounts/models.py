@@ -16,6 +16,9 @@ class User(AbstractUser):
     def profile(self):
         profile = Profile.objects.get(user=self)
 
+    def __str__(self):
+        return f"{self.username}: ({self.email})"
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=1000)
