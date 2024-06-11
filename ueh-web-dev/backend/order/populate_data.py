@@ -1,6 +1,9 @@
 import random
 from datetime import datetime, timedelta
-
+from .serializers import OrdersSerializer, OrdersItemSerializer
+from categories.models import Product
+from accounts.models import User
+from django.utils import timezone
 
 orders_data = [
     {
@@ -227,3 +230,48 @@ def generate_sorted_dates(n, start_date, end_date):
     dates.sort()
     return dates
 
+def create_initial_orders(orders_data, start_date=timezone.make_aware(datetime(2023, 9, 1))):
+    end_date = timezone.now()
+    random_dates = generate_sorted_dates((end_date - start_date).days, start_date, end_date)
+    print(random_dates)
+    # print(DATA_GENERATION)
+    # print(orders_data)
+    random.shuffle(orders_data)
+    # print(orders_data)
+
+    for random_date in random_dates:
+        num_orders = random.randint(3, 7)
+        
+        for _ in range(num_orders):
+            for order_data in orders_data:
+                user_id = order_data['user_id']
+                user = User.objects.get(id=user_id)
+                items_data = order_data['items']     
+                print(user)
+                order_serializer = OrdersSerializer(data=order_data, partial=True)
+                if order_serializer.is_valid():
+                    print('----------------------------')
+                    order = order_serializer.save(user=user)
+                    total_price = 0
+                    order.created_at = random_date
+                    order.shipping_deadline = order.created_at.date() + timedelta(days=21)
+                    # order.save()
+                    for item_data in items_data:
+                        item_data['order'] = order.id
+                        product = Product.objects.get(id=item_data['product'])
+                        item_data['unit_price'] = product.price
+                        item_data['total_price'] = item_data['quantity'] * item_data['unit_price']
+
+                        item_serializer = OrdersItemSerializer(data=item_data, partial=True)
+
+                        if item_serializer.is_valid():
+                            print(f'Start data orderitem: {item_data}')
+                            item = item_serializer.save()
+                            total_price += item.total_price
+                        else:
+                            print(f"Invalid item data: {item_serializer.errors}")
+                    order.total_price = total_price
+                    order.save()
+                else:
+                    print(f"Invalid order data: {order_serializer.errors}")
+    print('Orders successfully created from JSON data.')

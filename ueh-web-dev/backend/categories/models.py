@@ -10,7 +10,7 @@ class Product(models.Model):
     carName = models.CharField(max_length=100)
     imgUrl = models.URLField()
     model = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.IntegerField()
     speed = models.CharField(max_length=50)
     gps = models.CharField(max_length=100)
     seatType = models.CharField(max_length=100)

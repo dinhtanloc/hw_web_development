@@ -238,6 +238,10 @@ button.ghost {
 	width: 40px;
 }
 
+.social:hover{
+	background-color: #d9d8ef;
+}
+
 .footer_title {
     background-color: #222;
     color: #fff;

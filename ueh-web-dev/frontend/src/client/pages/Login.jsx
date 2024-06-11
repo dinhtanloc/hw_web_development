@@ -10,7 +10,8 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 // axios.defaults.xsrfCookieName = 'csrftoken';
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -32,6 +33,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
 
   const handleSignUpClick = () => {
     setIsSignUpActive(true);
@@ -85,9 +87,16 @@ const Login = () => {
           <form className='form_title' onSubmit={e => submitRegistration(e)}>
             <h1 className="h1_title">Create Account</h1>
             <div className="social-container">
-              <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+            <a href="#" className="social">
+                {/* <i className="fab fa-facebook-f"></i> */}
+                <FontAwesomeIcon icon={faFacebookF} />
+            </a>
+            <a href="#" className="social">
+              <FontAwesomeIcon icon={faGoogle} />
+            </a>
+            <a href="#" className="social">
+              <FontAwesomeIcon icon={faGithub} />
+            </a>
             </div>
             <span className="span_title">or use your email for registration</span>
             <input className='input_title' type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)} />
@@ -102,9 +111,16 @@ const Login = () => {
           <form className='form_title' action="#" onSubmit={e => submitLogin(e)}>
             <h1 className="h1_title">Sign in</h1>
             <div className="social-container">
-              <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+              <a href="#" className="social">
+                {/* <i className="fab fa-facebook-f"></i> */}
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
+              <a href="#" className="social">
+                <FontAwesomeIcon icon={faGoogle} />
+              </a>
+              <a href="#" className="social">
+                <FontAwesomeIcon icon={faGithub} />
+              </a>
             </div>
             <span className="span_title">or use your account</span>
             <input className='input_title'  type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />

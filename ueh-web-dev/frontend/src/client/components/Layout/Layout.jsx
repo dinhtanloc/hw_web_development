@@ -6,6 +6,8 @@ import Footer from "../Footer/Footer";
 import Login from "../../pages/Login";
 import Routers from "../../routers/Routers";
 import axios from 'axios'
+import backgroundImage from './slider-2.jpg'; // Đảm bảo đường dẫn này đúng
+
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
@@ -29,7 +31,14 @@ const Layout = () => {
       
       <>
         {isLoginPage && (
-          <div className="login_outside" style={{ width: '100vw', height: '100vh' }}>
+          <div className="login_outside" style={{ 
+            width: '100vw', 
+            height: '100vh',
+            background: `linear-gradient(rgba(0, 13, 107, 0.5), rgba(0, 13, 107, 0.5)), url("${backgroundImage}")`,
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+             }}>
             <Login />
           </div>
         )}
