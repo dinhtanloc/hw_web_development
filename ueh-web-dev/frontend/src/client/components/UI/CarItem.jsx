@@ -2,11 +2,16 @@ import React from "react";
 import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "../../styles/car-item.css";
+import { useNavigate } from "react-router-dom";
 
 const CarItem = (props) => {
   const { imgUrl, model, carName, automatic, speed, price } = props.item;
+  const navigate = useNavigate()
 
+  const gotoProductPage = () =>{
+    navigate(`/cars/${carName}`)
 
+  };
 
   // console.log(imgUrl)
   const PUBLIC_URL='../../../public'
@@ -27,7 +32,7 @@ const CarItem = (props) => {
         <div className="car__item-content mt-4">
           <h4 className="section__title text-center">{carName}</h4>
           <h6 className="rent__price text-center mt-">
-            ${price.toLocaleString('de-DE')} <span>/ Day</span>
+            ${price.toLocaleString('de-DE')}
           </h6>
 
           <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
@@ -55,8 +60,10 @@ const CarItem = (props) => {
             <Link to={`/cars/${carName}`}>Rent</Link>
           </button>
 
-          <button className=" w-50 car__item-btn car__btn-details">
-            <Link to={`/cars/${carName}`}>Details</Link>
+          <button className=" w-50 car__item-btn car__btn-details" onClick={gotoProductPage}>
+            {/* <Link to={`/cars/${carName}`}>Details</Link> */}
+            <span>Details</span>
+            
           </button>
         </div>
       </div>

@@ -113,7 +113,6 @@ MIDDLEWARE = [
 ]
 
 
-DATA_GENERATION = False
 
 
 ROOT_URLCONF = 'backend.urls'
@@ -151,6 +150,7 @@ DATABASES = {
     }
 }
 
+DATA_GENERATION = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

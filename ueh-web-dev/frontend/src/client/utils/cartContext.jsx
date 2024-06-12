@@ -19,31 +19,31 @@ const CartProvider = ({ children }) => {
     setCartItems((prevCartItems) => [...prevCartItems, item]);
   };
 
-  const removeFromCart = (index) => {
+  const removeFromCart = (id) => {
     setCartItems((prevCartItems) => {
-      const newCartItems = [...prevCartItems];
-      newCartItems.splice(index, 1);
-      return newCartItems;
+      return prevCartItems.filter(item => item.product !== id);
     });
   };
 
   const updateCartItemQuantity = (itemId, newQuantity) => {
+    console.log(itemId,newQuantity)
     setCartItems((prevCartItems) => {
+      console.log(prevCartItems)
       const updatedCartItems = prevCartItems.map((item) => {
-        if (item.id === itemId) {
-          return { ...item, quantity: newQuantity };
+        if (item.product === itemId) {
+          return { ...item, quantity: newQuantity, total_price: item.unit_price*newQuantity };
         }
         return item;
       });
       return updatedCartItems;
     });
-
+  };
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartItemQuantity }}>
       {children}
     </CartContext.Provider>
   );
-};
+
 };
 
 export default CartProvider;

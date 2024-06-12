@@ -47,6 +47,16 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(product)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'], url_path='like',permission_classes=[IsAuthenticated])
+    def like_product(self, request, pk=None):
+        product = self.get_object()
+        
+        # Tăng rating lên 1
+        product.rating += 1
+        product.save()
+        
+        return Response({'success': 'Rating increased by 1'}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -56,7 +66,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ProductAdminViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # permission_classes = [IsAuthenticated, IsStaffUser]
+    permission_classes = [IsAuthenticated, IsStaffUser]
         # Phương thức tạo sản phẩm
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -2,7 +2,7 @@
 
 
 .shopping-cart {
-    width: 800px;
+    width: 70vw;
     height: 423px;
     /* margin: 1px auto; */
     background: #FFFFFF;
@@ -54,17 +54,36 @@ border-bottom:  1px solid #E1E8EE;
     background: url(&amp;amp;quot;delete-icn.svg&amp;amp;quot;) no-repeat center;
 }
 
-.like-btn {
-position: absolute;
+.like-btnc {
+
+position: flex;
 top: 9px;
-left: 15px;
-background: url('twitter-heart.png');
+left: 0px;
 width: 60px;
 height: 60px;
 background-size: 2900%;
 background-repeat: no-repeat;
 }
 
+@keyframes trashExplode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  /* 100% { transform: scale(2); } */
+}
+
+.trash-icon {
+  margin-left: 15px;
+  /* Thêm hiệu ứng transition */
+  transition: transform 0.3s ease-in-out;
+}
+.heart-icon{
+  transition: transform 0.3s ease-in-out;
+}
+
+.heart-icon:hover,.trash-icon:hover {
+  /* Khi rê chuột vào biểu tượng, áp dụng animation */
+  animation: trashExplode 0.8s;
+}
 
 .is-active {
 animation-name: animate;
@@ -74,6 +93,13 @@ animation-timing-function: steps(28);
 animation-fill-mode: forwards;
 }
 
+@keyframes explode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(2); }
+}
+
+
 @keyframes animate {
 0%   { background-position: left;  }
 50%  { background-position: right; }
@@ -82,7 +108,7 @@ animation-fill-mode: forwards;
 
 .image {
   display: flex;
-  width: 180px;
+  width: 210px;
   /* justify-content: center; */
   /* align-items: flex-start; */
   /* height: 100px; */

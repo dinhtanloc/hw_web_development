@@ -10,8 +10,7 @@ import PaymentMethod from "../components/UI/PaymentMethod";
 import { useCart } from "../utils/cartContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";  
-
-
+import Contact from './Contact'
 const CarDetails = () => {
   const { slug } = useParams();
   const { addToCart,cartItems } = useCart();
@@ -73,6 +72,8 @@ const CarDetails = () => {
       <section>
         <Container>
           <Row>
+          <div style={{marginTop:"30px"}}></div>
+
             <Col lg="6">
               <img src={changecolorImage} alt="" className="w-100" />
             </Col>
@@ -83,7 +84,7 @@ const CarDetails = () => {
 
                 <div className=" d-flex align-items-center gap-5 mb-4 mt-3">
                   <h6 className="rent__price fw-bold fs-4">
-                    ${singleCarItem.price}.00 / Day
+                    ${singleCarItem.price}
                   </h6>
 
                   <span className=" d-flex align-items-center gap-2">
@@ -107,10 +108,10 @@ const CarDetails = () => {
                     <option className="red-option" value="red">Red</option>
                   </select>
 
-                  <div className="col-span-2 sm:col-span-1">
+                  {/* <div className="col-span-2 sm:col-span-1">
                       <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
                       <input value={singleCarItem.quantity} onChange={(e) => setQuantity(Number(e.target.value))}  type="number" name="quantity" id="quantity" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Quantity" required=""/>
-                  </div> 
+                  </div>  */}
 
                 <p className="section__description">
                   {singleCarItem.description}
@@ -190,7 +191,9 @@ const CarDetails = () => {
                 itemsData={itemsData} />
               </div>
             </Col> */}
+          <div style={{marginBottom:'30px'}}></div>
           </Row>
+          {/* <Contact/> */}
         </Container>
       </section>
     </Helmet>

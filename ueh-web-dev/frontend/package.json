@@ -45,6 +45,7 @@
     "reactstrap": "^9.2.2",
     "remixicon": "^4.2.0",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.11",
     "sweetalert2": "^11.6.13",
     "swiper": "^11.1.1",
     "yup": "^1.4.0"
