@@ -27,11 +27,23 @@ const CartProvider = ({ children }) => {
     });
   };
 
+  const updateCartItemQuantity = (itemId, newQuantity) => {
+    setCartItems((prevCartItems) => {
+      const updatedCartItems = prevCartItems.map((item) => {
+        if (item.id === itemId) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+      return updatedCartItems;
+    });
+
   return (
     <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
+};
 };
 
 export default CartProvider;

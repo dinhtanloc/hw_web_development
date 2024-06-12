@@ -1,21 +1,10 @@
-* {
-    box-sizing: border-box;
-}
 
-html,
-body {
-width: 100%;
-height: 100%;
-margin: 0;
-background-color: #7EC855;
-font-family: 'Roboto', sans-serif;
-}
 
 
 .shopping-cart {
-    width: 750px;
+    width: 800px;
     height: 423px;
-    margin: 80px auto;
+    /* margin: 1px auto; */
     background: #FFFFFF;
     box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
     border-radius: 6px;
@@ -25,14 +14,14 @@ font-family: 'Roboto', sans-serif;
 }
 
 
-.title {
+/* .title {
     height: 60px;
     border-bottom: 1px solid #E1E8EE;
     padding: 20px 30px;
     color: #5E6977;
     font-size: 18px;
     font-weight: 400;
-}
+} */
 
 .item {
 padding: 20px 30px;
@@ -40,9 +29,13 @@ height: 120px;
 display: flex;
 }
 
-.item:nth-child(3) {
+/* .item:nth-child(3) {
 border-top:  1px solid #E1E8EE;
 border-bottom:  1px solid #E1E8EE;
+} */
+
+.item:not(:last-child) {
+  border-bottom: 1px solid #E1E8EE;
 }
 
 .buttons {
@@ -88,9 +81,23 @@ animation-fill-mode: forwards;
 }
 
 .image {
-    margin-right: 50px;
+  display: flex;
+  width: 180px;
+  /* justify-content: center; */
+  /* align-items: flex-start; */
+  /* height: 100px; */
+
+    margin-right: 0px;
+    /* width: 20px;
+    height: 20px; */
   }
-   
+  
+  .image img {
+    width: 60%; /* Điều chỉnh kích thước theo chiều rộng của thẻ div */
+    height: auto; /* Giữ tỷ lệ của hình ảnh */
+    max-width: 260px; /* Điều chỉnh giá trị này theo kích thước mong muốn */
+  }
+
   .description {
     padding-top: 10px;
     margin-right: 60px;
@@ -129,7 +136,7 @@ animation-fill-mode: forwards;
     font-weight: 300;
   }
    
-  button[class*=btn] {
+  button[class*=btnc] {
     width: 30px;
     height: 30px;
     background-color: #E1E8EE;
