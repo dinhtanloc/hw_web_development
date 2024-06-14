@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view,permission_classes, action
 from rest_framework.response import Response
 from .models import Orders, OrdersItem
 from categories.models import Product
-from .serializers import OrdersSerializer, OrdersItemSerializer
-from django.db.models.functions import TruncDate
+from .serializers import OrdersSerializer, OrdersItemSerializer, MonthlyBrandDataSerializer, BarHChartDataSerializer, TimeSeriesDataSerializer
+from django.db.models.functions import TruncDate, ExtractMonth
 from datetime import datetime, timedelta
 from django.db.models import Count, Sum
 from rest_framework.permissions import IsAuthenticated
@@ -186,3 +186,127 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         ).order_by('payment_method')
 
         return Response(stats, status=status.HTTP_200_OK)
+    
+
+class MonthlyBrandDataViewSet(viewsets.ViewSet):
+    def list(self, request):
+        monthly_brand_data = []
+
+        # Truy vấn tính tổng số lượng theo brand và tháng
+        monthly_orders = OrdersItem.objects.annotate(
+            month=ExtractMonth('order__created_at')
+        ).values(
+            'month', 'product__brand'
+        ).annotate(
+            count=Count('id')
+        )
+
+        # Sắp xếp các tháng theo thứ tự từ 1 đến 12
+        sorted_months = sorted(range(1, 13))
+
+        # Duyệt qua từng item trong monthly_orders
+        for item in monthly_orders:
+            month = item['month']
+            brand = item['product__brand']
+            count = item['count']
+
+            # Tìm hoặc tạo mới mục cho tháng hiện tại trong monthly_brand_data
+            month_entry = next((entry for entry in monthly_brand_data if entry['month'] == month), None)
+            if month_entry:
+                month_entry['brands'][brand] = count
+            else:
+                monthly_brand_data.append({
+                    'month': month,
+                    'brands': {brand: count}
+                })
+
+        # Sắp xếp monthly_brand_data theo thứ tự các tháng
+        monthly_brand_data_sorted = []
+        for month in sorted_months:
+            for entry in monthly_brand_data:
+                if entry['month'] == month:
+                    monthly_brand_data_sorted.append(entry)
+                    break
+
+        # Serialize và trả về dữ liệu
+        serializer = MonthlyBrandDataSerializer(monthly_brand_data_sorted, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class BarHChartDataViewSet(viewsets.ViewSet):
+    def list(self, request):
+        # Tính tổng quantity theo brand của Product từ OrderItem
+        queryset = OrdersItem.objects.values('product__brand').annotate(
+            total_quantity=Sum('quantity')
+        )
+
+        # Chuẩn bị dữ liệu cho BarH chart
+        barh_data = []
+        for item in queryset:
+            barh_data.append({
+                'label': item['product__brand'],
+                'value': item['total_quantity'],
+            })
+
+        serializer = BarHChartDataSerializer(barh_data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class TimeSeriesDataViewSet(viewsets.ViewSet):
+    def list(self, request):
+        # Lấy danh sách các brand từ Product
+        brands = Product.objects.values_list('brand', flat=True).distinct()
+
+        # Tính toán tổng tiền theo brand và thời gian
+        time_series_data = []
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
+
+        for brand in brands:
+            orders = Orders.objects.filter(ordersitem__product__brand=brand, created_at__gte=start_date)
+            brand_data = {
+                'id': brand,
+                'color': f"rgb({hash(brand) % 256}, {hash(brand) % 256}, {hash(brand) % 256})",  # Màu ngẫu nhiên dựa trên brand
+                'data': []
+            }
+            
+            # Tính tổng tiền cho mỗi tháng
+            monthly_totals = orders.annotate(month=ExtractMonth('created_at')).values('month').annotate(
+                total=Sum('total_price')
+            )
+
+            # Sắp xếp lại theo thứ tự các tháng từ 1 đến 12
+            month_order = list(range(1, 13))
+            month_totals_dict = {item['month']: item for item in monthly_totals}
+
+            for month in month_order:
+                total = month_totals_dict.get(month, {'total': 0})['total']
+                brand_data['data'].append({
+                    'x': month,  # Tháng
+                    'y': float(total)  # Tổng tiền
+                })
+
+            time_series_data.append(brand_data)
+
+        return Response(time_series_data, status=status.HTTP_200_OK)
+    
+class OrdersTimeSeriesViewSet(viewsets.ViewSet):
+    def list(self, request):
+        # Tính tổng doanh số (total_price) theo thời gian (tháng)
+        orders_data = []
+
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
+
+        # Group by month and calculate total sales
+        monthly_totals = Orders.objects.filter(created_at__gte=start_date).annotate(
+            month=ExtractMonth('created_at')
+        ).values('month').annotate(
+            total_sale=Sum('total_price')
+        )
+
+        for item in monthly_totals:
+            orders_data.append({
+                'x': item['month'],  # Tháng
+                'y': float(item['total_sale']) if item['total_sale'] else 0  # Doanh số, nếu không có thì mặc định là 0
+            })
+
+        return Response(orders_data, status=status.HTTP_200_OK)

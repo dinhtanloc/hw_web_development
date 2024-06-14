@@ -10,7 +10,7 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import { mockTransactions } from "../assets/data/mockData";
-
+import HorizontalBarChart from "../components/UI/HorizontalBarChart ";
 import Header from "./Header";
 import LineChart from "../components/UI/LineChart";
 import GeographyChart from "../components/UI/GeographyChart";
@@ -270,11 +270,67 @@ const ProductDashboard = () =>{
         {/* ROW 3 */}
         
         <Box
-          gridColumn="span 8"
+          gridColumn="span 6"
+          gridRow="span 4"
+          backgroundColor={colors.primary[400]}
+          padding="30px"
+        >
+          <Typography
+                variant="h5"
+                fontWeight="600"
+                sx={{ padding: "30px 30px 0 30px" }}
+                >
+                Percentage cancelled Orders
+                </Typography>
+                <Box height="550px" mt="-20px">
+                    <PieChart isDashboard={true} />
+                </Box>
+
+              
+
+        </Box>
+
+        <Box
+          gridColumn="span 6"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          // p="30px"
+        >
+          {/* <Box
+            gridColumn="span 4"
+            gridRow="span 2"
+            backgroundColor={colors.primary[400]}
+            > */}
+                {/* <Typography
+                variant="h5"
+                fontWeight="600"
+                sx={{ padding: "30px 30px 0 30px" }}
+                >
+                Percentage cancelled Orders
+                </Typography>
+                <Box height="250px" mt="-20px">
+                    <PieChart isDashboard={true} />
+                </Box> */}
+
+                <Typography
+            variant="h5"
+            fontWeight="600"
+            sx={{ padding: "30px 30px 0 30px" }}
+          >
+            Sales Quantity
+          </Typography>
+          <Box height="250px" mt="-20px">
+            <HorizontalBarChart  />
+          </Box>
+            {/* </Box> */}
+        </Box>
+
+        <Box
+          gridColumn="span 6"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
-          <Typography
+            <Typography
             variant="h5"
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
@@ -284,30 +340,6 @@ const ProductDashboard = () =>{
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
           </Box>
-        </Box>
-
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          p="30px"
-        >
-          {/* <Box
-            gridColumn="span 4"
-            gridRow="span 2"
-            backgroundColor={colors.primary[400]}
-            > */}
-                <Typography
-                variant="h5"
-                fontWeight="600"
-                sx={{ padding: "30px 30px 0 30px" }}
-                >
-                Percentage cancelled Orders
-                </Typography>
-                <Box height="250px" mt="-20px">
-                    <PieChart isDashboard={true} />
-                </Box>
-            {/* </Box> */}
         </Box>
         {/* <Box
           gridColumn="span 4"

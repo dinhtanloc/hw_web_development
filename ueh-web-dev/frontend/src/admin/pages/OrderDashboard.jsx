@@ -15,6 +15,7 @@ import Header from "./Header";
 import GeographyChart from "../components/UI/GeographyChart";
 import PieChart from "../components/UI/PieChart"
 import BarChart from "../components/UI/BarChart";
+import AreaChart from "../components/UI/AreaChart";
 // import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 // import useAxios from "../utils/useAxios";
@@ -218,7 +219,7 @@ const OrderDashboard = () =>{
                 Sales period
                 </Typography>
                 <Box height="250px" mt="-20px">
-                    <LineChart isDashboard={true} />
+                    <AreaChart  />
                 </Box>
             </Box>
 

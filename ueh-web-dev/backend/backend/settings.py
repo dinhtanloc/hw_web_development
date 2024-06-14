@@ -150,7 +150,7 @@ DATABASES = {
     }
 }
 
-DATA_GENERATION = False
+DATA_GENERATION = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

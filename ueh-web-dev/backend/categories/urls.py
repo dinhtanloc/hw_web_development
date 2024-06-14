@@ -8,6 +8,7 @@ from . import views
 router = DefaultRouter()
 router.register(r'', views.ProductViewSet, basename='product')
 router.register(r'admin/products', views.ProductAdminViewSet, basename='admin-product')
+router.register(r'admin/pieData', views.PieChartDataViewSet, basename='admin-pieData')
 
 urlpatterns = [
     path('', include(router.urls)),

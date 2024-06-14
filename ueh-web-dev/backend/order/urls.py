@@ -4,6 +4,10 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'admin/orders', views.OrderAdminViewSet, basename='order')
+router.register(r'admin/monthly-brand-data', views.MonthlyBrandDataViewSet, basename='monthly-brand-data')
+router.register(r'admin/barH-data', views.BarHChartDataViewSet, basename='barH-data')
+router.register(r'admin/time-series', views.TimeSeriesDataViewSet, basename='time-series')
+router.register(r'admin/sale-time-series', views.OrdersTimeSeriesViewSet, basename='sale-time-series')
 
 app_name='orders'
 urlpatterns = [

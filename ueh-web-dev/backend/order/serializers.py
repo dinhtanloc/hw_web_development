@@ -28,3 +28,17 @@ class OrdersSerializer(serializers.ModelSerializer):
         # for item_data in items_data:
         #     OrderItem.objects.create(order=order, **item_data)
         return order
+    
+
+class MonthlyBrandDataSerializer(serializers.Serializer):
+    month = serializers.IntegerField()
+    brands = serializers.DictField(child=serializers.IntegerField())
+
+class BarHChartDataSerializer(serializers.Serializer):
+    label = serializers.CharField()
+    value = serializers.IntegerField()
+
+class TimeSeriesDataSerializer(serializers.Serializer):
+    id = serializers.CharField()  # Brand
+    color = serializers.CharField()
+    data = serializers.ListField(child=serializers.DictField())

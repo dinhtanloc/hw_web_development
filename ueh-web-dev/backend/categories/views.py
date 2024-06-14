@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count,Sum
 from rest_framework import viewsets
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, PieChartDataSerializer
 from .populate_data import car_data
 from rest_framework import status
 from rest_framework.decorators import action
@@ -113,3 +113,21 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
         ).order_by('id')
 
         return Response(stats, status=status.HTTP_200_OK)
+
+class PieChartDataViewSet(viewsets.ViewSet):
+    def list(self, request):
+        # Tính tổng quantity theo brand của Product từ OrderItem
+        queryset = Product.objects.values('brand').annotate(total_quantity=Sum('quantity'))
+
+        # Chuẩn bị dữ liệu cho pie chart
+        pie_data = []
+        for item in queryset:
+            pie_data.append({
+                'id': item['brand'].lower(),  # Đặt id là brand viết thường
+                'label': item['brand'],       # Nhãn là brand
+                'value': item['total_quantity'],  # Giá trị là tổng quantity
+                'color': f"hsl({hash(item['brand']) % 360}, 70%, 50%)"  # Tạo màu ngẫu nhiên dựa trên brand
+            })
+
+        serializer = PieChartDataSerializer(pie_data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

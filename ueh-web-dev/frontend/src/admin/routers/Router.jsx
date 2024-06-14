@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../pages/Dashboardpage";
 import Teampage from "../pages/Teampage";
 import Invoicespage from "../pages/Invoicespage";
@@ -18,6 +18,7 @@ import StaffDashboard from "../pages/StaffDashboard";
 const Routers = () => {
     return (
       <Routes>
+              <Route path="/" element={<Navigate to="/admin" />} />
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/team" element={<Teampage />} />
               <Route path="/admin/products" element={<ProductPage />} />
