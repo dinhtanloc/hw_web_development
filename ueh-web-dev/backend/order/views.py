@@ -1,9 +1,10 @@
 import random
-from .populate_data import orders_data, create_initial_orders
+from .populate_data import orders_data, create_initial_orders, replace_color_in_image_url
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view,permission_classes, action
 from rest_framework.response import Response
 from .models import Orders, OrdersItem
+from categories.models import Product
 from .serializers import OrdersSerializer, OrdersItemSerializer
 from django.db.models.functions import TruncDate
 from datetime import datetime, timedelta
@@ -70,10 +71,35 @@ def get_order_items(request, order_id):
         order = Orders.objects.get(id=order_id)
     except Orders.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+    orderSerializer = OrdersSerializer(order)
     order_items = OrdersItem.objects.filter(order=order)
     serializer = OrdersItemSerializer(order_items, many=True)
-    return Response(serializer.data)
+    # return Response({'info':orderSerializer.data,'items':serializer.data})
+    items_data = serializer.data
+    for item in items_data:
+        product_id = item['product']
+        # print(product_id)
+        color = item['color']
+        try:
+            product = Product.objects.get(id=product_id)
+            base_image_url = product.imgUrl
+            carName=product.carName
+            brand=product.brand
+            print(carName)
+            print(brand)
+            print(base_image_url)
+            print(replace_color_in_image_url(base_image_url,color))
+            imgItems=replace_color_in_image_url(base_image_url,color)
+            item['carName']=carName
+            item['brand']=brand
+            item['imgUrl']=imgItems
+            # Adjust the imgUrl field
+            # item['imgUrl'] = base_image_url.replace('base', color)  # Example replacement logic
+        except Product.DoesNotExist:
+            pass
+            item['imgUrl'] = None  # Handle the case where the product does not exist
+
+    return Response({'info': orderSerializer.data, 'items': items_data})
 
 
 class OrderAdminViewSet(viewsets.ModelViewSet):

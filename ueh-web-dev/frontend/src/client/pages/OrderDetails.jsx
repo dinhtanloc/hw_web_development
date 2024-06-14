@@ -7,6 +7,7 @@ import { Row, Container } from "reactstrap";
 // import Container from "reactstrap";
 import { useCart } from "../utils/cartContext";
 import "../styles/booking-form.css";
+import useAxios from "../utils/useAxios";
 // import "../styles/payment-method.css";
 // import "../styles/cart-items.css"
 
@@ -15,7 +16,9 @@ const OrderDetails = () =>{
     const {cartItems} = useCart();
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
+    const [orderInfo, setOrderInfo] = useState([]);
     const navigate = useNavigate();
+    const getOrderItems = useAxios()
     const styles ={
       // width:'100vw',
       // marginLeft:'10px',
@@ -30,11 +33,14 @@ const OrderDetails = () =>{
     }
 
     const fetchOrderItems = async () => {
+      console.log(orderId)
           // Tạm thời bỏ qua để không ảnh hưởng đến dữ liệu
 
         try {
-            const response = await axios.get(`http://localhost:8000/orders/${orderId}/items/`);
-            setOrderItems(response.data);
+            const response = await getOrderItems.get(`http://localhost:8000/orders/${orderId}/items/`);
+            console.log(response)
+            setOrderItems(response.data.items);
+            setOrderInfo(response.data.info)
         } catch (error) {
             console.error('Error fetching order items:', error);
         }
@@ -60,9 +66,9 @@ const OrderDetails = () =>{
                 <h4 className="mb-3" >Shipping Info</h4>
 
                 <div >
-                  <p><b>Name:</b> Ghulam Abbas</p>
-                  <p><b>Phone:</b> 111 111 1111</p>
-                  <p className="mb-4"><b>Address:</b> 2968, Oakwood Circle, DENVILLE, 07834, USA</p>
+                  <p><b>Name:</b> {`${orderInfo.Lastname} ${orderInfo.Firstname}`}</p>
+                  <p><b>Phone:</b> {orderInfo.phoneNumber}</p>
+                  <p className="mb-4"><b>Address:</b> {orderInfo.address}</p>
 
                 </div>
                 Shopping Bag
@@ -157,8 +163,8 @@ const OrderDetails = () =>{
       Shopping bag
       </div>
 
-      <div className="shopping-cart" style={{width:'55vw'}}>
-      {cartItems.map((item, index) => (
+      <div className="shopping-cart" style={{width:'55vw',height:'500px', position:'relative', marginBottom:'30px'}}>
+      {orderItems.map((item, index) => (
               <ViewOrderItems 
                 item={item} 
                 key={item.id || index}
@@ -172,6 +178,7 @@ const OrderDetails = () =>{
               />
             ))}
             </div>
+      {/* <div style={{height:'60px'}}></div> */}
       </Row>
       </Container>
 

@@ -108,7 +108,7 @@ const Confirmation = () => {
         phoneNumber: formData.phoneNumber,
         address: formData.address,
         notes: formData.notes,
-        paymentMethod: formData.paymentMethod,
+        payment_method: formData.paymentMethod,
 
       },
         items: cartItems      
@@ -120,20 +120,20 @@ const Confirmation = () => {
     console.log(itemsToUpdateRating)
     
     try {
-      // response =await getOrder.post('orders/create-order/', orderData);
-      // console.log(response.data)
+      const response =await getOrder.post('orders/create-order/', orderData);
+      console.log(response)
       console.log('haha')
 
       await Promise.all(
         itemsToUpdateRating.map(async (item) => {
           console.log(item.product)
-          // const response1 = await getOrder.post(`categories/${item.id}/like`, {
-          //   id: item.id,
-          // });
-          // console.log("Rating updated:", response1.data);
-          navigate(`/confirmation/${response.data.orderId}`);
-        })
-      );
+          const response1 = await getOrder.post(`categories/${item.id}/like`, {
+            id: item.id,
+          });
+          console.log("Rating updated:", response1.data);
+          })
+          );
+      navigate(`/confirmation/${response.data.id}`);
     } catch (error) {
       console.error("Error updating rating:", error);
     }
@@ -192,6 +192,7 @@ const Confirmation = () => {
             </div>
           </div>
           </Row>
+          <Row>
 
           <Col lg="7" className="mt-5">
               <div className="booking-info mt-5">
@@ -294,6 +295,8 @@ const Confirmation = () => {
                   itemsData={itemsData} /> */}
               </div>
             </Col>
+            </Row>        
+
         </Row>
 
         </Container>

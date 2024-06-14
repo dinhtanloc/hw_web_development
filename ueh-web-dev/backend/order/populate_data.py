@@ -218,6 +218,18 @@ orders_data = [
     }
 ]
 
+def replace_color_in_image_url(base_url, color):
+    last_slash_index = base_url.rfind('/')    
+    path = base_url[:last_slash_index]
+    filename = base_url[last_slash_index + 1:]    
+    name, extension = filename.split('.')
+
+    current_color=name.split("_")[-1]    
+    new_filename = f"{name.replace(current_color, color)}.{extension}"
+    print(new_filename)
+    new_url = f"{path}/{new_filename}"
+    
+    return new_url
 
 
 def random_date(start, end):

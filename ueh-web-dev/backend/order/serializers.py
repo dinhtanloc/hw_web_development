@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from .models import Orders, OrdersItem
+from categories.serializers import ProductSerializer
 # from .serializers import OrdersSerializer
 # from .views import OrdersSerializer
 
 
 class OrdersItemSerializer(serializers.ModelSerializer):
     # order = serializers.SerializerMethodField()  # Sử dụng serializer tương ứng của model Orders
+    # product = ProductSerializer()
     class Meta:
         model = OrdersItem
         fields = '__all__'

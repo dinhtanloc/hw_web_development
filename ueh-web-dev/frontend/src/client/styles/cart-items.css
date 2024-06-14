@@ -3,7 +3,9 @@
 
 .shopping-cart {
     width: 70vw;
+    overflow-y: auto;
     height: 423px;
+    max-height: 450px;
     /* margin: 1px auto; */
     background: #FFFFFF;
     box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);

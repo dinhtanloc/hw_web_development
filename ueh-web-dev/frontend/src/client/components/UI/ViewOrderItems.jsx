@@ -22,7 +22,7 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
   const [liked, setLiked] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const {removeFromCart, updateCartItemQuantity} =useCart();
-  const{carName, color, imgUrl, quantity,total_price ,unit_price }=item
+  const{carName, color, imgUrl, quantity,total_price ,unit_price ,brand}=item
   // console.log(item)
   const [amount, setQuantity] = useState(quantity); // Khởi tạo state cho số lượng, ban đầu là 1
 
@@ -86,9 +86,31 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
       return <div>Invalid item</div>;
       }
 
+    if(isOrderDetail){
+      return(
+      
+        <div className="item">
+            <div className="image">
+              <img src={imgUrl} alt="" />
+            </div>
+         
+            <div className="description">
+              <span>{brand}</span>
+              <span>{carName}</span>
+              <span>{color}</span>
+            </div>
+            <div className="total-price">{unit_price*quantity}</div>
+          {/* <div ></div> */}
+          </div>
+
+      );
+
+   
+    }
+
     return(
+      
       <div className="item">
-          {!isOrderDetail ? (
         <div className="buttons">
           <StyledHeartIcon
             icon={liked ? faHeart : faHeartRegular}
@@ -102,7 +124,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
             onClick={handleRemove}
           />
         </div>
-      ) : null}
        
           <div className="image">
             <img src={imgUrl} alt="" />
@@ -113,7 +134,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
             <span>{carName}</span>
             <span>{color}</span>
           </div>
-          {!isOrderDetail ? (
         <div className="quantity">
           <button
             className="plus-btnc"
@@ -133,7 +153,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
             <FontAwesomeIcon icon={faMinus} />
           </button>
         </div>
-      ) : null}
        
           <div className="total-price">{unit_price*quantity}</div>
         </div>

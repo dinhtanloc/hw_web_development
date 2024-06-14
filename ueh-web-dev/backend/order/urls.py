@@ -10,6 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('create-order/', views.create_order, name='create-order'),
-    path('order/<int:order_id>/items/', views.get_order_items, name='get-order-items'),
+    path('<int:order_id>/items/', views.get_order_items, name='get-order-items'),
 
 ]

@@ -39,8 +39,8 @@ const Routers = ({ searchTerm }) => {
       <Route exact path='/confirmation' element={<PrivateRoute/>}>
             <Route exact path='/confirmation' element={<Confirmation/>}/>
       </Route>
-      <Route exact path='/confirmation/:slug' element={<PrivateRoute/>}>
-            <Route exact path='/confirmation/:slug' element={<OrderDetails/>}/>
+      <Route exact path='/confirmation/:orderId' element={<PrivateRoute/>}>
+            <Route exact path='/confirmation/:orderId' element={<OrderDetails/>}/>
       </Route>
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />
