@@ -14,11 +14,36 @@ import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 // import useAxios from "../utils/useAxios";
-import downloadExcel from "../utils/downloadExcel";
+// import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const handleDownload = async () => {
+    try {
+        const response = await fetch('http://localhost:8000/orders/download-excel/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'orders.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    } catch (error) {
+        console.error('Error downloading the file', error);
+    }
+};
   
  
   
@@ -37,10 +62,10 @@ const Dashboard = () => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
-            onclick = {downloadExcel}
+            onClick = {handleDownload}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
+            Download Data
           </Button>
         </Box>
       </Box>

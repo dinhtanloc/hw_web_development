@@ -12,6 +12,9 @@ from django.db.models import Count, Sum
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsStaffUser
 from backend.settings import DATA_GENERATION
+import pandas as pd
+from django.http import HttpResponse
+import io
 
 if DATA_GENERATION:
     if not Orders.objects.exists():
@@ -294,11 +297,10 @@ class TimeSeriesDataViewSet(viewsets.ViewSet):
 class OrdersTimeSeriesViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
-        # Tính tổng doanh số (total_price) theo thời gian (tháng)
         orders_data = []
 
         current_date = datetime.now().date()
-        start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
+        start_date = current_date - timedelta(days=365)
 
         # Group by month and calculate total sales
         monthly_totals = Orders.objects.filter(created_at__gte=start_date).annotate(
@@ -309,21 +311,89 @@ class OrdersTimeSeriesViewSet(viewsets.ViewSet):
 
         for item in monthly_totals:
             orders_data.append({
-                'x': item['month'],  # Tháng
-                'y': float(item['total_sale']) if item['total_sale'] else 0  # Doanh số, nếu không có thì mặc định là 0
+                'x': item['month'],
+                'y': float(item['total_sale']) if item['total_sale'] else 0 
             })
 
         return Response(orders_data, status=status.HTTP_200_OK)
     
 
-class DataViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, IsStaffUser]
-    def get(self, request):
-        # products = Product.objects.all()
-        orders = Orders.objects.all()
-        
-        order_serializer = OrdersSerializer(orders, many=True)
-        
-        return Response({
-            'orders': order_serializer.data
-        })
+# def download_excel(request):
+#     # Lấy tất cả các đơn hàng sắp xếp theo `created_at`
+#     orders = Orders.objects.all().order_by('created_at')
+
+#     # Tạo DataFrame từ dữ liệu của model `Orders`
+#     data = {
+#         'Order ID': [order.pk for order in orders],
+#         'User': [order.user.username for order in orders],
+#         'Firstname': [order.Firstname for order in orders],
+#         'Lastname': [order.Lastname for order in orders],
+#         'Email': [order.email for order in orders],
+#         'Phone Number': [order.phoneNumber for order in orders],
+#         'Address': [order.address for order in orders],
+#         'Total Price': [order.total_price for order in orders],
+#         'Payment Method': [order.payment_method for order in orders],
+#         'Shipping Deadline': [order.shipping_deadline for order in orders],
+#         'Created At': [order.created_at.replace(tzinfo=None) for order in orders], 
+#         'Updated At': [order.updated_at.replace(tzinfo=None) for order in orders],
+#         'Note': [order.note for order in orders],
+#         'Status': [order.status for order in orders],
+#     }
+#     df = pd.DataFrame(data)
+
+#     # Tạo một đối tượng BytesIO để lưu file Excel
+#     buffer = io.BytesIO()
+
+#     # Lưu DataFrame vào buffer dưới dạng file Excel
+#     with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+#         df.to_excel(writer, index=False, sheet_name='Orders')
+
+#     # Thiết lập con trỏ về đầu buffer
+#     buffer.seek(0)
+
+#     # Tạo phản hồi HTTP với file Excel
+#     response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = 'attachment; filename=orders.xlsx'
+
+#     return response
+
+def download_excel(request):
+    orders = Orders.objects.all().order_by('created_at').values(
+        'pk', 'user__username', 'Firstname', 'Lastname', 'email',
+        'phoneNumber', 'address', 'total_price', 'payment_method',
+        'shipping_deadline', 'created_at', 'updated_at', 'note', 'status'
+    )
+
+    df = pd.DataFrame(list(orders))
+
+    df['created_at'] = df['created_at'].apply(lambda x: x.replace(tzinfo=None))
+    df['updated_at'] = df['updated_at'].apply(lambda x: x.replace(tzinfo=None))
+
+    df.rename(columns={
+        'pk': 'Order ID',
+        'user__username': 'User',
+        'Firstname': 'Firstname',
+        'Lastname': 'Lastname',
+        'email': 'Email',
+        'phoneNumber': 'Phone Number',
+        'address': 'Address',
+        'total_price': 'Total Price',
+        'payment_method': 'Payment Method',
+        'shipping_deadline': 'Shipping Deadline',
+        'created_at': 'Created At',
+        'updated_at': 'Updated At',
+        'note': 'Note',
+        'status': 'Status'
+    }, inplace=True)
+
+    buffer = io.BytesIO()
+
+    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Orders')
+
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=orders.xlsx'
+
+    return response
