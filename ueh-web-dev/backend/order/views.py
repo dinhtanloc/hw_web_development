@@ -189,6 +189,7 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     
 
 class MonthlyBrandDataViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         monthly_brand_data = []
 
@@ -233,6 +234,7 @@ class MonthlyBrandDataViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class BarHChartDataViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         # Tính tổng quantity theo brand của Product từ OrderItem
         queryset = OrdersItem.objects.values('product__brand').annotate(
@@ -251,6 +253,7 @@ class BarHChartDataViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class TimeSeriesDataViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         # Lấy danh sách các brand từ Product
         brands = Product.objects.values_list('brand', flat=True).distinct()
@@ -289,6 +292,7 @@ class TimeSeriesDataViewSet(viewsets.ViewSet):
         return Response(time_series_data, status=status.HTTP_200_OK)
     
 class OrdersTimeSeriesViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         # Tính tổng doanh số (total_price) theo thời gian (tháng)
         orders_data = []
@@ -310,3 +314,16 @@ class OrdersTimeSeriesViewSet(viewsets.ViewSet):
             })
 
         return Response(orders_data, status=status.HTTP_200_OK)
+    
+
+class DataViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, IsStaffUser]
+    def get(self, request):
+        # products = Product.objects.all()
+        orders = Orders.objects.all()
+        
+        order_serializer = OrdersSerializer(orders, many=True)
+        
+        return Response({
+            'orders': order_serializer.data
+        })

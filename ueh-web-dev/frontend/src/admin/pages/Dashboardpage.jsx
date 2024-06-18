@@ -14,6 +14,7 @@ import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 // import useAxios from "../utils/useAxios";
+import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -36,6 +37,7 @@ const Dashboard = () => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
+            onclick = {downloadExcel}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Reports

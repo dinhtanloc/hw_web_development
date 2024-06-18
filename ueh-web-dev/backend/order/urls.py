@@ -8,6 +8,8 @@ router.register(r'admin/monthly-brand-data', views.MonthlyBrandDataViewSet, base
 router.register(r'admin/barH-data', views.BarHChartDataViewSet, basename='barH-data')
 router.register(r'admin/time-series', views.TimeSeriesDataViewSet, basename='time-series')
 router.register(r'admin/sale-time-series', views.OrdersTimeSeriesViewSet, basename='sale-time-series')
+router.register(r'admin/data',views.DataViewSet, basename='data')
+
 
 app_name='orders'
 urlpatterns = [
