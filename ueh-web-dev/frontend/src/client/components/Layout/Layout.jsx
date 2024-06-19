@@ -7,7 +7,7 @@ import Login from "../../pages/Login";
 import Routers from "../../routers/Routers";
 import axios from 'axios'
 import backgroundImage from './slider-2.jpg'; // Đảm bảo đường dẫn này đúng
-
+import Popup from "../UI/Popup";
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
@@ -48,6 +48,7 @@ const Layout = () => {
           <Fragment>
             <Header onSearch={handleSearch} />
             <Routers searchTerm={searchTerm} />
+            <Popup/>
             <Footer />
           </Fragment>
         )}

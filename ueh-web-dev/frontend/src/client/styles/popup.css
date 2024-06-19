@@ -1,0 +1,26 @@
+/* Popup.css */
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none; /* Không hiển thị ban đầu */
+  }
+  
+  .popup.open {
+    display: block; /* Hiển thị khi có class 'open' */
+  }
+  
+  .popup-content {
+    text-align: center;
+  }
+  
+  .popup button {
+    margin-top: 10px;
+  }
+  

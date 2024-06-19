@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User,Profile
+from rest_framework.views import APIView
 
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer,ProfileSerializer,ChangePasswordSerializer, StaffTokenObtainPairSerializer,UserSerializer
+from .serializers import MyTokenObtainPairSerializer , RegisterSerializer,ProfileSerializer,ChangePasswordSerializer, StaffTokenObtainPairSerializer,UserSerializer
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
@@ -147,4 +148,6 @@ def profileView(request):
 #         user_profile.save()
 #         return Response({'message': 'Image uploaded successfully.'}, status=status.HTTP_200_OK)
 #     return Response({'message': 'No image uploaded.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
