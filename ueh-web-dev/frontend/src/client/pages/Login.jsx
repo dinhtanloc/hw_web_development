@@ -33,6 +33,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+          setIsSignUpActive(true);
+        }, 100); // Delay một chút để đảm bảo hiệu ứng hoạt động
+    }, []);
   
 
   const handleSignUpClick = () => {

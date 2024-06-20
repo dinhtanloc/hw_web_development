@@ -42,10 +42,7 @@ const Testimonial = () => {
     <Slider {...settings}>
       <div className="testimonial py-4 px-3">
         <p className="section__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus magni
-          explicabo molestias recusandae repudiandae, dolor, sapiente placeat
-          ab, animi eum minima nulla facere aliquam aut vitae quo pariatur
-          voluptate odit?
+        The service at this luxury car dealership is unparalleled. From the moment you walk in, you are treated like royalty. The staff is knowledgeable, friendly, and eager to help you find the perfect vehicle that suits your lifestyle and preferences.
         </p>
 
         <div className="mt-3 d-flex align-items-center gap-4">
@@ -60,10 +57,7 @@ const Testimonial = () => {
 
       <div className="testimonial py-4 px-3">
         <p className="section__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus magni
-          explicabo molestias recusandae repudiandae, dolor, sapiente placeat
-          ab, animi eum minima nulla facere aliquam aut vitae quo pariatur
-          voluptate odit?
+        An exceptional experience awaits you at this official premium car dealership. The showroom is immaculate, and the collection of vehicles is simply stunning. The sales team is professional and attentive, ensuring that every detail is taken care of.
         </p>
 
         <div className="mt-3 d-flex align-items-center gap-4">
@@ -78,10 +72,7 @@ const Testimonial = () => {
 
       <div className="testimonial py-4 px-3">
         <p className="section__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus magni
-          explicabo molestias recusandae repudiandae, dolor, sapiente placeat
-          ab, animi eum minima nulla facere aliquam aut vitae quo pariatur
-          voluptate odit?
+        This luxury car dealership sets the standard for excellence. The attention to detail in every aspect of the service is remarkable. Whether you're purchasing a new car or getting your current one serviced, you can expect top-notch treatment from start to finish.
         </p>
 
         <div className="mt-3 d-flex align-items-center gap-4">
@@ -96,10 +87,7 @@ const Testimonial = () => {
 
       <div className="testimonial py-4 px-3">
         <p className="section__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus magni
-          explicabo molestias recusandae repudiandae, dolor, sapiente placeat
-          ab, animi eum minima nulla facere aliquam aut vitae quo pariatur
-          voluptate odit?
+        From the elegant showroom to the exceptional customer service, this premium car dealership is second to none. The staff goes above and beyond to ensure that your car-buying experience is smooth and enjoyable. I couldn't be happier with my new vehicle
         </p>
 
         <div className="mt-3 d-flex align-items-center gap-4">

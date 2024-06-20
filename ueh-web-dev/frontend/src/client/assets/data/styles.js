@@ -5,7 +5,7 @@ export const styles = {
         // Border
         borderRadius: '50%',
         // Background 
-        backgroundImage: `url(https://chat-engine-assets.s3.amazonaws.com/tutorials/my-face-min.png)`, 
+        backgroundImage: `url(https://miro.medium.com/v2/resize:fit:612/1*C_LFPy6TagD1SEN5SwmVRQ.jpeg)`, 
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: '84px',
@@ -16,6 +16,7 @@ export const styles = {
     avatarHello: { 
         // Position
         position: 'absolute', 
+        zIndex: 10000 ,
         left: 'calc(-100% - 44px - 28px)', 
         top: 'calc(50% - 24px)', 
         // Layering
@@ -43,6 +44,7 @@ export const styles = {
         borderRadius: '12px',
         border: `2px solid #7a39e0`,
         overflow: 'hidden',
+        zIndex: 2000,
         // Shadow
         boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
     },
