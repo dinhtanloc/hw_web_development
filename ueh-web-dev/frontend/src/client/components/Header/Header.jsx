@@ -5,6 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
 import AuthContext from '../../context/AuthContext.jsx'
 import useAxios from "../../utils/useAxios"
+import  AuthLoginContext  from "../../context/AuthLoginContext.jsx";
 
 
 
@@ -36,6 +37,8 @@ const navLinks = [
 const Header = ({ onSearch }) => {
   const {user, logoutUser} = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState();
+  const { setShowLogin } = useContext(AuthLoginContext);
+
   const [nameuser, setName] = useState('');
   const [img,setImage]=useState('');
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,6 +70,14 @@ const Header = ({ onSearch }) => {
     logoutUser()
 
   
+  }
+
+  const handleLogin= () =>{
+    setShowLogin(false)
+  }
+
+  const handleRegister = () =>{
+    setShowLogin(true)
   }
 
     useEffect(() => {
@@ -145,11 +156,11 @@ const Header = ({ onSearch }) => {
                   </>
                 ) : (
                   <>
-                    <Link to="/login" className=" d-flex align-items-center gap-1">
+                    <Link to="/login" className=" d-flex align-items-center gap-1" onClick={handleLogin}>
                       <i className="ri-login-circle-line"></i> Login
                     </Link>
 
-                    <Link to="#" className=" d-flex align-items-center gap-1">
+                    <Link to="/register" className=" d-flex align-items-center gap-1" onClick={handleRegister}>
                       <i className="ri-user-line"></i> Register
                     </Link>
                   </>

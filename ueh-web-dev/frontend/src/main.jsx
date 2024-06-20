@@ -12,6 +12,7 @@ import { AuthProvider } from './client/context/AuthContext.jsx';
 import Clientpage from './client/Clientpage.jsx';
 import Adminpage from './admin/AdminPage.jsx'
 import CartProvider from './client/utils/cartContext.jsx';
+import { AuthLoginProvider } from './client/context/AuthLoginContext.jsx';
 // import Clientpage from './client/Clientpage.jsx';
 
 const url = window.location.pathname;
@@ -37,7 +38,9 @@ if (url.startsWith('/admin')) {
       <Router>
           <AuthProvider>
             <CartProvider>
-              <Clientpage />
+                <AuthLoginProvider>
+                  <Clientpage />
+                </AuthLoginProvider>
   
             </CartProvider>
           
@@ -45,6 +48,7 @@ if (url.startsWith('/admin')) {
           </AuthProvider>
   
       </Router>
+
   
     </React.StrictMode>,
   )

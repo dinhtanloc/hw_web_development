@@ -26,7 +26,7 @@ const Layout = () => {
     console.log('toi dang o Layout')
     console.log(searchTerm)
   };
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
     return (
       
       <>

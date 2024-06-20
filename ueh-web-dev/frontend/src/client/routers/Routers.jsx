@@ -19,6 +19,7 @@ const Routers = ({ searchTerm }) => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/register" element={<Login />} />
       <Route path="/login" element={<Login />} />
       {/* <PrivateRoute path='/profile/' element = {<Profile />}/> */}
       {/* <Route path="/profile/" element={<Profile />} /> */}

@@ -3,6 +3,7 @@ import "../styles/login.css";
 import axios from 'axios'
 import { jwtDecode }  from "jwt-decode";
 import AuthContext from '../context/AuthContext'
+import  AuthLoginContext  from '../context/AuthLoginContext';
 import useAxios from "../utils/useAxios"
 
 import { useEffect } from 'react';
@@ -25,11 +26,13 @@ const Login = () => {
   const {loginUser} = useContext(AuthContext);
   const { registerUser } = useContext(AuthContext);
   const {user, logoutUser} = useContext(AuthContext);
-  const [isSignUpActive, setIsSignUpActive] = useState(false);
+  const { showLogin } = useContext(AuthLoginContext);
+  console.log(!showLogin)
+  const [isSignUpActive, setIsSignUpActive] = useState(!showLogin);
 
 
   const [currentUser, setCurrentUser] = useState();
-  const [registrationToggle, setRegistrationToggle] = useState(false);
+  const [registrationToggle, setRegistrationToggle] = useState(true);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -37,7 +40,7 @@ const Login = () => {
 
     useEffect(() => {
         setTimeout(() => {
-          setIsSignUpActive(true);
+          setIsSignUpActive(showLogin);
         }, 100); // Delay một chút để đảm bảo hiệu ứng hoạt động
     }, []);
   
