@@ -14,6 +14,7 @@ router.register(r'admin/sale-time-series', views.OrdersTimeSeriesViewSet, basena
 app_name='orders'
 urlpatterns = [
     path('', include(router.urls)),
+    path('<int:user_id>/orders-history/', views.user_orders, name='user_orders'),
 
     path('create-order/', views.create_order, name='create-order'),
     path('<int:order_id>/items/', views.get_order_items, name='get-order-items'),

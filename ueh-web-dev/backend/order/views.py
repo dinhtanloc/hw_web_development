@@ -27,6 +27,14 @@ else:
     print('Data Generation is turned off')
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_orders(request, user_id):
+    orders = Orders.objects.filter(user_id=user_id).order_by('-created_at')
+    serializer = OrdersSerializer(orders, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_order(request):
