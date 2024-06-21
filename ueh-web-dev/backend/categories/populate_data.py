@@ -12,7 +12,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Tesla Malibu is a luxurious electric sedan. It combines sleek design with cutting-edge technology, offering a comfortable and eco-friendly driving experience. With advanced features like GPS Navigation and Heated Seats, it's perfect for those who value both style and sustainability."
+        'description': "The Tesla Malibu is a luxurious electric sedan. It combines sleek design with cutting-edge technology, offering a comfortable and eco-friendly driving experience. With advanced features like GPS Navigation and Heated Seats, it's perfect for those who value both style and sustainability.",
+        'quantity':10
     },
     {
         'id': 2,
@@ -26,7 +27,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Toyota Aventador is a reliable and versatile SUV. With its spacious interior and rugged design, it's perfect for both city driving and off-road adventures. Equipped with advanced features like GPS Navigation and Automatic Transmission, it offers a smooth and comfortable ride in any situation."
+        'description': "The Toyota Aventador is a reliable and versatile SUV. With its spacious interior and rugged design, it's perfect for both city driving and off-road adventures. Equipped with advanced features like GPS Navigation and Automatic Transmission, it offers a smooth and comfortable ride in any situation.",
+        'quantity':10
     },
     {
         'id': 3,
@@ -40,7 +42,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The BMW X3 is a luxurious and sporty crossover SUV. With its powerful engine and agile handling, it delivers an exhilarating driving experience. The spacious interior is equipped with premium amenities like Heated Seats and GPS Navigation, ensuring a comfortable and convenient journey every time."
+        'description': "The BMW X3 is a luxurious and sporty crossover SUV. With its powerful engine and agile handling, it delivers an exhilarating driving experience. The spacious interior is equipped with premium amenities like Heated Seats and GPS Navigation, ensuring a comfortable and convenient journey every time.",
+        'quantity':10
     },
     {
         'id': 4,
@@ -54,7 +57,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Nissan Mercielago is a stylish and efficient sedan. With its sleek design and spacious interior, it offers a comfortable and enjoyable driving experience. Equipped with features like GPS Navigation and Automatic Transmission, it's perfect for daily commutes and weekend getaways."
+        'description': "The Nissan Mercielago is a stylish and efficient sedan. With its sleek design and spacious interior, it offers a comfortable and enjoyable driving experience. Equipped with features like GPS Navigation and Automatic Transmission, it's perfect for daily commutes and weekend getaways.",
+        'quantity':10
     },
     {
         'id': 5,
@@ -68,7 +72,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Ferrari Camry is a sleek and powerful sports car. With its aerodynamic design and high-performance engine, it offers an exhilarating driving experience. The luxurious interior features amenities like Heated Seats and GPS Navigation, ensuring both comfort and convenience on the road."
+        'description': "The Ferrari Camry is a sleek and powerful sports car. With its aerodynamic design and high-performance engine, it offers an exhilarating driving experience. The luxurious interior features amenities like Heated Seats and GPS Navigation, ensuring both comfort and convenience on the road.",
+        'quantity':10
     },
     {
         'id': 6,
@@ -82,7 +87,8 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Mercedes Benz XC90 is a luxurious and versatile SUV. With its spacious interior and advanced technology, it offers a comfortable and enjoyable driving experience for the whole family. Equipped with features like Heated Seats and GPS Navigation, it's perfect for both daily commutes and long road trips."
+        'description': "The Mercedes Benz XC90 is a luxurious and versatile SUV. With its spacious interior and advanced technology, it offers a comfortable and enjoyable driving experience for the whole family. Equipped with features like Heated Seats and GPS Navigation, it's perfect for both daily commutes and long road trips.",
+        'quantity':10
     },
     {
         'id': 7,
@@ -96,7 +102,7 @@ car_data = [
         'gps': "GPS Navigation",
         'seat_type': "Heated seats",
         'automatic': "Automatic",
-        'description': "The Audi Fiesta is a stylish and reliable sedan. With its sleek design and comfortable interior, it offers a pleasant driving experience for daily commutes and weekend trips. Equipped with features like GPS Navigation and Automatic Transmission"
-
+        'description': "The Audi Fiesta is a stylish and reliable sedan. With its sleek design and comfortable interior, it offers a pleasant driving experience for daily commutes and weekend trips. Equipped with features like GPS Navigation and Automatic Transmission",
+        'quantity':10
     },
 ]
