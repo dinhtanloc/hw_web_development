@@ -1,15 +1,15 @@
-import React from 'react'
+// import React from 'react'
 
-export default function StartBtn(props) {
+// export default function StartBtn(props) {
 
-    const initialAction = () => {
-        props.actions.initialAction();
-    }
+//     const initialAction = () => {
+//         props.actions.initialAction();
+//     }
 
-    return (
-        <div>
+//     return (
+//         <div>
 
-            <button className='start-btn' onClick={() => initialAction()}>Let's Lo Started</button>
-        </div>
-    )
-}
+//             <button className='start-btn' onClick={() => initialAction()}>Let's Lo Started</button>
+//         </div>
+//     )
+// }

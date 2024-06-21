@@ -98,6 +98,11 @@ const Confirmation = () => {
   };
 
 
+  const meomeocheck = () => {
+    console.log('da check');
+  }
+
+
   const handleCreateOrder = async (e) => {
     e.preventDefault();
     const orderData = {
@@ -127,8 +132,8 @@ const Confirmation = () => {
       await Promise.all(
         itemsToUpdateRating.map(async (item) => {
           console.log(item.product)
-          const response1 = await getOrder.post(`categories/${item.id}/like`, {
-            id: item.id,
+          const response1 = await getOrder.post(`categories/${item.product}/like/`, {
+            id: item.product,
           });
           console.log("Rating updated:", response1.data);
           })
@@ -234,7 +239,7 @@ const Confirmation = () => {
             </Col>
 
             <Col lg="5" className="mt-5">
-              <div className="payment__info mt-5">
+              <div className="payment__info mt-5" style={{position:'relative',  zIndex:'10000000000'}}>
                 <h5 className="mb-4 fw-bold">Payment Information</h5>
                 <div className="payment">
                   <label htmlFor="directBankTransfer" className="d-flex align-items-center gap-2">
@@ -285,11 +290,13 @@ const Confirmation = () => {
                     Paypal
                   </label>
 
-                        <img src={paypal} alt="" />
-                      </div>
-                      <div className="payment text-end mt-5">
-                        <button onClick={handleCreateOrder}>Reserve Now</button>
-                      </div>
+                  <img src={paypal} alt="" />
+                </div>
+                <div className="payment text-end mt-5">
+                
+                  <button onClick={handleCreateOrder}>Reserve Now</button>
+                  {/* <input type="button" value="Reserve Now" onClick={meomeocheck} /> */}
+                </div>
                   {/* <PaymentMethod
                   orderData={orderData}
                   itemsData={itemsData} /> */}

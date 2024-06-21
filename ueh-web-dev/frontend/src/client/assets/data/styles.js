@@ -44,7 +44,7 @@ export const styles = {
         borderRadius: '12px',
         border: `2px solid #7a39e0`,
         overflow: 'hidden',
-        zIndex: 2000,
+        zIndex: 200,
         // Shadow
         boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
     },

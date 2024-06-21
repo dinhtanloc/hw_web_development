@@ -1,7 +1,7 @@
 import { createChatBotMessage } from 'react-chatbot-kit';
 import Avatar from './Avatar';
-import StartBtn from './StartBtn';
-import StartSlow from './StartSlow';
+// import StartBtn from './StartBtn';
+// import StartSlow from './StartSlow';
 import DipslayImage from './DipslayImage'
 
 const botAvatar = (props) => {
@@ -17,7 +17,7 @@ const config = {
     botName: "AgeDrive Explorer",
     initialMessages: [
         createChatBotMessage(`Welcome to RideAge Advisor!`, {
-            widget: "startBtn"
+            // widget: "startBtn"
         })
     ],
     customComponents: {
@@ -38,10 +38,10 @@ const config = {
         }
     },
     widgets: [
-        {
-            widgetName: "startBtn",
-            widgetFunc: (props) => <StartBtn {...props} />,
-        },
+        // {
+        //     widgetName: "startBtn",
+        //     widgetFunc: (props) => <StartBtn {...props} />,
+        // },
         // {
         //     widgetName: "startSlow",
         //     widgetFunc: (props) => <StartSlow {...props} />,
