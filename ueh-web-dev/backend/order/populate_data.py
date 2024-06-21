@@ -90,12 +90,12 @@ orders_data = [
         "status": "pending",
         "items": [
             {
-                "product": 7,
+                "product": 6,
                 "quantity": 1,
                 "color": "white"
             },
             {
-                "product": 3,
+                "product": 7,
                 "quantity": 3,
                 "color": "black"
             }
@@ -187,14 +187,14 @@ orders_data = [
                 "color": "red"
             },
             {
-                "product": 4,
+                "product": 7,
                 "quantity": 2,
                 "color": "black"
             }
         ]
     },
     {
-        "user_id": 11,
+        "user_id": 10,
         "Firstname": "Kim",
         "Lastname": "Duong",
         "email": "kimduong2003@gmail.com",
@@ -210,7 +210,7 @@ orders_data = [
                 "color": "white"
             },
             {
-                "product": 7,
+                "product": 4,
                 "quantity": 2,
                 "color": "red"
             }

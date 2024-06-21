@@ -19,7 +19,7 @@ const Confirmation = () => {
   const {cartItems} = useCart();
   const navigate = useNavigate();
   const [likedItems, setLikedItems] = useState([]);
-  const [productRating, setProductRating] = useState({});
+  // const [productRating, setProductRating] = useState({});
 
   // const [orderItems, setOrderItems] = useState(cartItems);
   const getOrder=useAxios();

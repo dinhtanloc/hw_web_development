@@ -14,6 +14,8 @@ from accounts.permissions import IsStaffUser
 from backend.settings import DATA_GENERATION
 import pandas as pd
 from django.http import HttpResponse
+from django.db import transaction
+
 import io
 
 if DATA_GENERATION:
@@ -44,27 +46,47 @@ def create_order(request):
     # Process order items
     total_price = 0
     print(items_data, order.id)
-    for item_data in items_data:
-        item_data['order'] = order.id
-        item_serializer = OrdersItemSerializer(data=item_data,partial=True)
-        print(item_data)
-        print(item_serializer)
-        if not item_serializer.is_valid():
-            print('vo day')
-            errors = item_serializer.errors
-            print(errors)
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if item_serializer.is_valid():
-            print('toi o day ne')
-            item = item_serializer.save()
-            total_price += item.total_price
-        else:
-            return Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    with transaction.atomic():
+        for item_data in items_data:
+            item_data['order'] = order.id
+            item_serializer = OrdersItemSerializer(data=item_data,partial=True)
+            print(item_data)
+            print(item_serializer)
+            if not item_serializer.is_valid():
+                print('vo day')
+                errors = item_serializer.errors
+                print(errors)
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            product_id = item_data['product']
+            try:
+                product = Product.objects.get(id=product_id)
+                if item_data['quantity'] > product.quantity:
+                    return Response(
+                        {'error': f'Product {product_id} does not have enough quantity'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                # Subtract the quantity from the product
+                product.quantity -= item_data['quantity']
+                product.save()
+
+                if item_serializer.is_valid():
+                    print('toi o day ne')
+                    item = item_serializer.save()
+                    total_price += item.total_price
+                else:
+                    return Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            except Product.DoesNotExist:
+                return Response(
+                    {'error': f'Product {product_id} does not exist'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
     order.total_price = total_price
     order.save()
-
     return Response(OrdersSerializer(order).data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
@@ -126,6 +148,13 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     def cancel_order(self, request, pk=None):
         instance = self.get_object()
         if instance.status == 'pending':
+            order_items = OrdersItem.objects.filter(order=instance)
+            
+            with transaction.atomic():
+                for item in order_items:
+                    product = item.product
+                    product.quantity += item.quantity
+                    product.save()
             instance.status = 'cancelled'
             instance.save()
             return Response({'status': 'Order cancelled'}, status=status.HTTP_200_OK)
