@@ -122,7 +122,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -414,21 +414,21 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 JAZZMIN_SETTINGS = {
     "site_title": "Django & React JWT Authentication ",
-    "welcome_sign": "Hey there...welcome back",
+    "welcome_sign": "Management Auto Retailer Backend",
     "site_header": "Django & React JWT Authentication ",
-    "site_brand": "Think | Create | Inspire",
+    "site_brand": "Admin System",
     "copyright": "www.desphixs.com",
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "React Admin", "url": "http://localhost:3000/admin", "new_window": False},
+        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "usermenu_links": [
         {"name": "Profile", "url": "admin:auth_user_change", "permissions": ["auth.view_user"]},
-        {"name": "React Admin", "url": "http://localhost:3000/admin", "new_window": False},
+        {"name": "React Admin", "url": "http://localhost:5173/admin", "new_window": False},
     ],
     "custom_links": {
         "app_name": [
-            {"name": "React Admin", "url": "http://localhost:3000/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
+            {"name": "React Admin", "url": "http://localhost:5173/admin", "icon": "fas fa-external-link-alt", "permissions": ["auth.view_user"]},
         ]
     },
     

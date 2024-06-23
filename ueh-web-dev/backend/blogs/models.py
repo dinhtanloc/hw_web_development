@@ -6,7 +6,7 @@ class BlogPost(models.Model):
     author = models.CharField(max_length=100)
     date = models.DateField()
     time = models.TimeField()
-    imgUrl = models.URLField(max_length=200)
+    imgUrl = models.ImageField(upload_to='blog_images/')
     description = models.TextField()
     quote = models.TextField()
 
