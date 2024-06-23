@@ -1,11 +1,34 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
+import React, {useState, useEffect} from 'react'
 import { tokens } from "../../theme";
 import { mockBarHData as data } from "../../assets/data/mockData";
+import useAxios from "../../../client/utils/useAxios";
+
 const HorizontalBarChart = () => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const [ProductData, checkProductdata] = useState([])
+    const api = useAxios()
+
+
+    useEffect(() => {
+      fetchproduct();
+    }, []);
+    
+    const fetchproduct = async () => {
+        try {
+            const response = await api.get('orders/admin/barH-data/')
+            // setUserProfile(response.data);
+            // checkStaff(response.data.is_staff)
+            checkProductdata(response)
+            console.log(ProductData)
+            
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
     return(
   <ResponsiveBar
     data={data}

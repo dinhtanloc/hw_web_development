@@ -12,6 +12,7 @@ const Layout =() =>{
     const [isSidebar, setIsSidebar] = useState(true);
     const isStaff = useAxios() 
     const [checkedStaff, checkStaff ] = useState(false)
+    const [staffInfo, ListstaffInfo] = useState([])
 
 
 
@@ -23,7 +24,9 @@ const Layout =() =>{
         try {
             const response = await isStaff.get('accounts/staff/');
             // setUserProfile(response.data);
-            checkStaff(response.data.is_staff)
+            checkStaff(response.data.is_staff);
+            ListstaffInfo(response.data)
+            console.log(staffInfo)
             
             console.log(checkedStaff)
         } catch (error) {
@@ -39,7 +42,7 @@ const Layout =() =>{
         <Fragment>
 
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          <Sidebar isSidebar={isSidebar}  data={staffInfo} />
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routers/>

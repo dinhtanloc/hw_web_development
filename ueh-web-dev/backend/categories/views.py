@@ -113,6 +113,11 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
         ).order_by('id')
 
         return Response(stats, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'], url_path='check_inventory')
+    def check_inventory(self, request):
+        out_of_stock_count = Product.objects.filter(quantity=0).count()
+        return Response({'out_of_stock_count': out_of_stock_count}, status=status.HTTP_200_OK)
 
 class PieChartDataViewSet(viewsets.ViewSet):
     def list(self, request):

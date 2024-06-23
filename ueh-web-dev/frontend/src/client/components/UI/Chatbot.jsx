@@ -9,7 +9,7 @@ import ActionProvider from '../Chatbot/ActionProvider'
 // import EmailForm from "./EmailForm";
 // import ChatEngine from "./ChatEngine";
 
-const SupportWindow = props => {
+const Bot = props => {
     const [user, setUser] = useState(null)
     const [chat, setChat] = useState(null)
     // styles.js
@@ -52,4 +52,4 @@ const SupportWindow = props => {
     )
 }
 
-export default SupportWindow;
+export default Bot;

@@ -10,6 +10,7 @@ export default AuthContext
 
 export const AuthProvider = ({ children }) => {
     const navigate =useNavigate()
+    const [logined, isLogin] = useState(null)
     const [authTokens, setAuthTokens] = useState(() =>
         localStorage.getItem("authTokens")
             ? JSON.parse(localStorage.getItem("authTokens"))
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }) => {
             setUser(jwtDecode (data.access))
             localStorage.setItem("authTokens", JSON.stringify(data))
             console.log('da log in')
+            isLogin(true);
             navigate("/") // chuyen trang
             Swal.fire({
                 title: "Login Successful",
@@ -116,6 +118,8 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(null)
         setUser(null)
         localStorage.removeItem("authTokens")
+        isLogin(false)
+        // window.location.reload();
         // navigate("/login")
         Swal.fire({
             title: "You have been logged out...",
@@ -126,11 +130,14 @@ export const AuthProvider = ({ children }) => {
             timerProgressBar: true,
             showConfirmButton: false,
         })
+        window.location.reload();
+
     }
 
     const contextData = {
         user, 
         setUser,
+        logined,
         authTokens,
         setAuthTokens,
         registerUser,

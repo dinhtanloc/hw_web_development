@@ -1,11 +1,33 @@
 import { ResponsiveLine } from "@nivo/line";
+import React, {useState, useEffect} from "react";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
+import useAxios from "../../../client/utils/useAxios";
 import { mockLineData as data } from "../../assets/data/mockData";
+
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [OrderData, checkOrderData] = useState([])
+
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+  
+  const fetchOrderData = async () => {
+      try {
+          const response = await api.get('orders/admin/time-series/')
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          checkOrderData(response)
+          console.log(OrderData)
+          
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
 
   return (
     <ResponsiveLine

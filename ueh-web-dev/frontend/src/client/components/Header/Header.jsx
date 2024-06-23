@@ -69,6 +69,7 @@ const Header = ({ onSearch }) => {
     setCurrentUser(false)
     logoutUser()
 
+
   
   }
 

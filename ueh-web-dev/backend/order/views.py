@@ -1,4 +1,5 @@
 import random
+from django.utils import timezone
 from .populate_data import orders_data, create_initial_orders, replace_color_in_image_url
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view,permission_classes, action
@@ -138,7 +139,7 @@ def get_order_items(request, order_id):
 class OrderAdminViewSet(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
 
     # Xem đơn hàng
     def retrieve(self, request, *args, **kwargs):
@@ -188,6 +189,15 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         return Response({'error': 'Order cannot be cancelled'}, status=status.HTTP_400_BAD_REQUEST)
     
 
+    @action(detail=False, methods=['get'], url_path='total-order')
+    def order_total(self, request):
+        stats = Orders.objects.aggregate(
+        total_orders=Count('id'),
+        total_revenue=Sum('total_price'),
+        total_quantity_sold=Sum('quantity')
+        )
+        return Response(stats, status=status.HTTP_200_OK)
+    
     @action(detail=False, methods=['get'], url_path='statistics')
     def order_statistics(self, request):
         stats = Orders.objects.values('status').annotate(
@@ -200,6 +210,13 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='time-series')
     def order_time_series(self, request):
         completed_orders = Orders.objects.filter(status='completed').annotate(
+            date=TruncDate('created_at')
+        ).values('date').annotate(
+            count=Count('id'),
+            total_revenue=Sum('total_price')
+        ).order_by('date')
+
+        completed_orders = Orders.objects.filter(status='pending').annotate(
             date=TruncDate('created_at')
         ).values('date').annotate(
             count=Count('id'),
@@ -219,7 +236,17 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_200_OK)
     
 
-    @action(detail=False, methods=['get'], url_path='payment-method-stats')
+    @action(detail=False, methods=['get'], url_path='recent-car-orders')
+    def recent_car_orders(self, request):
+        thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
+        recent_orders = OrdersItem.objects.filter(order__created_at__gte=thirty_days_ago)
+        car_order_stats = recent_orders.values('product__id', 'product__carName').annotate(
+            total_quantity=Sum('quantity')
+        ).order_by('-total_quantity')
+
+        return Response(car_order_stats, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'], url_path='product-stats')
     def payment_method_stats(self, request):
         stats = Orders.objects.values('payment_method').annotate(
             count=Count('id')
@@ -227,6 +254,13 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
 
         return Response(stats, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['get'], url_path='order-status-total')
+    def order_status_total(self, request):
+        order_status_stats = Orders.objects.values('status').annotate(
+            total_revenue=Sum('total_price')
+        ).order_by('status')
+
+        return Response(order_status_stats, status=status.HTTP_200_OK)
 
 class MonthlyBrandDataViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, IsStaffUser]
@@ -293,7 +327,7 @@ class BarHChartDataViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class TimeSeriesDataViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         # Lấy danh sách các brand từ Product
         brands = Product.objects.values_list('brand', flat=True).distinct()

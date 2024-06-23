@@ -13,12 +13,52 @@ import GeographyChart from "../components/UI/GeographyChart";
 import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
-// import useAxios from "../utils/useAxios";
+import useAxios from "../../client/utils/useAxios"
 // import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [OrderInfo, checkOrderInfo] = useState([]);
+  const [ProductInfo, checkProductInfo] = useState();
+  const api = useAxios();
+  
+  useEffect(() => {
+    fetchTotalOrder();
+    fetchProductInventory();
+  }, []);
+  
+  const fetchTotalOrder = async () => {
+      try {
+          const response = await api.get('orders/admin/orders/total-order/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          checkOrderInfo(response)
+          console.log(OrderInfo)
+          
+          
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
+  const fetchProductInventory = async () => {
+      try {
+          const response = await api.get('categories/admin/products/check_inventory/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          checkProductInfo(response)
+          console.log(OrderInfo)
+          
+          console.log(checkedStaff)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
+
+
+
   const handleDownload = async () => {
     try {
         const response = await fetch('http://localhost:8000/orders/download-excel/', {
@@ -45,6 +85,9 @@ const Dashboard = () => {
     }
 };
   
+
+
+
  
   
   return (
@@ -87,7 +130,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="12,361"
-            subtitle="Emails Sent"
+            subtitle="Total sale"
             progress="0.75"
             increase="+14%"
             icon={
@@ -106,7 +149,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="431,225"
-            subtitle="Sales Obtained"
+            subtitle="Transactions"
             progress="0.50"
             increase="+21%"
             icon={
@@ -125,7 +168,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="32,441"
-            subtitle="New Clients"
+            subtitle="Quantity Product"
             progress="0.30"
             increase="+5%"
             icon={
@@ -144,7 +187,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="1,325,134"
-            subtitle="Traffic Received"
+            subtitle="Out of stock"
             progress="0.80"
             increase="+43%"
             icon={
