@@ -8,19 +8,21 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "./Header";
-import LineChart from "../components/UI/LineChart";
+import {SummaryLineChart} from "../components/UI/LineChart";
 import GeographyChart from "../components/UI/GeographyChart";
 import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 import useAxios from "../../client/utils/useAxios"
+import numeral from 'numeral';
+
 // import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [OrderInfo, checkOrderInfo] = useState([]);
-  const [ProductInfo, checkProductInfo] = useState();
+  const [ProductInfo, checkProductInfo] = useState([]);
   const api = useAxios();
   
   useEffect(() => {
@@ -33,7 +35,8 @@ const Dashboard = () => {
           const response = await api.get('orders/admin/orders/total-order/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-          checkOrderInfo(response)
+          console.log(response.data)
+          checkOrderInfo(response.data)
           console.log(OrderInfo)
           
           
@@ -47,10 +50,10 @@ const Dashboard = () => {
           const response = await api.get('categories/admin/products/check_inventory/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-          checkProductInfo(response)
-          console.log(OrderInfo)
+          checkProductInfo(response.data)
+          console.log(ProductInfo)
           
-          console.log(checkedStaff)
+          // console.log(checkedStaff)
       } catch (error) {
           console.error('Error fetching user profile:', error);
       }
@@ -129,7 +132,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
+            title={numeral(OrderInfo.total_revenue).format('0.00a $')}
             subtitle="Total sale"
             progress="0.75"
             increase="+14%"
@@ -147,8 +150,9 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
+          {console.log(OrderInfo)}
           <StatBox
-            title="431,225"
+            title={new Intl.NumberFormat('en-US').format(OrderInfo.total_orders)}
             subtitle="Transactions"
             progress="0.50"
             increase="+21%"
@@ -167,7 +171,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
+            title={new Intl.NumberFormat('en-US').format(ProductInfo.total_quantity)}
             subtitle="Quantity Product"
             progress="0.30"
             increase="+5%"
@@ -186,7 +190,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
+            title={ProductInfo.out_of_stock_count}
             subtitle="Out of stock"
             progress="0.80"
             increase="+43%"
@@ -236,7 +240,7 @@ const Dashboard = () => {
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            <SummaryLineChart isDashboard={true} />
           </Box>
         </Box>
         <Box

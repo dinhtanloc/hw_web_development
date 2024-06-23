@@ -14,10 +14,12 @@ import EditProfile from "../pages/EditProfile";
 import PrivateRoute from "../utils/PrivateRoute";
 import Confirmation from "../pages/Confirmation";
 import OrderDetails from "../pages/OrderDetails";
+import Dashboard from "../../admin/pages/Dashboardpage";
 
 const Routers = ({ searchTerm }) => {
   return (
     <Routes>
+
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/register" element={<Login />} />
       <Route path="/login" element={<Login />} />

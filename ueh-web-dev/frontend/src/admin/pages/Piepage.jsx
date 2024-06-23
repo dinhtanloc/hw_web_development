@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import Header from "./Header";
-import PieChart from "../components/UI/PieChart";
+import {OrderPieChart} from "../components/UI/PieChart";
 const Pie = () => {
   return (
     <Box m="20px">
       <Header title="Pie Chart" subtitle="Simple Pie Chart" />
       <Box height="75vh">
-        <PieChart />
+        <OrderPieChart />
       </Box>
     </Box>
   );

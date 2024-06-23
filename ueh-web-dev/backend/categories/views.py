@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count,Sum
 from rest_framework import viewsets
 from .models import Product
+from order.models import OrdersItem
 from .serializers import ProductSerializer, PieChartDataSerializer
 from .populate_data import car_data
 from rest_framework import status
@@ -98,12 +99,11 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], url_path='top-selling')
     def top_selling(self, request):
-        top_products = Product.objects.annotate(
-            total_sales=Count('orderitem')
-        ).order_by('-total_sales')[:10]
+        top_products = OrdersItem.objects.values('product__carName').annotate(
+            total_revenue=Sum('total_price')
+        ).order_by('-total_revenue')[:10]
 
-        serializer = self.get_serializer(top_products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'top_products':top_products}, status=status.HTTP_200_OK)
     
 
     @action(detail=False, methods=['get'], url_path='inventory-quantity-stats')
@@ -114,10 +114,24 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
 
         return Response(stats, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['get'], url_path='cancelled-orders-product-quantity')
+    def cancelled_orders_product_quantity(self, request):
+        # Calculate the total quantity of products in order items of cancelled orders
+        total_quantity = OrdersItem.objects.filter(order__status='cancelled').aggregate(
+            total_quantity=Sum('quantity')
+        )['total_quantity'] or 0
+
+        response_data = {
+            "total_quantity": total_quantity
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=['get'], url_path='check_inventory')
     def check_inventory(self, request):
         out_of_stock_count = Product.objects.filter(quantity=0).count()
-        return Response({'out_of_stock_count': out_of_stock_count}, status=status.HTTP_200_OK)
+        total_quantity = OrdersItem.objects.aggregate(total_quantity=Sum('quantity'))['total_quantity']
+        return Response({'out_of_stock_count': out_of_stock_count, 'total_quantity': total_quantity}, status=status.HTTP_200_OK)
 
 class PieChartDataViewSet(viewsets.ViewSet):
     def list(self, request):

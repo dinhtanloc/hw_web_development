@@ -17,18 +17,20 @@ import GeographyChart from "../components/UI/GeographyChart";
 import BarChart from "../components/UI/BarChart";
 // import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
-import PieChart from "../components/UI/PieChart";
+import {ProductPieChart} from "../components/UI/PieChart";
 // import useAxios from "../utils/useAxios";
 
 const ProductDashboard = () =>{
     const isProducts = useAxios()
     const theme = useTheme();
     const colors = tokens(theme.palette.mode); 
-    const [productList, MakeproductList] = useState([]);
+    const [productPercentage, MakeproductPercentage] = useState([]);
+    const [ProductInfo, checkProductInfo] = useState([]);
+
     useEffect(() => {
         fetchProductlist();
-        fetchToplist();
         fetchStatlist();
+        fetchProductInventory();
 
       }, []);
 
@@ -44,17 +46,7 @@ const ProductDashboard = () =>{
             console.error('Error fetching user profile:', error);
         }
     };
-    const fetchToplist = async () => {
-        try {
-            const response = await isProducts.get('categories/admin/products/top-selling');
-            // setUserProfile(response.data);
-            // checkStaff(response.data.is_staff)
-            console.log(response.data)
-            // Makestafflist(response.data)
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
+ 
     const fetchStatlist = async () => {
         try {
             const response = await isProducts.get('categories/admin/products/inventory-quantity-stats');
@@ -66,6 +58,30 @@ const ProductDashboard = () =>{
             console.error('Error fetching user profile:', error);
         }
     };
+
+    const fetchProductInventory = async () => {
+      try {
+          const response = await isProducts.get('categories/admin/products/check_inventory/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          checkProductInfo(response.data)
+          console.log(ProductInfo)
+          
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
+  const mockTopProducts = [
+    { product__carName: 'Mercedes Benz XC90', total_revenue: 729810000 },
+    { product__carName: 'Nissan Mercielago', total_revenue: 701190000 },
+    { product__carName: 'BMW X3', total_revenue: 651430000 },
+    { product__carName: 'Tesla Malibu', total_revenue: 286200000 },
+    { product__carName: 'Ferrari Camry', total_revenue: 128790000 },
+    { product__carName: 'Toyota Aventador', total_revenue: 71550000 },
+  ];
+
+
 
 
     return(
@@ -106,8 +122,8 @@ const ProductDashboard = () =>{
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
+            title={new Intl.NumberFormat('en-US').format(ProductInfo.total_quantity)}
+            subtitle="Ordered Products"
             progress="0.75"
             increase="+14%"
             icon={
@@ -163,8 +179,8 @@ const ProductDashboard = () =>{
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
+            title={ProductInfo.out_of_stock_count}
+            subtitle="Out of stock"
             progress="0.80"
             increase="+43%"
             icon={
@@ -283,7 +299,7 @@ const ProductDashboard = () =>{
                 Percentage cancelled Orders
                 </Typography>
                 <Box height="550px" mt="-20px">
-                    <PieChart isDashboard={true} />
+                    <ProductPieChart isDashboard={true} />
                 </Box>
 
               
@@ -320,7 +336,9 @@ const ProductDashboard = () =>{
             Sales Quantity
           </Typography>
           <Box height="250px" mt="-20px">
-            <HorizontalBarChart  />
+          {/* <HorizontalBarChart data={mockTopProducts} keys={['total_revenue']} label="product__carName" /> */}
+          <HorizontalBarChart/>
+
           </Box>
             {/* </Box> */}
         </Box>
@@ -368,3 +386,5 @@ const ProductDashboard = () =>{
 }
 
 export default ProductDashboard
+
+

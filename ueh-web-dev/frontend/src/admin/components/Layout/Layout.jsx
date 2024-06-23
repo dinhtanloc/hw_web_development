@@ -24,9 +24,9 @@ const Layout =() =>{
         try {
             const response = await isStaff.get('accounts/staff/');
             // setUserProfile(response.data);
+            console.log(response)
             checkStaff(response.data.is_staff);
-            ListstaffInfo(response.data)
-            console.log(staffInfo)
+            ListstaffInfo(response.data.staff)
             
             console.log(checkedStaff)
         } catch (error) {

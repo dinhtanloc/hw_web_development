@@ -1,7 +1,7 @@
 import React, { useRef, useContext, useState,useEffect } from "react";
 import { jwtDecode }  from "jwt-decode";
 import { Container, Row, Col } from "reactstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink,useNavigate  } from "react-router-dom";
 import "../../styles/header.css";
 import AuthContext from '../../context/AuthContext.jsx'
 import useAxios from "../../utils/useAxios"
@@ -42,8 +42,17 @@ const Header = ({ onSearch }) => {
   const [nameuser, setName] = useState('');
   const [img,setImage]=useState('');
   const [searchTerm, setSearchTerm] = useState("");
+  const [checkedStaff, checkStaff ] = useState(false)
+
 
   const api = useAxios();
+
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    e.preventDefault(); 
+    navigate('/admin'); 
+  };
 
 
   const token = localStorage.getItem("authTokens")
@@ -113,8 +122,21 @@ const Header = ({ onSearch }) => {
       }
     };
 
+    const fetchStaffChecking = async () => {
+      try {
+          const response = await api.get('accounts/staff/');
+          // setUserProfile(response.data);
+          console.log(response)
+          checkStaff(response.data.is_staff);
+          
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
+
     fetchUser();
     fetchProfile();
+    fetchStaffChecking();
   }, []);
 
 
@@ -139,9 +161,17 @@ const Header = ({ onSearch }) => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-              <Link to="/confirmation" className="d-flex align-items-center gap-1">
-                <i className="ri-shopping-cart-line"></i> Order
-              </Link>
+              {checkedStaff ? (
+                <Link to="/admin" className="d-flex align-items-center gap-1" onClick={handleClick}>
+                  <i className="ri-staff-line"></i> Admin
+                </Link>
+
+              ) : (
+
+                <Link to="/confirmation" className="d-flex align-items-center gap-1">
+                  <i className="ri-shopping-cart-line"></i> Order
+                </Link>
+              )}
               {currentUser ? (
                   <>
                     {/* <span>Welcome, {currentUser.name}</span> */}

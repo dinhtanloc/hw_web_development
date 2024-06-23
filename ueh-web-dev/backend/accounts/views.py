@@ -72,8 +72,9 @@ def testEndPoint(request):
 def isStaffEndpoint(request):
     if request.method == 'GET':
         is_staff = request.user.is_staff
+        serializer = UserSerializer(request.user)
         # Bạn có thể sử dụng giá trị is_staff ở đây để thực hiện các xử lý phù hợp.
-        return Response({"is_staff": is_staff})
+        return Response({"is_staff": is_staff, "staff":serializer.data})
 
 
 @api_view(['GET'])

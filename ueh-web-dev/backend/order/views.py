@@ -9,7 +9,7 @@ from categories.models import Product
 from .serializers import OrdersSerializer, OrdersItemSerializer, MonthlyBrandDataSerializer, BarHChartDataSerializer, TimeSeriesDataSerializer
 from django.db.models.functions import TruncDate, ExtractMonth
 from datetime import datetime, timedelta
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, F
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsStaffUser
 from backend.settings import DATA_GENERATION
@@ -194,7 +194,7 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         stats = Orders.objects.aggregate(
         total_orders=Count('id'),
         total_revenue=Sum('total_price'),
-        total_quantity_sold=Sum('quantity')
+        # total_quantity_sold=Sum('quantity')
         )
         return Response(stats, status=status.HTTP_200_OK)
     
@@ -242,9 +242,28 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         recent_orders = OrdersItem.objects.filter(order__created_at__gte=thirty_days_ago)
         car_order_stats = recent_orders.values('product__id', 'product__carName').annotate(
             total_quantity=Sum('quantity')
-        ).order_by('-total_quantity')
+        ).order_by('-total_quantity')[:10]
+        product_data = []
+        for stat in car_order_stats:
+            product_id = stat['product__id']
+            product = Product.objects.get(id=product_id)
+            product_data.append({
+                'id': product.id,
+                'brand': product.brand,
+                'rating': product.rating,
+                'carName': product.carName,
+                'imgUrl': product.imgUrl,
+                'model': product.model,
+                'price': product.price,
+                'speed': product.speed,
+                'gps': product.gps,
+                'seatType': product.seatType,
+                'automatic': product.automatic,
+                'description': product.description,
+                # Thêm các trường thông tin khác của sản phẩm cần thiết
+            })
 
-        return Response(car_order_stats, status=status.HTTP_200_OK)
+        return Response(product_data, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'], url_path='product-stats')
     def payment_method_stats(self, request):
@@ -256,14 +275,42 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], url_path='order-status-total')
     def order_status_total(self, request):
+        # Calculate total revenue for each status
         order_status_stats = Orders.objects.values('status').annotate(
-            total_revenue=Sum('total_price')
+            total_revenue=Sum('total_price'),
+            count=Count('id')
         ).order_by('status')
 
-        return Response(order_status_stats, status=status.HTTP_200_OK)
+        # Calculate total orders and total revenue
+        total_orders = Orders.objects.count()
+        total_cancel_revenue = 0
+        total_cancel_orders = 0
+        total_completed_revenue = 0
+        total_completed_orders = 0
+
+        for stat in order_status_stats:
+            if stat['status'] == 'cancelled':
+                total_cancel_revenue = stat['total_revenue']
+                total_cancel_orders = stat['count']
+            elif stat['status'] == 'completed':
+                total_completed_revenue = stat['total_revenue']
+                total_completed_orders = stat['count']
+        
+        # Calculate percentage of cancelled orders
+        cancel_percentage = (total_cancel_orders / total_orders) * 100 if total_orders > 0 else 0
+
+        response_data = {
+            "order_status_stats": list(order_status_stats),
+            "cancel_percentage": cancel_percentage,
+            "total_cancel_revenue": total_cancel_revenue,
+            "total_completed_orders": total_completed_orders,
+            "total_completed_revenue": total_completed_revenue
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 class MonthlyBrandDataViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         monthly_brand_data = []
 
@@ -308,7 +355,7 @@ class MonthlyBrandDataViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class BarHChartDataViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         # Tính tổng quantity theo brand của Product từ OrderItem
         queryset = OrdersItem.objects.values('product__brand').annotate(
@@ -365,8 +412,47 @@ class TimeSeriesDataViewSet(viewsets.ViewSet):
 
         return Response(time_series_data, status=status.HTTP_200_OK)
     
+class OrderStatusTimeSeriesDataViewSet(viewsets.ViewSet):
+      # permission_classes = [IsAuthenticated, IsStaffUser]
+    
+    def list(self, request):
+        # Lấy danh sách các status từ Order
+        statuses = Orders.objects.values_list('status', flat=True).distinct()
+
+        # Tính toán tổng tiền theo status và thời gian
+        time_series_data = []
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
+
+        for status_order in statuses:
+            orders = Orders.objects.filter(status=status_order, created_at__gte=start_date)
+            status_data = {
+                'id': status_order,
+                'color': f"rgb({hash(status_order) % 256}, {hash(status_order) % 256}, {hash(status_order) % 256})",  # Màu ngẫu nhiên dựa trên status
+                'data': []
+            }
+            
+            # Tính tổng tiền cho mỗi tháng
+            monthly_totals = orders.annotate(month=ExtractMonth('created_at')).values('month').annotate(
+                total=Sum('total_price')
+            )
+
+            # Sắp xếp lại theo thứ tự các tháng từ 1 đến 12
+            month_order = list(range(1, 13))
+            month_totals_dict = {item['month']: item for item in monthly_totals}
+
+            for month in month_order:
+                total = month_totals_dict.get(month, {'total': 0})['total']
+                status_data['data'].append({
+                    'x': month,  # Tháng
+                    'y': float(total)  # Tổng tiền
+                })
+
+            time_series_data.append(status_data)
+
+        return Response(time_series_data, status=status.HTTP_200_OK)
 class OrdersTimeSeriesViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, IsStaffUser]
+    # permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
         orders_data = []
 
@@ -379,15 +465,147 @@ class OrdersTimeSeriesViewSet(viewsets.ViewSet):
         ).values('month').annotate(
             total_sale=Sum('total_price')
         )
-
-        for item in monthly_totals:
+        for month in range(1, 13):
+            total_sale = next((item['total_sale'] for item in monthly_totals if item['month'] == month), 0)
             orders_data.append({
-                'x': item['month'],
-                'y': float(item['total_sale']) if item['total_sale'] else 0 
+                'x': month,
+                'y': float(total_sale) if total_sale else 0
             })
 
-        return Response(orders_data, status=status.HTTP_200_OK)
+        data = [{
+            'id': 'total_price',
+            'color': 'rgb(255, 60, 32)',
+            'data': orders_data
+        }]
+
+        return Response(data, status=status.HTTP_200_OK)
     
+from collections import defaultdict
+
+class OrdersBarViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=365)
+
+        # Tính tổng doanh số theo tháng và từng thương hiệu
+        monthly_totals = OrdersItem.objects.filter(
+            order__created_at__gte=start_date,
+            # order__is_completed=True,
+        ).annotate(
+            month=ExtractMonth('order__created_at'),
+            brand=F('product__brand')
+        ).values('month', 'brand').annotate(
+            total_sales=Sum('quantity')
+        ).order_by('month', 'brand')
+
+        # Dữ liệu cho biểu đồ
+        bar_data = defaultdict(dict)
+
+        # Xử lý từng tháng trong kết quả
+        for entry in monthly_totals:
+            month = entry['month']
+            brand = entry['brand']
+            total_sales = entry['total_sales']
+
+            # Nếu chưa có entry cho tháng này, khởi tạo với giá trị 0 cho tất cả các thương hiệu
+            if month not in bar_data:
+                bar_data[month] = {
+                    'month': month,
+                    'BMW': 0,
+                    'BMWColor': f"hsl({hash('BMW') % 360}, 70%, 50%)",
+                    'Tesla': 0,
+                    'TeslaColor': f"hsl({hash('Tesla') % 360}, 70%, 50%)",
+                    'Toyota': 0,
+                    'ToyotaColor': f"hsl({hash('Toyota') % 360}, 70%, 50%)",
+                    'Nissan': 0,
+                    'NissanColor': f"hsl({hash('Nissan') % 360}, 70%, 50%)",
+                    'Ferrari': 0,
+                    'FerrariColor': f"hsl({hash('Ferrari') % 360}, 70%, 50%)",
+                    'Mercedes': 0,
+                    'MercedesColor': f"hsl({hash('Mercedes') % 360}, 70%, 50%)",
+                }
+
+            # Cập nhật tổng doanh số của thương hiệu vào tháng tương ứng
+            bar_data[month][brand] += total_sales
+
+        # Chuyển dict sang list để trả về dưới dạng JSON
+        bar_data_list = list(bar_data.values())
+
+        # Sắp xếp lại theo tháng
+        bar_data_list.sort(key=lambda x: x['month'])
+
+        # Trả về dữ liệu dưới dạng JSON
+        return Response(bar_data_list, status=status.HTTP_200_OK)
+class PaymentBarViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=365)
+
+        # Tính tổng doanh số theo tháng và từng phương thức thanh toán
+        monthly_totals = OrdersItem.objects.filter(
+            order__created_at__gte=start_date,
+            # order__is_completed=True,
+        ).annotate(
+            month=ExtractMonth('order__created_at'),
+            payment_method=F('order__payment_method')
+        ).values('month', 'payment_method').annotate(
+            total_sales=Sum('total_price')
+        ).order_by('month', 'payment_method')
+
+        # Dữ liệu cho biểu đồ
+        bar_data = defaultdict(dict)
+
+        # Xử lý từng tháng trong kết quả
+        for entry in monthly_totals:
+            month = entry['month']
+            payment_method = entry['payment_method']
+            total_sales = entry['total_sales']
+
+            # Nếu chưa có entry cho tháng này, khởi tạo với giá trị 0 cho tất cả các phương thức thanh toán
+            if month not in bar_data:
+                bar_data[month] = {
+                    'month': month,
+                    'bank_transfer': 0,
+                    'bank_transferColor': f"hsl({hash('bank_transfer') % 360}, 70%, 50%)",
+                    'cheque': 0,
+                    'chequeColor': f"hsl({hash('cheque') % 360}, 70%, 50%)",
+                    'mastercard': 0,
+                    'mastercardColor': f"hsl({hash('mastercard') % 360}, 70%, 50%)",
+                    'paypal': 0,
+                    'paypalColor': f"hsl({hash('paypal') % 360}, 70%, 50%)",
+                }
+
+            # Cập nhật tổng doanh số của phương thức thanh toán vào tháng tương ứng
+            bar_data[month][payment_method] += total_sales
+
+        # Chuyển dict sang list để trả về dưới dạng JSON
+        bar_data_list = list(bar_data.values())
+
+        # Sắp xếp lại theo tháng
+        bar_data_list.sort(key=lambda x: x['month'])
+
+        # Trả về dữ liệu dưới dạng JSON
+        return Response(bar_data_list, status=status.HTTP_200_OK)
+
+class PieChartDataViewSet(viewsets.ViewSet):
+    
+    def list(self, request):
+        # Tính tổng total_price theo status của Order
+        queryset = Orders.objects.values('status').annotate(total_price=Sum('total_price'))
+
+        # Chuẩn bị dữ liệu cho pie chart
+        pie_data = []
+        for item in queryset:
+            pie_data.append({
+                'id': item['status'].lower(),    # Đặt id là status viết thường
+                'label': item['status'],         # Nhãn là status
+                'value': float(item['total_price']),  # Giá trị là tổng total_price
+                'color': f"hsl({hash(item['status']) % 360}, 70%, 50%)"  # Tạo màu ngẫu nhiên dựa trên status
+            })
+
+        return Response(pie_data, status=status.HTTP_200_OK)
 
 # def download_excel(request):
 #     # Lấy tất cả các đơn hàng sắp xếp theo `created_at`

@@ -3,12 +3,38 @@ import { useTheme } from "@mui/material";
 // import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
 import { mockAreaData as data } from "../../assets/data/mockData";
+import useAxios from "../../../client/utils/useAxios";
+import React, {useEffect, useState} from "react";
 const AreaChart = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const isProducts=useAxios()
+    const [ProductData, checkProductdata] = useState([])
+
+
+    useEffect(() => {
+      fetchToplist();
+  
+    }, []);
+  
+  
+  
+  const fetchToplist = async () => {
+      try {
+          const response = await isProducts.get('orders/admin/time-series/');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+         
+          checkProductdata(response.data)
+          // console.log(Object.keys.keys(response.data))
+          // Makestafflist(response.data)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
     return(
   <ResponsiveLine
-    data={data}
+    data={ProductData}
     theme={{
         axis: {
           domain: {

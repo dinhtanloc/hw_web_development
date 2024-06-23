@@ -13,9 +13,10 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "./Header";
 import GeographyChart from "../components/UI/GeographyChart";
-import PieChart from "../components/UI/PieChart"
-import BarChart from "../components/UI/BarChart";
+import {OrderPieChart} from "../components/UI/PieChart"
+import {PaymentBarChart} from "../components/UI/BarChart";
 import AreaChart from "../components/UI/AreaChart";
+import numeral from "numeral";
 // import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 // import useAxios from "../utils/useAxios";
@@ -25,62 +26,61 @@ const OrderDashboard = () =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode); 
     const isOrders = useAxios() 
-    const [orderList, MakeorderList] = useState([]);
+    const [orderInfo, checkOrderInfo] = useState([]);
+    const [orderFigure, checkorderFigure] = useState([]);
+    const [Productquantity, Cancelproduct] =useState([])
     // const [orderList, MakeorderList] = useState([]);
     // const [orderList, MakeorderList] = useState([]);
     // const [orderList, MakeorderList] = useState([]);
     useEffect(() => {
-        fetchOrderlist();
+      fetchOrderInfo();
+        fetchTotalOrder();
+        fetchCancelQuantity();
+
       }, []);
+      const fetchTotalOrder = async () => {
+          try {
+              const response = await isOrders.get('orders/admin/orders/total-order/');
+              // setUserProfile(response.data);
+              // checkStaff(response.data.is_staff)
+              console.log(response.data)
+              checkOrderInfo(response.data)
+              console.log(orderInfo)
+              
+              
+          } catch (error) {
+              console.error('Error fetching user profile:', error);
+          }
+      };
 
 
-    const fetchOrderlist = async () => {
+    const fetchOrderInfo = async () => {
         try {
-            const response = await isOrders.get('orders/admin/orders/');
+            const response = await isOrders.get('orders/admin/orders/order-status-total/');
             // setUserProfile(response.data);
             // checkStaff(response.data.is_staff)
             console.log(response.data)
+            checkorderFigure(response.data)
             // Makestafflist(response.data)
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }
     };
+
+    const fetchCancelQuantity = async () => {
+      try {
+          const response = await isOrders.get('categories/admin/products/cancelled-orders-product-quantity');
+          // setUserProfile(response.data);
+          // checkStaff(response.data.is_staff)
+          console.log(response.data)
+          Cancelproduct(response.data)
+          // Makestafflist(response.data)
+      } catch (error) {
+          console.error('Error fetching user profile:', error);
+      }
+  };
     
-    const fetchStat_orderlist = async () => {
-        try {
-            const response = await isOrders.get('orders/admin/orders/statistics');
-            // setUserProfile(response.data);
-            // checkStaff(response.data.is_staff)
-            console.log(response.data)
-            // Makestafflist(response.data)
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
-    
-    const fetchTime_serieslist = async () => {
-        try {
-            const response = await isOrders.get('orders/admin/orders/time-series');
-            // setUserProfile(response.data);
-            // checkStaff(response.data.is_staff)
-            console.log(response.data)
-            // Makestafflist(response.data)
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
-    
-    const fetchPaymentlist = async () => {
-        try {
-            const response = await isOrders.get('orders/admin/orders/payment-method-stats');
-            // setUserProfile(response.data);
-            // checkStaff(response.data.is_staff)
-            console.log(response.data)
-            // Makestafflist(response.data)
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-        }
-    };
+   
 
 
     return(
@@ -121,8 +121,8 @@ const OrderDashboard = () =>{
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
+            title={numeral(orderFigure.total_completed_revenue).format('0.00a $')}
+            subtitle="Total completed sale"
             progress="0.75"
             increase="+14%"
             icon={
@@ -139,9 +139,10 @@ const OrderDashboard = () =>{
           alignItems="center"
           justifyContent="center"
         >
+        {console.log(orderInfo)}
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
+            title={numeral(orderFigure.total_cancel_revenue).format('0.00a $')}
+            subtitle="Loss"
             progress="0.50"
             increase="+21%"
             icon={
@@ -159,8 +160,8 @@ const OrderDashboard = () =>{
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
-            subtitle="New Clients"
+            title={Productquantity.total_quantity}
+            subtitle="Return products"
             progress="0.30"
             increase="+5%"
             icon={
@@ -178,8 +179,8 @@ const OrderDashboard = () =>{
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
+            title={new Intl.NumberFormat('en-US').format(orderInfo.total_orders)}
+            subtitle="Transactions"
             progress="0.80"
             increase="+43%"
             icon={
@@ -238,7 +239,7 @@ const OrderDashboard = () =>{
             Payment method Checking
           </Typography>
           <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
+            <PaymentBarChart isDashboard={true} />
           </Box>
         </Box>
 
@@ -261,7 +262,7 @@ const OrderDashboard = () =>{
                 Percentage cancelled Orders
                 </Typography>
                 <Box height="250px" mt="-20px">
-                    <PieChart isDashboard={true} />
+                    <OrderPieChart isDashboard={true} />
                 </Box>
             {/* </Box> */}
         </Box>

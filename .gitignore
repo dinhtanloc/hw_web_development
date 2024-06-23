@@ -4,3 +4,4 @@ test
 *.env
 __pycache__
 # migrations
+node_modules

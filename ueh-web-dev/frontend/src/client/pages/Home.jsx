@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 import HeroSlider from "../components/UI/HeroSlider";
 import Helmet from "../components/Helmet/Helmet";
 
@@ -15,6 +15,25 @@ import Testimonial from "../components/UI/Testimonial";
 import BlogList from "../components/UI/BlogList";
 
 const Home = () => {
+  const [carData, setCarData] = useState([]);
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_DOMAIN_BACKEND, 
+   
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await instance.get('/orders/admin/orders/recent-car-orders/'); 
+      console.log(response.data); 
+      setCarData(response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   return (
     <Helmet title="Home">
       {/* ============= hero section =========== */}
