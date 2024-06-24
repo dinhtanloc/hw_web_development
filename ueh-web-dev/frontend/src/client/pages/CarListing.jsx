@@ -5,24 +5,56 @@ import CommonSection from "../components/UI/CommonSection";
 import CarItem from "../components/UI/CarItem";
 // import carData from "../assets/data/carData";
 import axios from "axios";
+import {Pagination, Button} from "@nextui-org/react";
+
 
 
 const CarListing = ({searchTerm}) => {
   const [sortBy, setSortBy] = useState(""); // Trạng thái lưu trữ cách sắp xếp
   const [carData, setCardata] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
-    axios.get('http://localhost:8000/categories/')
-        .then(response => {
-            // console.log(response.data);
-            setCardata(response.data)
-            // console.log('hello bibi')
-            // console.log(hello)
-            // console.log('hello abc')
-        })
-        .catch(error => {
-            console.error("There was an error fetching the data!", error);
-        });
-}, []);
+    fetchCars(currentPage, sortBy, searchTerm);
+  }, [currentPage, sortBy, searchTerm]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+
+//   useEffect(() => {
+//     axios.get('http://localhost:8000/categories/')
+//         .then(response => {
+//             // console.log(response.data);
+//             setCardata(response.data)
+//             // console.log('hello bibi')
+//             // console.log(hello)
+//             // console.log('hello abc')
+//         })
+//         .catch(error => {
+//             console.error("There was an error fetching the data!", error);
+//         });
+// }, []);
+
+
+const fetchCars = async (page, sort, search) => {
+  try {
+    const response = await axios.get('http://localhost:8000/categories/', {
+      params: {
+        page: page,
+        sort: sort,
+        search: search,
+      },
+    });
+    setCardata(response.data.results);
+    setTotalPages(Math.ceil(response.data.count / 9)); // Giả sử mỗi trang có 5 sản phẩm
+  } catch (error) {
+    console.error("There was an error fetching the data!", error);
+  }
+};
+
 
 
   // Hàm để sắp xếp danh sách xe dựa trên giá
@@ -86,13 +118,69 @@ const CarListing = ({searchTerm}) => {
               </div>
             </Col>
 
-            {filteredCars.map((item) => (
+            {sortedCars.map((item) => (
               <CarItem 
               item={item} 
               key={item.id} 
               // handleChangeColor={handleChangeColor} 
               />
             ))}
+          </Row>
+          <Row>
+            <Col lg="12" className="d-flex justify-content-center mt-4">
+              <div className="flex flex-col gap-5">
+              <p className="text-small text-default-500">Selected Page: {currentPage}</p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={setCurrentPage}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    color="secondary"
+                    onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    color="secondary"
+                    onPress={() => setCurrentPage((prev) => (prev < 10 ? prev + 1 : prev))}
+                  >
+                    Next
+                  </Button>
+                </div>
+
+              </div>
+              {/* <Pagination
+                total={totalPages}
+                color="secondary"
+                page={currentPage}
+                onChange={handlePageChange}
+              />
+              <div className="flex gap-2 mt-3">
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
+                >
+                  Previous
+                </Button>
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  onPress={() => setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev))}
+                >
+                  Next
+                </Button>
+              </div> */}
+            </Col>
           </Row>
         </Container>
       </section>

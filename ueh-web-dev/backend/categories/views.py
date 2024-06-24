@@ -4,14 +4,12 @@ from rest_framework import viewsets
 from .models import Product
 from order.models import OrdersItem
 from .serializers import ProductSerializer, PieChartDataSerializer
+from rest_framework.pagination import PageNumberPagination
 from .populate_data import car_data
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsStaffUser
-
-
-
 from rest_framework.response import Response
 
 
@@ -23,9 +21,13 @@ if not Product.objects.exists():
 else:
     print("Data already exists. No import needed.")
 
+
+class ProductPagination(PageNumberPagination):
+    page_size = 9
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
 
     @action(detail=True, methods=['post'], url_path='change-color')
     def change_color_and_update_img_url(self, request, pk=None):

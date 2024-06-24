@@ -13,6 +13,8 @@ import Clientpage from './client/Clientpage.jsx';
 import Adminpage from './admin/AdminPage.jsx'
 import CartProvider from './client/utils/cartContext.jsx';
 import { AuthLoginProvider } from './client/context/AuthLoginContext.jsx';
+import {NextUIProvider} from '@nextui-org/react'
+
 // import Clientpage from './client/Clientpage.jsx';
 
 const url = window.location.pathname;
@@ -23,7 +25,10 @@ if (url.startsWith('/admin')) {
     <React.StrictMode>
     <Router>
       <AuthProvider>
-          <Adminpage />
+        <NextUIProvider>
+
+            <Adminpage />
+        </NextUIProvider>
 
       </AuthProvider>
 
@@ -39,7 +44,12 @@ if (url.startsWith('/admin')) {
           <AuthProvider>
             <CartProvider>
                 <AuthLoginProvider>
-                  <Clientpage />
+                  <NextUIProvider>
+
+                    <Clientpage />
+                  </NextUIProvider>
+
+                
                 </AuthLoginProvider>
   
             </CartProvider>

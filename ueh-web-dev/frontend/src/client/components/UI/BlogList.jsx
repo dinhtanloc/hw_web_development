@@ -11,7 +11,7 @@ const BlogList = ({searchTerm}) => {
     axios.get('http://localhost:8000/blogs/')
         .then(response => {
             // console.log(response.data);
-            setBlogdata(response.data)
+            setBlogdata(response.data.results)
             // console.log('hello bibi')
             // console.log(hello)
             // console.log('hello abc')
@@ -37,6 +37,7 @@ const BlogList = ({searchTerm}) => {
 : blogData;
   return (
     <>
+    {console.log(filteredBlogs)}
       {filteredBlogs.map((item) => (
         <BlogItem item={item} key={item.id} />
       ))}
