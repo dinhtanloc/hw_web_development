@@ -15,7 +15,6 @@ orders_data = [
         "address": "123 Main St",
         "payment_method": "paypal",
         "note": "Please deliver between 9am-5pm",
-        "status": "pending",
         "items": [
             {
                 "product": 1,
@@ -33,10 +32,9 @@ orders_data = [
         "address": "456 Elm St",
         "payment_method": "mastercard",
         "note": "Call before delivery",
-        "status": "pending",
         "items": [
             {
-                "product": 3,
+                "product": 2,
                 "quantity": 3,
                 "color": "white"
             }
@@ -51,7 +49,6 @@ orders_data = [
         "address": "789 Oak St",
         "payment_method": "cheque",
         "note": "Leave package by the door",
-        "status": "pending",
         "items": [
             {
                 "product": 5,
@@ -69,7 +66,6 @@ orders_data = [
         "address": "321 Pine St",
         "payment_method": "paypal",
         "note": "Urgent delivery required",
-        "status": "pending",
         "items": [
             {
                 "product": 7,
@@ -87,7 +83,6 @@ orders_data = [
         "address": "987 Maple St",
         "payment_method": "mastercard",
         "note": "Gift wrap required",
-        "status": "pending",
         "items": [
             {
                 "product": 6,
@@ -95,7 +90,7 @@ orders_data = [
                 "color": "white"
             },
             {
-                "product": 7,
+                "product": 4,
                 "quantity": 3,
                 "color": "black"
             }
@@ -110,10 +105,9 @@ orders_data = [
         "address": "654 Birch St",
         "payment_method": "paypal",
         "note": "Please include a gift message",
-        "status": "pending",
         "items": [
             {
-                "product": 4,
+                "product": 14,
                 "quantity": 2,
                 "color": "black"
             },
@@ -133,7 +127,6 @@ orders_data = [
         "address": "246 Cedar St",
         "payment_method": "bank_transfer",
         "note": "Please call upon arrival",
-        "status": "pending",
         "items": [
             {
                 "product": 1,
@@ -141,7 +134,7 @@ orders_data = [
                 "color": "red"
             },
             {
-                "product": 3,
+                "product": 13,
                 "quantity": 1,
                 "color": "white"
             }
@@ -156,7 +149,6 @@ orders_data = [
         "address": "135 Walnut St",
         "payment_method": "mastercard",
         "note": "Special instructions: fragile",
-        "status": "pending",
         "items": [
             {
                 "product": 4,
@@ -164,7 +156,7 @@ orders_data = [
                 "color": "white"
             },
             {
-                "product": 6,
+                "product": 11,
                 "quantity": 1,
                 "color": "black"
             }
@@ -179,7 +171,6 @@ orders_data = [
         "address": "369 Pine St",
         "payment_method": "paypal",
         "note": "Delivery instructions: leave at front desk",
-        "status": "pending",
         "items": [
             {
                 "product": 6,
@@ -202,15 +193,14 @@ orders_data = [
         "address": "579 Oak St",
         "payment_method": "mastercard",
         "note": "Please ring doorbell upon arrival",
-        "status": "pending",
         "items": [
             {
-                "product": 2,
+                "product": 9,
                 "quantity": 1,
                 "color": "white"
             },
             {
-                "product": 4,
+                "product": 15,
                 "quantity": 2,
                 "color": "red"
             }
@@ -242,18 +232,17 @@ def generate_sorted_dates(n, start_date, end_date):
     dates.sort()
     return dates
 
-def create_initial_orders(orders_data, start_date=timezone.make_aware(datetime(2023, 9, 1))):
+def create_initial_orders(orders_data, start_date=timezone.make_aware(datetime(2024, 1, 1))):
     end_date = timezone.now()
     random_dates = generate_sorted_dates((end_date - start_date).days, start_date, end_date)
     print(random_dates)
     # print(DATA_GENERATION)
     # print(orders_data)
-    random.shuffle(orders_data)
     # print(orders_data)
 
     for random_date in random_dates:
-        num_orders = random.randint(3, 7)
-        
+        random.shuffle(orders_data)
+        num_orders = random.randint(3, len(orders_data))
         for _ in range(num_orders):
             for order_data in orders_data:
                 user_id = order_data['user_id']
@@ -267,6 +256,7 @@ def create_initial_orders(orders_data, start_date=timezone.make_aware(datetime(2
                     total_price = 0
                     order.created_at = random_date
                     order.shipping_deadline = order.created_at.date() + timedelta(days=21)
+                    order.status = random.choice(['completed','completed','completed','cancelled'])
                     # order.save()
                     for item_data in items_data:
                         item_data['order'] = order.id
