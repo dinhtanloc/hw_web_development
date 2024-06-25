@@ -332,7 +332,7 @@ const ProductDashboard = () =>{
           >
             Sales Quantity
           </Typography>
-          <Box height="250px" mt="-20px">
+          <Box height="250px" mt="-20px" marginLeft="50px">
           {/* <HorizontalBarChart data={mockTopProducts} keys={['total_revenue']} label="product__carName" /> */}
           <HorizontalBarChart/>
 

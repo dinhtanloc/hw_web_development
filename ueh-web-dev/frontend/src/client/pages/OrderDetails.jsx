@@ -17,6 +17,7 @@ const OrderDetails = () =>{
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
     const [orderInfo, setOrderInfo] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
     const navigate = useNavigate();
     const getOrderItems = useAxios()
     const styles ={
@@ -37,8 +38,10 @@ const OrderDetails = () =>{
 
         try {
             const response = await getOrderItems.get(`http://localhost:8000/orders/${orderId}/items/`);
+            console.log(response)
             setOrderItems(response.data.items);
-            setOrderInfo(response.data.info)
+            setOrderInfo(response.data.info);
+            setTotalPrice(response.data.info.total_price)
         } catch (error) {
             console.error('Error fetching order items:', error);
         }
@@ -69,7 +72,7 @@ const OrderDetails = () =>{
                   <p className="mb-4"><b>Address:</b> {orderInfo.address}</p>
 
                 </div>
-                Shopping Bag
+                
            
 
             
@@ -87,11 +90,11 @@ const OrderDetails = () =>{
             <div id="order_summary" >
               <h4>Order Summary</h4>
               <hr />
-              <p>Subtotal: <span className="order-summary-values">${25}</span></p>
+              <p>Subtotal: <span className="order-summary-values">${totalPrice.toLocaleString('de-DE')}</span></p>
               <p>Shipping: <span className="order-summary-values">$25</span></p>
-              <p>Tax: <span className="order-summary-values">${30*0.1}</span></p>
+              <p>Tax: <span className="order-summary-values">${(totalPrice*0.1).toLocaleString('de-DE')}</span></p>
               <hr />
-              <p>Total: <span className="order-summary-values">${1.1*30+25}</span></p>
+              <p>Total: <span className="order-summary-values">${(1.1*totalPrice+25).toLocaleString('de-DE')}</span></p>
               <hr />
               <button id="checkout_btn" className="btn btn-primary btn-block" onClick={returnMainPage}>Return to main pages</button>
             </div>

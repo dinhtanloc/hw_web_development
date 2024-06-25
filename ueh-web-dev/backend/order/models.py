@@ -21,7 +21,7 @@ class Orders(models.Model):
     email = models.EmailField()
     phoneNumber=models.CharField(max_length=100)
     address=models.CharField(max_length=100)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_price = models.DecimalField(max_digits=10, decimal_places=0, default=0.00)
     payment_method=models.CharField(null=True,choices=PAYMENT_METHOD_CHOICES)
     shipping_deadline = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,10 +49,10 @@ class Orders(models.Model):
 class OrdersItem(models.Model):
     order = models.ForeignKey(Orders, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)  # Thêm trường unit_price
+    unit_price = models.DecimalField(max_digits=10, decimal_places=0)
     color = models.CharField(max_length=20,null=True)
     quantity = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)  # Thêm trường total_price
+    total_price = models.DecimalField(max_digits=10, decimal_places=0)
 
 
     def __str__(self):

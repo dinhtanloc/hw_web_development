@@ -151,13 +151,13 @@ export const SummaryLineChart = ({ isCustomLineColors = false, isDashboard = fal
 
 
     useEffect(() => {
-      fetchToplist();
+      saleTimeseries();
   
     }, []);
   
   
   
-  const fetchToplist = async () => {
+  const saleTimeseries = async () => {
       try {
           const response = await isProducts.get('orders/admin/sale-time-series/');
           // setUserProfile(response.data);

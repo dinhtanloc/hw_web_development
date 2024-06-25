@@ -60,7 +60,7 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["BMW", "Tesla", "Toyota", "Nissan", "Ferrari", "Mercedes"]}
+      keys={["BMW", "Tesla", "Toyota", "Nissan", "Ferrari", "Mercedes",'Audi']}
       indexBy="month"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
@@ -158,10 +158,10 @@ export const PaymentBarChart = ({ isDashboard = false }) => {
 
 
   useEffect(() => {
-    fetchToplist();
+    payMentTop();
   }, []);
   
-  const fetchToplist = async () => {
+  const payMentTop = async () => {
     try {
         const response = await isProducts.get('orders/admin/payment-bar');
         // setUserProfile(response.data);

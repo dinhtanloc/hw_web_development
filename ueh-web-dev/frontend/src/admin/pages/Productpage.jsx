@@ -38,7 +38,7 @@ const ProductPage = () => {
   const fetchProductList = async () => {
       try {
           const response = await productList.get('categories/admin/products/');
-          setProducts(response.data);
+          setProducts(response.data.results);
           
       } catch (error) {
           console.error('Error fetching user profile:', error);

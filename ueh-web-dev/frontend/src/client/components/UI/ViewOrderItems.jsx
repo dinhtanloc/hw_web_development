@@ -23,7 +23,7 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
   const [isActive, setIsActive] = useState(false);
   const {removeFromCart, updateCartItemQuantity} =useCart();
   const{carName, color, imgUrl, quantity,total_price ,unit_price ,brand}=item
-  const [amount, setQuantity] = useState(quantity); // Khởi tạo state cho số lượng, ban đầu là 1
+  const [amount, setQuantity] = useState(1); // Khởi tạo state cho số lượng, ban đầu là 1
 
   const handleClick = () => {
     setLiked(!liked)
@@ -90,11 +90,11 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
             </div>
          
             <div className="description">
-              <span>{brand}</span>
+              <span style={{fontWeight:'bold',fontSize:'13px', color:'#96630b'}}>{brand}</span>
               <span>{carName}</span>
-              <span>{color}</span>
+              <span style={{fontSize:'12px',fontWeight:'bolder',color:'gray'}} >{color}</span>
             </div>
-            <div className="total-price">{unit_price*quantity}</div>
+            <div className="total-price">{unit_price*amount}</div>
           {/* <div ></div> */}
           </div>
 

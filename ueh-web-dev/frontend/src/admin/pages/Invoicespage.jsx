@@ -6,7 +6,9 @@ import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
 import {Button} from "@mui/material";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import CheckCircleIcon
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 const Invoicespage = () => {
   const theme = useTheme();
@@ -27,7 +29,7 @@ const Invoicespage = () => {
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
       
-          setOrders(response.data)
+          setOrders(response.data.results)
           
       } catch (error) {
           console.error('Error fetching user profile:', error);
@@ -136,7 +138,7 @@ const Invoicespage = () => {
         if (params.row.status === "completed") {
           return <CheckCircleIcon style={{ color: "green" }} />;
         } else if (params.row.status === "cancelled") {
-          return <Typography color="red">Hủy đơn hàng</Typography>;
+          return <CancelIcon style={{color:"red"}}/>;
         } else {
           return <Typography color="gray">Chờ</Typography>;; // Nếu status là 'pending' thì không hiển thị gì
         }

@@ -376,19 +376,27 @@ class BarHChartDataViewSet(viewsets.ViewSet):
 class TimeSeriesDataViewSet(viewsets.ViewSet):
     # permission_classes = [IsAuthenticated, IsStaffUser]
     def list(self, request):
-        # Lấy danh sách các brand từ Product
         brands = Product.objects.values_list('brand', flat=True).distinct()
-
-        # Tính toán tổng tiền theo brand và thời gian
         time_series_data = []
         current_date = datetime.now().date()
-        start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
+        start_date = current_date - timedelta(days=365) 
+        brand_totals = (
+            Orders.objects.filter(created_at__gte=start_date)
+            .values('ordersitem__product__brand')
+            .annotate(total_sales=Sum('total_price'))
+            .order_by('-total_sales')[:3]
+        )
 
-        for brand in brands:
+        top_brands = [item['ordersitem__product__brand'] for item in brand_totals]
+
+        # print(brand_totals)
+
+
+        for brand in top_brands:
             orders = Orders.objects.filter(ordersitem__product__brand=brand, created_at__gte=start_date)
             brand_data = {
                 'id': brand,
-                'color': f"rgb({hash(brand) % 256}, {hash(brand) % 256}, {hash(brand) % 256})",  # Màu ngẫu nhiên dựa trên brand
+                'color': f"rgb({hash(brand) % 256}, {hash(brand) % 256}, {hash(brand) % 256})", 
                 'data': []
             }
             
@@ -398,14 +406,14 @@ class TimeSeriesDataViewSet(viewsets.ViewSet):
             )
 
             # Sắp xếp lại theo thứ tự các tháng từ 1 đến 12
-            month_order = list(range(1, 13))
+            month_order = list(range(1, current_date.month+1))
             month_totals_dict = {item['month']: item for item in monthly_totals}
 
             for month in month_order:
                 total = month_totals_dict.get(month, {'total': 0})['total']
                 brand_data['data'].append({
-                    'x': month,  # Tháng
-                    'y': float(total)  # Tổng tiền
+                    'x': month, 
+                    'y': float(total) 
                 })
 
             time_series_data.append(brand_data)
@@ -425,10 +433,17 @@ class OrderStatusTimeSeriesDataViewSet(viewsets.ViewSet):
         start_date = current_date - timedelta(days=365)  # Lấy dữ liệu trong vòng 1 năm
 
         for status_order in statuses:
+            print(status_order)
             orders = Orders.objects.filter(status=status_order, created_at__gte=start_date)
+            if status_order == 'completed':
+                color = "rgb(0, 128, 0)"  # Màu xanh lá
+            elif status_order == 'cancelled':
+                color = "rgb(255, 0, 0)"  # Màu đỏ
+            else:
+                color = f"hsl({hash(status_order) % 360}, 70%, 50%)"  
             status_data = {
                 'id': status_order,
-                'color': f"rgb({hash(status_order) % 256}, {hash(status_order) % 256}, {hash(status_order) % 256})",  # Màu ngẫu nhiên dựa trên status
+                'color': color,  # Màu ngẫu nhiên dựa trên status
                 'data': []
             }
             
@@ -438,7 +453,7 @@ class OrderStatusTimeSeriesDataViewSet(viewsets.ViewSet):
             )
 
             # Sắp xếp lại theo thứ tự các tháng từ 1 đến 12
-            month_order = list(range(1, 13))
+            month_order = list(range(1, current_date.month+1))
             month_totals_dict = {item['month']: item for item in monthly_totals}
 
             for month in month_order:
@@ -465,7 +480,7 @@ class OrdersTimeSeriesViewSet(viewsets.ViewSet):
         ).values('month').annotate(
             total_sale=Sum('total_price')
         )
-        for month in range(1, 13):
+        for month in range(1, current_date.month+1):
             total_sale = next((item['total_sale'] for item in monthly_totals if item['month'] == month), 0)
             orders_data.append({
                 'x': month,
@@ -524,6 +539,10 @@ class OrdersBarViewSet(viewsets.ViewSet):
                     'FerrariColor': f"hsl({hash('Ferrari') % 360}, 70%, 50%)",
                     'Mercedes': 0,
                     'MercedesColor': f"hsl({hash('Mercedes') % 360}, 70%, 50%)",
+                    'Audi': 0,
+                    'AudiColor': f"hsl({hash('Audi') % 360}, 70%, 50%)",
+                    'VinFast': 0,
+                    'VinFastColor': f"hsl({hash('VinFast') % 360}, 70%, 50%)",
                 }
 
             # Cập nhật tổng doanh số của thương hiệu vào tháng tương ứng

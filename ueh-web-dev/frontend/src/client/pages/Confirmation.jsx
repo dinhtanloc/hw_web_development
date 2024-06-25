@@ -105,7 +105,7 @@ const Confirmation = () => {
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
-        notes: formData.notes,
+        note: formData.notes,
         payment_method: formData.paymentMethod,
 
       },
@@ -119,7 +119,7 @@ const Confirmation = () => {
       const response =await getOrder.post('orders/create-order/', orderData);
  
 
-      await Promise.all(
+       Promise.all(
         itemsToUpdateRating.map(async (item) => {
           const response1 = await getOrder.post(`categories/${item.product}/like/`, {
             id: item.product,
@@ -217,7 +217,7 @@ const Confirmation = () => {
                           type="textarea"
                           className="textarea"
                           placeholder="Write"
-                          name="notes" 
+                          name="note" 
                           value={formData.notes} 
                           onChange={handleInputChange}
                         ></textarea>
