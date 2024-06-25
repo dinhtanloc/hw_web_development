@@ -6,13 +6,13 @@ class BlogPost(models.Model):
     author = models.CharField(max_length=100)
     date = models.DateField()
     time = models.TimeField()
-    imgUrl = models.ImageField(upload_to='blog_images/')
+    imgUrl = models.ImageField(upload_to='all-images/blog_images/')
     description = models.TextField()
     quote = models.TextField()
 
     def __str__(self):
         return self.title
     
-
+   
 
 

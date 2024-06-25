@@ -11,6 +11,19 @@
   font-weight: 600;
   font-size: 2.8rem;
 }
+.find__cars-right {
+  background: linear-gradient(rgb(249, 168, 38, 0.9), rgb(249, 168, 38, 0.9)),
+    url("../assets/all-images/toyota-offer-2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 65px 35px;
+}
+
+.find__cars-right h2 {
+  font-weight: 600;
+  font-size: 2.8rem;
+}
 
 .form__group {
   width: 30%;

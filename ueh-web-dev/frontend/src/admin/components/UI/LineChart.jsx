@@ -29,7 +29,6 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           // checkStaff(response.data.is_staff)
          
           checkProductdata(response.data)
-          console.log(response.data)
           // Makestafflist(response.data)
       } catch (error) {
           console.error('Error fetching user profile:', error);
@@ -165,7 +164,6 @@ export const SummaryLineChart = ({ isCustomLineColors = false, isDashboard = fal
           // checkStaff(response.data.is_staff)
          
           checkProductdata(response.data)
-          console.log(response.data)
           // Makestafflist(response.data)
       } catch (error) {
           console.error('Error fetching user profile:', error);

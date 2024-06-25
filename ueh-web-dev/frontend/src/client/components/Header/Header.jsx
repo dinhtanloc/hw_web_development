@@ -95,9 +95,7 @@ const Header = ({ onSearch }) => {
       try {
         const res = await api.get("accounts/test/");
         setCurrentUser(true);
-        // console.log(res.data)
         const name_login = res.data.response.username;
-        // console.log(name_login);
         setName(name_login)
       } catch (error) {
         setCurrentUser(false);
@@ -112,7 +110,6 @@ const Header = ({ onSearch }) => {
         setCurrentUser(true);
         const profile = res.data;
         var imgUrl = profile.image
-        // console.log(imgUrl);
         setImage(imgUrl)
         // setName(profile)
       } catch (error) {
@@ -126,7 +123,6 @@ const Header = ({ onSearch }) => {
       try {
           const response = await api.get('accounts/staff/');
           // setUserProfile(response.data);
-          console.log(response)
           checkStaff(response.data.is_staff);
           
       } catch (error) {

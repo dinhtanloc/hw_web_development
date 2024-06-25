@@ -10,11 +10,8 @@ const BlogList = ({searchTerm}) => {
   useEffect(() => {
     axios.get('http://localhost:8000/blogs/')
         .then(response => {
-            // console.log(response.data);
             setBlogdata(response.data.results)
-            // console.log('hello bibi')
-            // console.log(hello)
-            // console.log('hello abc')
+       
         })
         .catch(error => {
             console.error("There was an error fetching the data!", error);
@@ -28,16 +25,13 @@ const BlogList = ({searchTerm}) => {
   const filteredBlogs = searchTerm
   ? blogData.filter((blog) =>{
     const match =blog.title && blog.title.toLowerCase().includes(searchTerm.toLowerCase());
-    // console.log(blog.title);
-    // console.log('hello')
-    // console.log(match);
+ 
     return match;
   }
 )
 : blogData;
   return (
     <>
-    {console.log(filteredBlogs)}
       {filteredBlogs.map((item) => (
         <BlogItem item={item} key={item.id} />
       ))}
@@ -47,11 +41,12 @@ const BlogList = ({searchTerm}) => {
 
 const BlogItem = ({ item }) => {
   const { imgUrl, title, author, date, description, time } = item;
+  const img =imgUrl.replace("http://localhost:8000/media", "")
 
   return (
     <Col lg="4" md="6" sm="6" className="mb-5">
       <div className="blog__item">
-        <img src={imgUrl} alt="" className="w-100" />
+        <img src={img} alt="" className="w-100" />
         <div className="blog__info p-3">
           <Link to={`/blogs/${title}`} className="blog__title">
             {title}

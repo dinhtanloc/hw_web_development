@@ -25,5 +25,5 @@ else:
     print("Data already exists. No import needed.")
 
 class BlogViewSet(viewsets.ModelViewSet):
-    queryset = BlogPost.objects.all()
+    queryset = BlogPost.objects.all().order_by('id')
     serializer_class = BlogSerializer

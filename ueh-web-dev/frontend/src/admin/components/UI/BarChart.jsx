@@ -21,9 +21,7 @@ const BarChart = ({ isDashboard = false }) => {
         const response = await isProducts.get('orders/admin/bar');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log(response.data)
         checkProductdata(response.data)
-        // console.log(Object.keys.keys(response.data))
         // Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -168,9 +166,7 @@ export const PaymentBarChart = ({ isDashboard = false }) => {
         const response = await isProducts.get('orders/admin/payment-bar');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log(response.data)
         checkProductdata(response.data)
-        // console.log(Object.keys.keys(response.data))
         // Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);

@@ -57,10 +57,8 @@ const Confirmation = () => {
   const handleLikeClick = (itemId) => {
     setLikedItems(prevLikedItems => {
       if (prevLikedItems.includes(itemId)) {
-        console.log(prevLikedItems.filter(id => id !== itemId))
         return prevLikedItems.filter(id => id !== itemId); // Bỏ đánh dấu nếu đã đánh dấu
       } else {
-        console.log([...prevLikedItems, itemId])
         return [...prevLikedItems, itemId]; // Đánh dấu nếu chưa đánh dấu
       }
     });
@@ -80,8 +78,7 @@ const Confirmation = () => {
     paymentMethod: "",
     notes: "",
   });
-  // console.log('Day la trang xac nhan')
-  // console.log(cartItems);
+ 
 
 
   const handleInputChange = (e) => {
@@ -97,10 +94,6 @@ const Confirmation = () => {
     setFormData({ ...formData, paymentMethod: e.target.value });
   };
 
-
-  const meomeocheck = () => {
-    console.log('da check');
-  }
 
 
   const handleCreateOrder = async (e) => {
@@ -118,24 +111,19 @@ const Confirmation = () => {
       },
         items: cartItems      
     };
-    console.log('Order Items');
-    console.log(orderData);  
+ 
     
     const itemsToUpdateRating = cartItems.filter((item, index) => likedItems.includes(index));
-    console.log(itemsToUpdateRating)
     
     try {
       const response =await getOrder.post('orders/create-order/', orderData);
-      console.log(response)
-      console.log('haha')
+ 
 
       await Promise.all(
         itemsToUpdateRating.map(async (item) => {
-          console.log(item.product)
           const response1 = await getOrder.post(`categories/${item.product}/like/`, {
             id: item.product,
           });
-          console.log("Rating updated:", response1.data);
           })
           );
       navigate(`/confirmation/${response.data.id}`);

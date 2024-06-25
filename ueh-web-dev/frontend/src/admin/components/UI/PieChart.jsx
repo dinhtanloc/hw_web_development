@@ -21,9 +21,7 @@ export const ProductPieChart = () => {
         const response = await isProducts.get('categories/admin/pieData');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log(response.data)
         checkProductdata(response.data)
-        // console.log(Object.keys.keys(response.data))
         // Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -147,9 +145,7 @@ export const OrderPieChart = () => {
         const response = await isProducts.get('orders/admin/pieData/');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log(response.data)
         checkProductdata(response.data)
-        // console.log(Object.keys.keys(response.data))
         // Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);

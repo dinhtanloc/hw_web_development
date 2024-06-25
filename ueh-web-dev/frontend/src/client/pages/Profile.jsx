@@ -19,7 +19,6 @@ const Profile =()=>{
         try {
             const response = await profileAPI.get('accounts/profile/');
             setUserProfile(response.data);
-            console.log(userProfile)
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }

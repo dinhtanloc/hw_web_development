@@ -23,7 +23,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
   const [isActive, setIsActive] = useState(false);
   const {removeFromCart, updateCartItemQuantity} =useCart();
   const{carName, color, imgUrl, quantity,total_price ,unit_price ,brand}=item
-  // console.log(item)
   const [amount, setQuantity] = useState(quantity); // Khởi tạo state cho số lượng, ban đầu là 1
 
   const handleClick = () => {
@@ -32,7 +31,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
     // setLiked(true);
     setIsActive(true);
     setTimeout(() => setIsActive(false), 800);
-    // console.log(item.id)
     handleLikeClick()
       // Cập nhật lượt rating của sản phẩm
       // Nếu đã được thích trước đó, giảm lượt rating đi 1
@@ -46,7 +44,6 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
 
   const handleRemove = () => {
     // Gọi hàm removeFromCart để xóa mục khỏi giỏ hàng khi người dùng click vào biểu tượng xóa
-    // console.log(item.id)
     removeFromCart(item.product);
   };
 
@@ -54,15 +51,13 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
     updateCartItemQuantity(item.product, amount + 1); // Gọi hàm xử lý từ props để cập nhật số lượng
-    // console.log(quantity+1)
-    // console.log(amount+1)
+    
   };
 
   const decreaseQuantity = () => {
     if (amount > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
-      // console.log(prevQuantity-1)
-      // console.log(amount)
+     
       updateCartItemQuantity(item.product, amount-1); // Gọi hàm xử lý từ props để cập nhật số lượng
 
     } else{return;}

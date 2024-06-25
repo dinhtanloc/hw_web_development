@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }) => {
     // const navigate = useNavigate();
 
     const loginUser = async (email, password) => {
-        console.log("Đã login")
         const response = await fetch("http://127.0.0.1:8000/accounts/token/", {
             method: "POST",
             headers:{
@@ -41,14 +40,11 @@ export const AuthProvider = ({ children }) => {
             })
         })
         const data = await response.json()
-        console.log(data);
 
         if(response.status === 200){
-            console.log("Logged In");
             setAuthTokens(data)
             setUser(jwtDecode (data.access))
             localStorage.setItem("authTokens", JSON.stringify(data))
-            console.log('da log in')
             isLogin(true);
             navigate("/") // chuyen trang
             Swal.fire({
@@ -62,8 +58,6 @@ export const AuthProvider = ({ children }) => {
             })
 
         } else {    
-            console.log(response.status);
-            console.log("there was a server issue");
             Swal.fire({
                 title: "Username or passowrd does not exists",
                 icon: "error",
@@ -78,7 +72,6 @@ export const AuthProvider = ({ children }) => {
 
     // const registerUser = async (email, username, password, password2) => {
     const registerUser = async (email, username, password) => {
-        console.log("Đã register")
         const response = await fetch("http://127.0.0.1:8000/accounts/register/", {
             method: "POST",
             headers: {
@@ -100,8 +93,6 @@ export const AuthProvider = ({ children }) => {
                 showConfirmButton: false,
             })
         } else {
-            console.log(response.status);
-            console.log("there was a server issue");
             Swal.fire({
                 title: "An Error Occured " + response.status,
                 icon: "error",

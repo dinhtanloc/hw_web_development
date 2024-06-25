@@ -1,4 +1,14 @@
+# from transformers import CLIPProcessor, CLIPModel
+from PIL import Image
+import torch
+import os
+from backend.settings import model, device, processor, PUBLIC_DIR
 
+# device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# # Tải mô hình và processor từ Hugging Face
+# model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
+# processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 car_data = [
     {
         "id": 1,
@@ -226,3 +236,30 @@ car_data = [
         "quantity": 7
     }
 ]
+
+
+def filter_images(image_paths, prompt, threshold=0.3):
+    filtered_images = []
+    text_inputs = processor(text=[prompt], return_tensors="pt", padding=True).to(device)
+
+    for image_url in image_paths:
+        print(PUBLIC_DIR)
+        image_path=os.path.join(PUBLIC_DIR,image_url.lstrip('/'))
+        print(image_path)
+        image = Image.open(image_path)
+        image_input = processor(images=image, return_tensors="pt", padding=True).to(device)
+
+        with torch.no_grad():
+            image_features = model.get_image_features(**image_input)
+            text_features = model.get_text_features(**text_inputs)
+        
+        image_features /= image_features.norm(dim=-1, keepdim=True)
+        text_features /= text_features.norm(dim=-1, keepdim=True)
+        
+        similarity = torch.matmul(image_features, text_features.T).item()
+        
+        if similarity > threshold:
+            filtered_images.append((image_url, similarity))
+            print(f'{image_url} with {similarity}')
+    
+    return filtered_images

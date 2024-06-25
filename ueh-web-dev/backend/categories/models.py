@@ -21,4 +21,13 @@ class Product(models.Model):
         return self.carName
     
 
+    @classmethod
+    def get_car_name_from_img_url(cls, img_url):
+        try:
+            product = cls.objects.get(imgUrl=img_url)
+            return product.carName
+        except cls.DoesNotExist:
+            return None
+    
+
 

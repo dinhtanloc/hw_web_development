@@ -52,20 +52,14 @@ const EditProfile = () => {
                 bio: response.data.bio,
                 date_joined:response.data.date_joined
             }));
-            console.log(formData.image)
-            console.log(formData.username)
+            
             setDateString(formData.date_joined)
-            console.log(formData.date_joined)
             setfDate(moment(dateString,'YYYY-MM-DD[T]HH:mm:ss').format("DD MMM YYYY"))
-            console.log(fDate)
             
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }
     };
-    // const formattedDate=moment(dateString).format("DD MMM YYYY");
-    // setfDate(formattedDate)
-    // console.log(dateString)
  
 
     const handleChange = (e) => {
@@ -80,8 +74,7 @@ const EditProfile = () => {
     const handleImageChange = (event) => {
         const selectedImage = event.target.files[0];
         setFormData({ ...formData, image: selectedImage }); // Lưu hình ảnh vào formData
-        console.log('co anh duoc chon')
-        console.log(selectedImage)
+        
 
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -105,16 +98,13 @@ const EditProfile = () => {
             formDataToSubmit.append('phone', formData.phone);
             formDataToSubmit.append('job', formData.job);
             formDataToSubmit.append('address', formData.address);
-            formDataToSubmit.append('image', formData.image); // Thêm hình ảnh vào formData
-            formDataToSubmit.append('bio', formData.bio); // Thêm hình ảnh vào formData
-            console.log(formData)
-            console.log('check su thay doi')
-            for (var pair of formDataToSubmit.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
-            }
+            formDataToSubmit.append('image', formData.image); 
+            formDataToSubmit.append('bio', formData.bio); 
+          
+            
             await profileAPI.patch('/profile/', formDataToSubmit, {
                 headers: {
-                    'Content-Type': 'multipart/form-data' // Thiết lập header cho formData
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
             // alert('Profile updated successfully');

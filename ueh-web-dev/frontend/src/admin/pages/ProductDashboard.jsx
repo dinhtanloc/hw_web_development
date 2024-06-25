@@ -40,7 +40,6 @@ const ProductDashboard = () =>{
             const response = await isProducts.get('categories/admin/products/');
             // setUserProfile(response.data);
             // checkStaff(response.data.is_staff)
-            console.log(response.data)
             // Makestafflist(response.data)
         } catch (error) {
             console.error('Error fetching user profile:', error);
@@ -52,7 +51,6 @@ const ProductDashboard = () =>{
             const response = await isProducts.get('categories/admin/products/inventory-quantity-stats');
             // setUserProfile(response.data);
             // checkStaff(response.data.is_staff)
-            console.log(response.data)
             // Makestafflist(response.data)
         } catch (error) {
             console.error('Error fetching user profile:', error);
@@ -65,7 +63,6 @@ const ProductDashboard = () =>{
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
           checkProductInfo(response.data)
-          console.log(ProductInfo)
           
       } catch (error) {
           console.error('Error fetching user profile:', error);

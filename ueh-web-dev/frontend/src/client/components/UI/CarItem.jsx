@@ -9,17 +9,15 @@ const CarItem = (props) => {
   const navigate = useNavigate()
 
   const gotoProductPage = () =>{
-    navigate(`/cars/${carName}`)
+    navigate(`/cars/${props.item.id}`)
 
   };
 
-  // console.log(imgUrl)
   const PUBLIC_URL='../../../public'
   
   const filePath = `${PUBLIC_URL}${imgUrl}`;
 
   // const hello = `../${carName}`; // Tạo đường dẫn tương đối cho ảnh
-  // console.log(filePath)
 
 
   return (
@@ -57,7 +55,7 @@ const CarItem = (props) => {
           </select> */}
 
           <button className=" w-50 car__item-btn car__btn-rent">
-            <Link to={`/cars/${carName}`}>Rent</Link>
+            <Link to={`/cars/${props.item.id}`}>Rent</Link>
           </button>
 
           <button className=" w-50 car__item-btn car__btn-details" onClick={gotoProductPage}>

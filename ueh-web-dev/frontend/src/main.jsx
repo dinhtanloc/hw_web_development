@@ -36,7 +36,6 @@ if (url.startsWith('/admin')) {
     </React.StrictMode>
     );
 } else {
-  console.log('ok')
   // ReactDOM.render(<Appclientpage />, document.getElementById('root'));
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

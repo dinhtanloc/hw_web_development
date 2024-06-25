@@ -10,22 +10,21 @@ const PaymentMethod = (orderData, itemsData) => {
   const navigate = useNavigate();
 
   const handleCreateOrder = async () => {
-    // try {
-    //     const response = await axios.post('http://localhost:8000/orders/create-order/', {
-    //         order: orderData,
-    //         items: itemsData
-    //     });
-    //     console.log('Order created:', response.data);
-    //     navigate(`/confirmation/${response.data.orderId}`);
+    try {
+        const response = await axios.post('http://localhost:8000/orders/create-order/', {
+            order: orderData,
+            items: itemsData
+        });
+        navigate(`/confirmation/${response.data.orderId}`);
 
-    // } catch (error) {
-    //     console.error('Error creating order:', error);
-    // }
+    } catch (error) {
+        console.error('Error creating order:', error);
+    }
 };
 
-  // const handleButtonClick = () => {
-  //   navigate("/confirmation");
-  // };
+  const handleButtonClick = () => {
+    navigate("/confirmation");
+  };
   return (
     <>
       <div className="payment">

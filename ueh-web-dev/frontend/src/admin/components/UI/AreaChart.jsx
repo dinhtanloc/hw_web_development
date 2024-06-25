@@ -26,7 +26,6 @@ const AreaChart = () => {
           // checkStaff(response.data.is_staff)
          
           checkProductdata(response.data)
-          // console.log(Object.keys.keys(response.data))
           // Makestafflist(response.data)
       } catch (error) {
           console.error('Error fetching user profile:', error);

@@ -40,7 +40,6 @@ const Sidebar = (data) => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  console.log(data)
 
   return (
     <Box
@@ -111,7 +110,6 @@ const Sidebar = (data) => {
                   sx={{ m: "10px 0 0 0" }}
                 >
                   {data.data.profile.full_name}
-                  {/* {console.log(data)} */}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Shop Assistant

@@ -33,12 +33,10 @@ const OrderDetails = () =>{
     }
 
     const fetchOrderItems = async () => {
-      console.log(orderId)
           // Tạm thời bỏ qua để không ảnh hưởng đến dữ liệu
 
         try {
             const response = await getOrderItems.get(`http://localhost:8000/orders/${orderId}/items/`);
-            console.log(response)
             setOrderItems(response.data.items);
             setOrderInfo(response.data.info)
         } catch (error) {

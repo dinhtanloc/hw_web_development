@@ -10,22 +10,7 @@ const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
   // const [OrderData, checkOrderdata] = useState([])
   const colors = tokens(theme.palette.mode);
   const angle = progress * 360;
-  // useEffect(() => {
-  //   fetchOrder();
-  // }, []);
   
-  // const fetchOrder = async () => {
-  //     try {
-  //         const response = await api.get('orders/admin/orders/order-status-total')
-  //         // setUserProfile(response.data);
-  //         // checkStaff(response.data.is_staff)
-  //         checkOrderdata(response)
-  //         console.log(OrderData)
-          
-  //     } catch (error) {
-  //         console.error('Error fetching user profile:', error);
-  //     }
-  // };
 
   return (
     <Box

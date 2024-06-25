@@ -5,7 +5,7 @@ from .models import Product
 from order.models import OrdersItem
 from .serializers import ProductSerializer, PieChartDataSerializer
 from rest_framework.pagination import PageNumberPagination
-from .populate_data import car_data
+from .populate_data import car_data, filter_images
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -60,6 +60,30 @@ class ProductViewSet(viewsets.ModelViewSet):
         product.save()
         
         return Response({'success': 'Rating increased by 1'}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['post'], url_path='find-car')
+    def find_car(self, request):
+        prompt = request.data.get('prompt', '')
+
+        products = Product.objects.all()
+
+        image_urls = [product.imgUrl for product in products]
+
+        filtered_images = filter_images(image_urls, prompt, threshold=0.26)
+
+        img_urls = [filtered_image[0] for filtered_image in filtered_images]
+
+        car_names = [Product.get_car_name_from_img_url(img_url) for img_url in img_urls]
+
+        products = []
+        for img_url, car_name in zip(img_urls, car_names):
+            product_data = {
+                'carName': car_name,
+                'imgUrl': img_url,
+            }
+            products.append(product_data)
+
+        return Response({'products': products}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

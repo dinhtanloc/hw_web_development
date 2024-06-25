@@ -31,20 +31,15 @@ const ProductPage = () => {
   };
 
   const GotoAddproductPage = () => {
-    navigate('create-products/'); // Điều hướng đến trang '/other-page' khi bấm nút
+    navigate('create-products/'); 
     };
 
 
   const fetchProductList = async () => {
       try {
           const response = await productList.get('categories/admin/products/');
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-          console.log('meomeo')
-          console.log(response)
           setProducts(response.data);
           
-          // console.log(checkedStaff)
       } catch (error) {
           console.error('Error fetching user profile:', error);
       }

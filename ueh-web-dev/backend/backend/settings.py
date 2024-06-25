@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from transformers import CLIPProcessor, CLIPModel
+import torch
 
 
 #load env variables
@@ -153,6 +155,11 @@ DATABASES = {
 }
 
 DATA_GENERATION = True
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Tải mô hình và processor từ Hugging Face
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

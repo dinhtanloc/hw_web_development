@@ -21,9 +21,9 @@
     /* width: 100vw; */
     /* background: #AA076B; */
     /* fallback for old browsers */
-    /* background: -webkit-linear-gradient(to right, #61045F, #AA076B); */
+    /* background: -webkit-linear-gradient(to right, #000d6b, #AA076B); */
     /* Chrome 10-25, Safari 5.1-6 */
-    /* background: linear-gradient(to right, #61045F, #AA076B); */
+    /* background: linear-gradient(to right, #000d6b, #AA076B); */
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   
@@ -67,13 +67,7 @@
     justify-content: flex-start;
 }
 
-.react-chatbot-kit-user-avatar{
-    /* right: 24px; */
-    /* margin:0; */
-    /* margin-left: 52.5px; */
-    /* padding: 0; */
 
-}
 
 
 .react-chatbot-kit-user-chat-message {
@@ -133,15 +127,15 @@
   }
   
   .react-chatbot-kit-chat-bot-message {
-    background-color: #61045F;
+    background-color: #000d6b;
   }
   
   .react-chatbot-kit-chat-bot-message-arrow {
-    border-right: 8px solid #61045F;
+    border-right: 8px solid #000d6b;
   }
   
   .react-chatbot-kit-chat-btn-send {
-    background-color: #61045F;
+    background-color: #000d6b;
   }
   
   .react-chatbot-kit-user-chat-message-container {
@@ -175,7 +169,7 @@
 
 
 .react-chatbot-kit-chat-btn-send {
-  background-color: #61045F;
+  background-color: #000d6b;
   width: 15%;
   border: none;
   color: #fff;
@@ -200,7 +194,7 @@
   }
   
   .start-btn {
-    background-color: #61045F;
+    background-color: #000d6b;
     color: white;
     padding: .5rem 1rem;
     border-radius: 999px;
@@ -221,7 +215,7 @@
   .img-container {
     width: 185px;
     height: 185px;
-    border: 2px solid #61045F;
+    border: 2px solid #000d6b;
     overflow: hidden;
     border-radius: 5px;
   }
@@ -237,12 +231,12 @@
     top: 0;
     left: 0;
     border-radius: 5px;
-    background-color: #61045F;
+    background-color: #000d6b;
     color: white;
     text-decoration: none;
     padding: .5rem 1rem;
   }
   
   .img-component a:hover {
-    background-color: #61045f5e;
+    background-color: #000d6b5e;
   }

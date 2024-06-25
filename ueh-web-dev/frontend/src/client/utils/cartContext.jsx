@@ -26,9 +26,7 @@ const CartProvider = ({ children }) => {
   };
 
   const updateCartItemQuantity = (itemId, newQuantity) => {
-    console.log(itemId,newQuantity)
     setCartItems((prevCartItems) => {
-      console.log(prevCartItems)
       const updatedCartItems = prevCartItems.map((item) => {
         if (item.product === itemId) {
           return { ...item, quantity: newQuantity, total_price: item.unit_price*newQuantity };

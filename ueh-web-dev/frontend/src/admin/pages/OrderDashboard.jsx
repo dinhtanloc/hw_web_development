@@ -43,9 +43,7 @@ const OrderDashboard = () =>{
               const response = await isOrders.get('orders/admin/orders/total-order/');
               // setUserProfile(response.data);
               // checkStaff(response.data.is_staff)
-              console.log(response.data)
               checkOrderInfo(response.data)
-              console.log(orderInfo)
               
               
           } catch (error) {
@@ -59,7 +57,6 @@ const OrderDashboard = () =>{
             const response = await isOrders.get('orders/admin/orders/order-status-total/');
             // setUserProfile(response.data);
             // checkStaff(response.data.is_staff)
-            console.log(response.data)
             checkorderFigure(response.data)
             // Makestafflist(response.data)
         } catch (error) {
@@ -72,7 +69,6 @@ const OrderDashboard = () =>{
           const response = await isOrders.get('categories/admin/products/cancelled-orders-product-quantity');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-          console.log(response.data)
           Cancelproduct(response.data)
           // Makestafflist(response.data)
       } catch (error) {
@@ -139,7 +135,6 @@ const OrderDashboard = () =>{
           alignItems="center"
           justifyContent="center"
         >
-        {console.log(orderInfo)}
           <StatBox
             title={numeral(orderFigure.total_cancel_revenue).format('0.00a $')}
             subtitle="Loss"

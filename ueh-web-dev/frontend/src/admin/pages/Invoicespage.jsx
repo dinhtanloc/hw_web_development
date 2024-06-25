@@ -26,11 +26,9 @@ const Invoicespage = () => {
           const response = await orderList.get('orders/admin/orders/');
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-          console.log('meomeo')
-          console.log(response)
+      
           setOrders(response.data)
           
-          // console.log(checkedStaff)
       } catch (error) {
           console.error('Error fetching user profile:', error);
       }
@@ -41,8 +39,7 @@ const Invoicespage = () => {
         const response = await orderList.post(`orders/admin/orders/${orderId}/complete/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-        console.log('meomeo')
-        console.log(response)
+       
 
       } catch(error){
         console.error('Error complete user order:', error);
@@ -56,8 +53,7 @@ const Invoicespage = () => {
         const response = await orderList.post(`orders/admin/orders/${orderId}/cancel/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-        console.log('huy don day')
-        console.log(response)
+     
 
       } catch(error){
         console.error('Error cancel user order:', error);
@@ -75,10 +71,8 @@ const Invoicespage = () => {
   };
 
   const handleCancelOrders = async () => {
-    console.log('bam don')
-    console.log(selectedOrders)
+   
     for (const orderId of selectedOrders) {
-      console.log(orderId)
       await cancelOrder(orderId);
     }
     // Fetch the updated order list
@@ -206,12 +200,7 @@ const Invoicespage = () => {
         rows={OrderFilterlist} 
         columns={columns}
         checkboxSelection 
-        // selectionModel={selectedOrders} 
-        // onSelectionModelChange={(ids) => {
-        //     console.log(ids)
-        //     setSelectedOrders(ids);
-        //   }}
-
+     
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setSelectedOrders(newRowSelectionModel);
         }}

@@ -6,99 +6,107 @@ import CarItem from "../components/UI/CarItem";
 // import carData from "../assets/data/carData";
 import axios from "axios";
 import {Pagination, Button} from "@nextui-org/react";
-
+import { useLocation } from "react-router-dom";
 
 
 const CarListing = ({searchTerm}) => {
+  const { state } = useLocation(); 
   const [sortBy, setSortBy] = useState(""); // Trạng thái lưu trữ cách sắp xếp
   const [carData, setCardata] = useState([]);
+  const [stateProducts, setStateProducts] = useState(state && state.products ? state.products : null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
+  
   useEffect(() => {
     fetchCars(currentPage, sortBy, searchTerm);
   }, [currentPage, sortBy, searchTerm]);
+ 
+              
+              const fetchCars = async (page, sort, search) => {
+                try {
+                  const response = await axios.get('http://localhost:8000/categories/', {
+                    params: {
+                      page: page,
+                      sort: sort,
+                      search: search,
+                    },
+                  });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+                //   const cardata=stateProducts
+                // ? response.data.results.filter((car) =>
+                //   stateProducts.some((product) => product.carName === car.carName)
+                //   )
+                // : response.data.results
 
+                let filteredCars = response.data.results;
 
-//   useEffect(() => {
-//     axios.get('http://localhost:8000/categories/')
-//         .then(response => {
-//             // console.log(response.data);
-//             setCardata(response.data)
-//             // console.log('hello bibi')
-//             // console.log(hello)
-//             // console.log('hello abc')
-//         })
-//         .catch(error => {
-//             console.error("There was an error fetching the data!", error);
-//         });
-// }, []);
+                if (stateProducts) {
+                  filteredCars = filteredCars.filter((car) =>
+                    stateProducts.some((product) => product.carName === car.carName)
+                  );
+                }
+                  setCardata(filteredCars);
+                  // location.state.products?setCardata(location.state.products):setCardata(response.data.results);
+                  setTotalPages(Math.ceil(response.data.count / 9)); // Giả sử mỗi trang có 5 sản phẩm
+                } catch (error) {
+                  console.error("There was an error fetching the data!", error);
+                }
+              };
+              
+              
+              
+              // Hàm để sắp xếp danh sách xe dựa trên giá
+              const sortCarsByPrice = (cars, order) => {
+                return cars.sort((a, b) => {
+                  if (order === "low") {
+                    return a.price - b.price;
+                  } else {
+                    return b.price - a.price;
+                  }
+                });
+              };
+              
+              const handleChangeColor = (productId,carName, color) => {
+                axios
+                .post(`http://localhost:8000/categories/${productId}/change-color/`, {
+                  carName:carName,
+                  color: color,
+                })
+                .then((response) => {
+                  // Xử lý phản hồi từ backend nếu cần
+                  console.log(response)
+                })
+                .catch((error) => {
+                  // Xử lý lỗi nếu có
+                });
+              };
+              
+              const resetCars = () => {
+                setCurrentPage(1); // Đặt lại trang hiện tại về 1
+                setSortBy(''); // Đặt lại cách sắp xếp
+                // setSearchTerm(''); // Đặt lại từ khóa tìm kiếm
+                fetchCars(1, '', ''); // Gọi API để lấy danh sách xe ban đầu
+                setStateProducts(null);
+                
+              };
+              
+              const filteredCars = searchTerm
+              ? (
+                carData.filter((car) =>{
+                const match =car.carName && car.carName.toLowerCase().includes(searchTerm.toLowerCase());
+            
+                return match;
+              }
+            ))
+            : (carData);
 
+           
+            const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
 
-const fetchCars = async (page, sort, search) => {
-  try {
-    const response = await axios.get('http://localhost:8000/categories/', {
-      params: {
-        page: page,
-        sort: sort,
-        search: search,
-      },
-    });
-    setCardata(response.data.results);
-    setTotalPages(Math.ceil(response.data.count / 9)); // Giả sử mỗi trang có 5 sản phẩm
-  } catch (error) {
-    console.error("There was an error fetching the data!", error);
-  }
-};
-
-
-
-  // Hàm để sắp xếp danh sách xe dựa trên giá
-  const sortCarsByPrice = (cars, order) => {
-    return cars.sort((a, b) => {
-      if (order === "low") {
-        return a.price - b.price;
-      } else {
-        return b.price - a.price;
-      }
-    });
-  };
-
-  const handleChangeColor = (productId,carName, color) => {
-    axios
-      .post(`http://localhost:8000/categories/${productId}/change-color/`, {
-        carName:carName,
-        color: color,
-      })
-      .then((response) => {
-        // Xử lý phản hồi từ backend nếu cần
-        console.log(response)
-      })
-      .catch((error) => {
-        // Xử lý lỗi nếu có
-      });
-  };
-  
-  const filteredCars = searchTerm
-  ? carData.filter((car) =>{
-    const match =car.carName && car.carName.toLowerCase().includes(searchTerm.toLowerCase());
-    // console.log(car.carName);
-    // console.log('hello')
-    // console.log(match);
-    return match;
-  }
-)
-: carData;
-  // console.log(searchTerm);
-  // console.log(filteredCars)
-  const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
-
-  return (
-    <Helmet title="Cars">
+         
+            return (
+              <Helmet title="Cars">
       <CommonSection title="Car Listing" />
 
       <section>
@@ -126,6 +134,14 @@ const fetchCars = async (page, sort, search) => {
               />
             ))}
           </Row>
+          <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  onClick={resetCars}
+                >
+                  Reset Filter
+                </Button>
           <Row>
             <Col lg="12" className="d-flex justify-content-center mt-4">
               <div className="flex flex-col gap-5">

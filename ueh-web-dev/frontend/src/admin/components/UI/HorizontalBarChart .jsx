@@ -23,15 +23,7 @@ const HorizontalBarChart = ( ) => {
       { product__carName: 'Toyota', total_revenue: 71550000 },
     ];
 
-  //      if (Array.isArray(Object.values(api))) {
-  //     // Nếu data không phải là mảng, xử lý lỗi hoặc chuyển đổi thành mảng
-  //     console.error('Data is  an array:', data);
-  //     console.log(typeof api.top_products)
-  //     console.log(Object.values(api))
-  //     console.log(mockTopProducts)
-  //     // data = [];
-  // }
-
+  //     
   useEffect(() => {
     fetchToplist();
 
@@ -44,10 +36,7 @@ const fetchToplist = async () => {
         const response = await isProducts.get('categories/admin/products/top-selling');
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
-        console.log( Object.values(response.data.top_products))
-        console.log(typeof Object.values(response.data.top_products))
         MakeproductList(response.data.top_products)
-        // console.log(Object.keys.keys(response.data))
         // Makestafflist(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);

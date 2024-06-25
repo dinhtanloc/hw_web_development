@@ -22,7 +22,6 @@ const client = axios.create({
 const Layout = () => {
   const location = useLocation();
   const {logined} = useContext(AuthContext);
-  console.log('meomeo',logined)
   const [currentUser, setCurrentUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const api = useAxios()
@@ -33,8 +32,6 @@ const Layout = () => {
       try {
         const res = await api.get("accounts/test/");
         setCurrentUser(true);
-        console.log(res.data)
-        // console.log(name_login);
       } catch (error) {
         setCurrentUser(false);
         console.error('Có lỗi xảy ra khi truy cập dữ liệu:', error);
@@ -46,8 +43,6 @@ const Layout = () => {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    console.log('toi dang o Layout')
-    console.log(searchTerm)
   };
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
   const isAdminPage =location.pathname === "/admin"
@@ -77,13 +72,12 @@ const Layout = () => {
           <Fragment>
             <Header onSearch={handleSearch} />
             <Routers searchTerm={searchTerm} />
-            {/* {(logined || currentUser) ?  <Popup />:  <Popup />}
-            {console.log('logined: ', logined)}
-            {console.log('current' ,currentUser)} */}
+        
             <ChatPopup/>
             <Footer />
           </Fragment>
-        )}{isLoginPage && (
+        )}
+        {/* {isLoginPage && (
           <div className="login_outside" style={{ 
             width: '100vw', 
             height: '100vh',
@@ -94,20 +88,10 @@ const Layout = () => {
              }}>
             <Login />
           </div>
-        )}
+        )} */}
   
         {/* Sử dụng toán tử ba ngôi để kiểm tra điều kiện */}
-        {isLoginPage ? null : (
-          <Fragment>
-            <Header onSearch={handleSearch} />
-            <Routers searchTerm={searchTerm} />
-            {/* {(logined || currentUser) ?  <Popup />:  <Popup />}
-            {console.log('logined: ', logined)}
-            {console.log('current' ,currentUser)} */}
-            <ChatPopup/>
-            <Footer />
-          </Fragment>
-        )}
+        
         </>
 
       ):(
