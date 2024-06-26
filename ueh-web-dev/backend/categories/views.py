@@ -91,23 +91,20 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 class ProductAdminViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsStaffUser]
-        # Phương thức tạo sản phẩm
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    # Phương thức xóa sản phẩm
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # Phương thức cập nhật sản phẩm
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -115,7 +112,6 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
 
-    # Phương thức chỉnh sửa một phần thông tin sản phẩm
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -168,10 +164,10 @@ class PieChartDataViewSet(viewsets.ViewSet):
         pie_data = []
         for item in queryset:
             pie_data.append({
-                'id': item['brand'].lower(),  # Đặt id là brand viết thường
-                'label': item['brand'],       # Nhãn là brand
-                'value': item['total_quantity'],  # Giá trị là tổng quantity
-                'color': f"hsl({hash(item['brand']) % 360}, 70%, 50%)"  # Tạo màu ngẫu nhiên dựa trên brand
+                'id': item['brand'].lower(), 
+                'label': item['brand'],       
+                'value': item['total_quantity'],  
+                'color': f"hsl({hash(item['brand']) % 360}, 70%, 50%)"
             })
 
         serializer = PieChartDataSerializer(pie_data, many=True)

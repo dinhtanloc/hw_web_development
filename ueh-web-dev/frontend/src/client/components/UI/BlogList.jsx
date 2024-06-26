@@ -10,18 +10,13 @@ const BlogList = ({searchTerm}) => {
   useEffect(() => {
     axios.get('http://localhost:8000/blogs/')
         .then(response => {
-            setBlogdata(response.data.results)
+            setBlogdata(response.data)
        
         })
         .catch(error => {
             console.error("There was an error fetching the data!", error);
         });
 }, []);
-
-
-
-
-
   const filteredBlogs = searchTerm
   ? blogData.filter((blog) =>{
     const match =blog.title && blog.title.toLowerCase().includes(searchTerm.toLowerCase());

@@ -48,11 +48,7 @@ def create_order(request):
     print(order_data)
     if not order_serializer.is_valid():
         return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # Create the order
     order = order_serializer.save(user=user)
-
-    # Process order items
     total_price = 0
     print(items_data, order.id)
 
@@ -76,8 +72,6 @@ def create_order(request):
                         {'error': f'Product {product_id} does not have enough quantity'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-                
-                # Subtract the quantity from the product
                 product.quantity -= item_data['quantity']
                 product.save()
 
@@ -108,11 +102,9 @@ def get_order_items(request, order_id):
     orderSerializer = OrdersSerializer(order)
     order_items = OrdersItem.objects.filter(order=order)
     serializer = OrdersItemSerializer(order_items, many=True)
-    # return Response({'info':orderSerializer.data,'items':serializer.data})
     items_data = serializer.data
     for item in items_data:
         product_id = item['product']
-        # print(product_id)
         color = item['color']
         try:
             product = Product.objects.get(id=product_id)
@@ -127,17 +119,15 @@ def get_order_items(request, order_id):
             item['carName']=carName
             item['brand']=brand
             item['imgUrl']=imgItems
-            # Adjust the imgUrl field
-            # item['imgUrl'] = base_image_url.replace('base', color)  # Example replacement logic
         except Product.DoesNotExist:
             pass
-            item['imgUrl'] = None  # Handle the case where the product does not exist
+            item['imgUrl'] = None  
 
     return Response({'info': orderSerializer.data, 'items': items_data})
 
 
 class OrderAdminViewSet(viewsets.ModelViewSet):
-    queryset = Orders.objects.all()
+    queryset = Orders.objects.all().order_by('-id')
     serializer_class = OrdersSerializer
     # permission_classes = [IsAuthenticated, IsStaffUser]
 

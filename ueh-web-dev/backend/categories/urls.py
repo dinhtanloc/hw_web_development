@@ -13,16 +13,3 @@ router.register(r'admin/pieData', views.PieChartDataViewSet, basename='admin-pie
 urlpatterns = [
     path('', include(router.urls)),
 ]
-# urlpatterns = [
-# 	path('', views.ProductViewSet.as_view(), name='products'),
-
-# ]
-# admin_router = DefaultRouter()
-
-# # Đăng ký viewset của bạn với router, sử dụng basename là 'admin-product'
-# admin_router.register(r'admin-products', views.ProductAdminViewSet, basename='admin-product')
-
-# # Bao gồm các đường dẫn từ router của ProductAdminViewSet vào urlpatterns
-# urlpatterns += [
-#     path('', include(admin_router.urls)),
-# ]

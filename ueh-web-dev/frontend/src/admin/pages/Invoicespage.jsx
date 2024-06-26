@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
-import { mockDataInvoices } from "../assets/data/mockData";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
 import {Button} from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 
 const Invoicespage = () => {
@@ -26,10 +26,7 @@ const Invoicespage = () => {
   const fetchOrderList = async () => {
       try {
           const response = await orderList.get('orders/admin/orders/');
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-      
-          setOrders(response.data.results)
+          setOrders(response.data)
           
       } catch (error) {
           console.error('Error fetching user profile:', error);
@@ -41,8 +38,6 @@ const Invoicespage = () => {
         const response = await orderList.post(`orders/admin/orders/${orderId}/complete/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-       
-
       } catch(error){
         console.error('Error complete user order:', error);
 
@@ -55,8 +50,6 @@ const Invoicespage = () => {
         const response = await orderList.post(`orders/admin/orders/${orderId}/cancel/`);
           // setUserProfile(response.data);
           // checkStaff(response.data.is_staff)
-     
-
       } catch(error){
         console.error('Error cancel user order:', error);
 
@@ -68,7 +61,6 @@ const Invoicespage = () => {
     for (const orderId of selectedOrders) {
       await completeOrder(orderId);
     }
-    // Fetch the updated order list
     fetchOrderList();
   };
 
@@ -77,7 +69,6 @@ const Invoicespage = () => {
     for (const orderId of selectedOrders) {
       await cancelOrder(orderId);
     }
-    // Fetch the updated order list
     fetchOrderList();
   };
 
@@ -96,7 +87,7 @@ const Invoicespage = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "phone",
+      field: "phoneNumber",
       headerName: "Phone Number",
       flex: 1,
     },
@@ -116,7 +107,7 @@ const Invoicespage = () => {
       flex: 1,
       renderCell: (params) => (
         <Typography color={colors.greenAccent[500]}>
-          ${params.row.total_price}
+          ${params.row.total_price.toLocaleString('de-DE')}
         </Typography>
       ),
     },
@@ -140,7 +131,7 @@ const Invoicespage = () => {
         } else if (params.row.status === "cancelled") {
           return <CancelIcon style={{color:"red"}}/>;
         } else {
-          return <Typography color="gray">Chờ</Typography>;; // Nếu status là 'pending' thì không hiển thị gì
+          return <HourglassBottomIcon   style={{ color: 'gray' }} />; 
         }
       },
     },
@@ -148,7 +139,6 @@ const Invoicespage = () => {
 
   const columnNames = columns.map(column => column.field);
     
-  // Lọc mockDataContacts để chỉ giữ lại các keys có trong columnNames
   const OrderFilterlist = orders.map(contact =>
     Object.keys(contact).reduce((acc, key) => {
       if (columnNames.includes(key)) {

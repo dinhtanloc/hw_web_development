@@ -148,40 +148,20 @@ const Confirmation = () => {
                     Shopping Bag
                   </div>
                
-
+                {console.log(cartItems)}
                 {cartItems.map((item, index) => (
                   <ViewOrderItems 
                     item={item} 
                     key={item.id || index}
                     handleLikeClick={() => handleLikeClick(index)}
-                    // handleQuantityChange={(newQuantity) => {
-                    //   addToCart({ ...item, quantity: newQuantity });
-                    // }}
-                    // handleRemove={() => removeFromCart(index)}
-                      // Use item.id if available, otherwise fall back to index
+                   
                   />
                 ))}
-                {/* <hr /> */}
 
               </div>
-                {/* <div className="col-span-2 sm:col-span-1">
-                                      <label for="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                                      <input value={''} onChange={''} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required=""/>
-                                  </div> */}
+ 
               </div>
-              {/* <div className="col-12 col-lg-3 my-4">
-                <div id="order_summary">
-                  <h4>Order Summary</h4>
-                  <hr />
-                  <p>Subtotal: <span className="order-summary-values">${totalPrice}</span></p>
-                  <p>Shipping: <span className="order-summary-values">$25</span></p>
-                  <p>Tax: <span className="order-summary-values">${totalPrice*0.1}</span></p>
-                  <hr />
-                  <p>Total: <span className="order-summary-values">${1.1*totalPrice+25}</span></p>
-                  <hr />
-                  <button id="checkout_btn" className="btn btn-primary btn-block" onClick={handleCreateOrder}>Proceed to Payment</button>
-                </div>
-              </div> */}
+           
             </div>
           </div>
           </Row>

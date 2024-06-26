@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../theme";
-import { mockDataContacts } from "../assets/data/mockData";
-import Header from "./Header";
 import { useTheme } from "@mui/material";
 import useAxios from "../../client/utils/useAxios";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 
 const ProductPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const colors = tokens(theme.palette.mode);
-  const[products,setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [editRowIndex, setEditRowIndex] = useState(null);
-  
-
-
-  const productList = useAxios()
+  const productList = useAxios();
 
   useEffect(() => {
     fetchProductList();
   }, []);
+
+  const fetchProductList = async () => {
+    try {
+      const response = await productList.get("categories/admin/products/");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching product list:", error);
+    }
+  };
 
   const handleCellDoubleClick = (params) => {
     const rowIndex = params.id;
@@ -31,23 +34,15 @@ const ProductPage = () => {
   };
 
   const GotoAddproductPage = () => {
-    navigate('create-products/'); 
-    };
-
-
-  const fetchProductList = async () => {
-      try {
-          const response = await productList.get('categories/admin/products/');
-          setProducts(response.data.results);
-          
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
+    navigate("create-products/");
   };
 
   const updateProduct = async (product) => {
     try {
-      const response = await productList.patch(`categories/admin/products/${product.id}/`, product);
+      const response = await productList.patch(
+        `categories/admin/products/${product.id}/`,
+        product
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -57,18 +52,10 @@ const ProductPage = () => {
   const deleteProduct = async (productId) => {
     try {
       await productList.delete(`categories/admin/products/${productId}/`);
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleDeleteProduct = async (productId) => {
-    try {
-      await deleteProduct(productId);
-      const updatedProducts = products.filter(product => product.id !== productId);
+      const updatedProducts = products.filter((product) => product.id !== productId);
       setProducts(updatedProducts);
     } catch (error) {
-      console.error('Error deleting product:', error);
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -80,112 +67,33 @@ const ProductPage = () => {
       setProducts(updatedProducts);
       setEditRowIndex(null);
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error("Error updating product:", error);
     }
   };
 
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setNewProductData({ ...newProductData, [name]: value });
-  // };
-
-
-  // const handleAddProduct = async () => {
-  //   try {
-  //     const response = await productList.post('categories/admin/products/', newProductData);
-  //     const newProduct = response.data;
-  //     setProducts([...products, newProduct]);
-  //     setNewProductData({
-  //       brand: "",
-  //       carName: "",
-  //       model: "",
-  //       price: "",
-  //       speed: "",
-  //       gps: "",
-  //       seatType: "",
-  //       automatic: "",
-  //     });
-  //   } catch (error) {
-  //     console.error('Error adding product:', error);
-  //   }
-  // };
-
-  
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    // { field: "registrarId", headerName: "Registrar ID" },
+    { field: "brand", editable: true, headerName: "Brand", flex: 1, cellClassName: "name-column--cell" },
+    { field: "carName", editable: true, headerName: "Name", flex: 1, cellClassName: "name-column--cell" },
+    { field: "model", editable: true, headerName: "Model", flex: 1, cellClassName: "name-column--cell" },
+    { field: "price", editable: true, headerName: "Price", type: "number", headerAlign: "left", align: "left" },
+    { field: "speed", editable: true, headerName: "Speed", flex: 1 },
+    { field: "gps", editable: true, headerName: "GPS", flex: 1 },
+    { field: "seatType", editable: true, headerName: "Seat Type", flex: 1 },
+    { field: "automatic", editable: true, headerName: "Automatic", flex: 1 },
     {
-      field: "brand",
-      headerName: "Brand",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      },
-      {
-        field: "carName",
-        headerName: "Name",
-        flex: 1,
-        cellClassName: "name-column--cell",
-        },
-        {
-          field: "model",
-          headerName: "Model",
-          flex: 1,
-          cellClassName: "name-column--cell",
-          },
-          {
-            field: "price",
-            headerName: "Price",
-            type: "number",
-            headerAlign: "left",
-            align: "left",
-            },
-            {
-              field: "speed",
-              headerName: "Speed",
-              flex: 1,
-              },
-              {
-                field: "gps",
-                headerName: "GPS",
-                flex: 1,
-                },
-                {
-                  field: "seatType",
-                  headerName: "Seat Type",
-                  flex: 1,
-                  },
-                  {
-                    field: "automatic",
-      headerName: "Automatic",
-      flex: 1,
-      },
-      {
-        field: "delete",
-        headerName: "Delete",
-        renderCell: (params) => (
-          <Button variant="contained" color="error" onClick={() => handleDeleteProduct(params.row.id)}>Delete</Button>
-        ),
-      },
-      ];
+      field: "delete",
+      headerName: "Delete",
+      renderCell: (params) => (
+        <Button variant="contained" color="error" onClick={() => deleteProduct(params.row.id)}>
+          Delete
+        </Button>
+      ),
+    },
+  ];
 
-      const columnNames = columns.map(column => column.field);
-    
-      // Lọc mockDataContacts để chỉ giữ lại các keys có trong columnNames
-      const filteredMockData = products.map(contact =>
-        Object.keys(contact).reduce((acc, key) => {
-          if (columnNames.includes(key)) {
-            acc[key] = contact[key];
-          }
-          return acc;
-        }, {})
-      );
-      
-      return (
+  return (
     <Box m="20px">
-      <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
-      />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -218,23 +126,28 @@ const ProductPage = () => {
           },
         }}
       >
+      {console.log(products)}
         <DataGrid
-          rows={filteredMockData}
+          key={products.length} // Ensure DataGrid updates when products change
+          rows={products}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           onCellDoubleClick={handleCellDoubleClick}
           editRowsModel={{
             id: editRowIndex,
-            mode: "row",
           }}
         />
       </Box>
 
       {editRowIndex !== null && (
-        <button onClick={handleSaveChanges}>Lưu</button>
+        <Button variant="contained" color="primary" onClick={handleSaveChanges}>
+          Save
+        </Button>
       )}
 
-      <button onClick={GotoAddproductPage}>Add</button>
+      <Button variant="contained" color="primary" onClick={GotoAddproductPage}>
+        Add
+      </Button>
     </Box>
   );
 };

@@ -1,47 +1,41 @@
 import React, {useState, useEffect} from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ViewOrderItems from "../components/UI/ViewOrderItems";
-import { Row, Container } from "reactstrap";
-// import Container from "reactstrap";
-import { useCart } from "../utils/cartContext";
 import "../styles/booking-form.css";
 import useAxios from "../utils/useAxios";
-// import "../styles/payment-method.css";
-// import "../styles/cart-items.css"
+import "../styles/order-details.css"
+import { format } from 'date-fns';
+
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardFooter,
+  MDBCardHeader,
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+  MDBTypography,
+} from "mdb-react-ui-kit";
 
 
 const OrderDetails = () =>{
-    const {cartItems} = useCart();
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
+    const [date, setDate]=useState(null);
     const [orderInfo, setOrderInfo] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const navigate = useNavigate();
     const getOrderItems = useAxios()
-    const styles ={
-      // width:'100vw',
-      // marginLeft:'10px',
-      height: '50px',
-      // borderBottom: '1px solid #E1E8EE',
-      padding: '0px 30px',
-      color: '#5E6977	',
-      fontSize: '20px',
-      fontWeight: 400,
-      fontFamily: "'Roboto', sans-serif",
-      // marginBottom:'30px'
-    }
-
+ 
     const fetchOrderItems = async () => {
-          // Tạm thời bỏ qua để không ảnh hưởng đến dữ liệu
-
         try {
             const response = await getOrderItems.get(`http://localhost:8000/orders/${orderId}/items/`);
             console.log(response)
             setOrderItems(response.data.items);
             setOrderInfo(response.data.info);
             setTotalPrice(response.data.info.total_price)
+            setDate(response.data.info.created_at)
         } catch (error) {
             console.error('Error fetching order items:', error);
         }
@@ -54,135 +48,101 @@ const OrderDetails = () =>{
     navigate('/');
   }
 
-    return(
-      <Container>
-      <Row>
-      <div className="container-fluid">
-        <div className="row d-flex justify-content-between">
-          <div className="col-12 col-lg-8 mt-5 order-confirm">
-          {/* <div className="shopping-cart" style={{width:'55vw'}}> */}
-            {/* <h4 className="mt-4">Your Cart Items:</h4>
-            <hr /> */}
-            <div className="title" style={styles}>
-                <h4 className="mb-3" >Shipping Info</h4>
-
-                <div >
-                  <p><b>Name:</b> {`${orderInfo.Lastname} ${orderInfo.Firstname}`}</p>
-                  <p><b>Phone:</b> {orderInfo.phoneNumber}</p>
-                  <p className="mb-4"><b>Address:</b> {orderInfo.address}</p>
-
-                </div>
-                
-           
-
-            
-
-              </div>
-            {/* <hr /> */}
-
-          {/* </div> */}
-            {/* <div className="col-span-2 sm:col-span-1">
-                                  <label for="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                                  <input value={''} onChange={''} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required=""/>
-                              </div> */}
-          </div>
-          <div className="col-12 col-lg-3 my-4" style={{position:'relative',zIndex:'100000000000000000'}}>
-            <div id="order_summary" >
-              <h4>Order Summary</h4>
-              <hr />
-              <p>Subtotal: <span className="order-summary-values">${totalPrice.toLocaleString('de-DE')}</span></p>
-              <p>Shipping: <span className="order-summary-values">$25</span></p>
-              <p>Tax: <span className="order-summary-values">${(totalPrice*0.1).toLocaleString('de-DE')}</span></p>
-              <hr />
-              <p>Total: <span className="order-summary-values">${(1.1*totalPrice+25).toLocaleString('de-DE')}</span></p>
-              <hr />
-              <button id="checkout_btn" className="btn btn-primary btn-block" onClick={returnMainPage}>Return to main pages</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-
-
-        {/* <div className="container-fluid">
-            <div className="row d-flex justify-content-between">
-              <div className="col-12 col-lg-8 mt-5 order-confirm">
-                <h4 className="mb-3">Shipping Info</h4>
-                <p><b>Name:</b> Ghulam Abbas</p>
-                <p><b>Phone:</b> 111 111 1111</p>
-                <p className="mb-4"><b>Address:</b> 2968, Oakwood Circle, DENVILLE, 07834, USA</p>
-                <hr />
-                <h4 className="mt-4">Your Cart Items:</h4>
-                <hr /> */}
-                {/* <div className="cart-item my-1">
-                  <div className="row">
-                    <div className="col-4 col-lg-2">
-                      <img src="./images/airpords.jpg" alt="Laptop" height="45" width="65" />
+  const formatDate = (isoDateString) => {
+    if(!isoDateString){return;}
+    const date = new Date(isoDateString);
+    return format(date, 'dd MMM, yyyy');
+  };
+    return (
+      <>
+        <section
+          className="h-100 gradient-custom"
+          style={{ backgroundColor: "#eee"  }}
+        >
+          <MDBContainer className="py-5 h-100" >
+            <MDBRow className="justify-content-center align-items-center h-100">
+              <MDBCol lg="12" xl="12">
+                <MDBCard style={{ borderRadius: "10px" }}>
+                  <MDBCardHeader className="px-4 py-5">
+                    <MDBTypography tag="h5" className="text-muted mb-0">
+                      Thanks for your Order,{" "}
+                      <span style={{ color: "#000d6b" }}>{`${orderInfo.Lastname} ${orderInfo.Firstname}`}</span>!
+                    </MDBTypography>
+                  </MDBCardHeader>
+                  <MDBCardBody className="p-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                      <p
+                        className="lead fw-normal mb-0"
+                        style={{ color: "#000d6b" }}
+                      >
+                        Receipt
+                      </p>
+                      <p className="small text-muted mb-0">
+                        Receipt Voucher : 1KAU9-84UIL
+                      </p>
                     </div>
-                    <div className="col-5 col-lg-6">
-                      <a href="#">HP 15-CX0056WM Laptop, 15.6" FHD</a>
+
+                    {orderItems.map((item, index) => (
+                      <ViewOrderItems 
+                            item={item} 
+                            key={item.id || index}
+                            isOrderDetail={true}
+                      />
+                    ))}
+                    <div className="d-flex justify-content-between pt-2">
+                      <p className="fw-bold mb-0">Order Details</p>
+                      <p className="text-muted mb-0">
+                        <span className="fw-bold me-4">Total:</span> ${totalPrice.toLocaleString('de-DE')}
+                      </p>
                     </div>
-                    <div className="col-3 col-lg-4 mt-4 mt-lg-0">
-                      <p>1 x $89.99 = <b>$89.99</b></p>
+  
+                    <div className="d-flex justify-content-between pt-2">
+                      <p className="text-muted mb-0">Invoice Number : {orderId}</p>
+                      <p className="text-muted mb-0">
+                        <span className="fw-bold me-4">Discount:</span> ${(totalPrice*0.2).toLocaleString('de-DE')}
+                      </p>
                     </div>
-                  </div>
-                </div> */}
-
-                {/* {filteredCars.map((item) => (
-                    <CarItem 
-                    item={item} 
-                    key={item.id} 
-              // handleChangeColor={handleChangeColor} 
-                    />
-                ))} */}
-                {/* <hr /> */}
-                {/* <div className="col-span-2 sm:col-span-1">
-                                      <label for="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                                      <input value={''} onChange={''} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required=""/>
-                                  </div> */}
-              {/* </div>
-              <div className="col-12 col-lg-3 my-4">
-                <div id="order_summary">
-                  <h4>Order Summary</h4>
-                  <hr />
-                  <p>Subtotal: <span className="order-summary-values">$89.99</span></p>
-                  <p>Shipping: <span className="order-summary-values">$25</span></p>
-                  <p>Tax: <span className="order-summary-values">$0</span></p>
-                  <hr />
-                  <p>Total: <span className="order-summary-values">$114.99</span></p>
-                  <hr />
-                  <button id="checkout_btn" className="btn btn-primary btn-block" onClick={returnMainPage}>Return to main pages</button>
-                </div>
-              </div>
-            </div>
-          </div> */}
-      </Row>
-      <Row>
-      <div className="title" style={styles}>
-      Shopping bag
-      </div>
-
-      <div className="shopping-cart" style={{width:'55vw',height:'500px', position:'relative', marginBottom:'30px'}}>
-      {orderItems.map((item, index) => (
-              <ViewOrderItems 
-                item={item} 
-                key={item.id || index}
-                // handleLikeClick={() => handleLikeClick(index)}
-                isOrderDetail={true}
-                // handleQuantityChange={(newQuantity) => {
-                //   addToCart({ ...item, quantity: newQuantity });
-                // }}
-                // handleRemove={() => removeFromCart(index)}
-                  // Use item.id if available, otherwise fall back to index
-              />
-            ))}
-            </div>
-      {/* <div style={{height:'60px'}}></div> */}
-      </Row>
-      </Container>
-
+  
+                    <div className="d-flex justify-content-between">
+                      <p className="text-muted mb-0">
+                        Invoice Date : {formatDate(date)}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <span className="fw-bold me-4">GST 18%</span> ${(totalPrice*0.8*0.18).toLocaleString('de-DE')}
+                      </p>
+                    </div>
+  
+                    <div className="d-flex justify-content-between mb-5">
+                      <p className="text-muted mb-0">
+                        Recepits Voucher : 18KU-62IIK
+                      </p>
+                      <p className="text-muted mb-0">
+                        <span className="fw-bold me-4">Delivery Charges</span>{" "}
+                        Free
+                      </p>
+                    </div>
+                  </MDBCardBody>
+                  <MDBCardFooter
+                    className="border-0 px-4 py-5"
+                    style={{
+                      backgroundColor: "#000d6b",
+                      borderBottomLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                    }}
+                  >
+                    <MDBTypography
+                      tag="h5"
+                      className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
+                    >
+                      Total paid: <span className="h2 mb-0 ms-2">${(totalPrice*0.98).toLocaleString('de-DE')}</span>
+                    </MDBTypography>
+                  </MDBCardFooter>
+                </MDBCard>
+              </MDBCol>
+            </MDBRow>
+          </MDBContainer>
+        </section>
+      </>
     );
 
 }
