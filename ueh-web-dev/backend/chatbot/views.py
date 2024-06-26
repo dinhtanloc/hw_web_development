@@ -34,3 +34,5 @@ class ChatAPIView(APIView):
         except Exception as e:
             # Xử lý các lỗi khác
             return Response({'error': 'Something went wrong. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+

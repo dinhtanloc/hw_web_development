@@ -1,0 +1,56 @@
+/* src/components/Tabs.css */
+.tabs {
+    margin: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.tab-buttons button {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.tab-buttons button:hover {
+    color: red;
+}
+
+.tab-buttons button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    bottom: -10px;
+    left: 0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.tab-buttons button:hover::after {
+    transform: scaleX(1);
+}
+
+.tab-buttons button.active {
+    color: red;
+}
+
+.tab-buttons button.active::after {
+    transform: scaleX(1);
+}
+
+.tab-buttons button:not(:last-child) {
+    margin-right: 10px;
+}
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #f1f1f1;
+    background-color: #fff;
+}

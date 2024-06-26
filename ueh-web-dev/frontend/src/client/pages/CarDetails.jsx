@@ -18,6 +18,7 @@ import Testimonial from "../components/UI/Testimonial";
 import BlogList from "../components/UI/BlogList";
 import BecomeDriverSection from "../components/UI/BecomeDriverSection";
 import Contact from './Contact'
+import DeatailTabs from "../components/UI/DeatailTabs";
 const CarDetails = () => {
   const { slug } = useParams();
   const { addToCart,cartItems } = useCart();
@@ -36,7 +37,7 @@ const CarDetails = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/categories/${slug}/`);
-       
+        console.log(response.data)
         setProduct(response.data);
         // defaultColor(response.data.imgUrl)
         const initialColor = ColorDefault(response.data.imgUrl);
@@ -265,27 +266,15 @@ const CarDetails = () => {
 
               </div>
             </Col>
-
-            {/* <Col lg="7" className="mt-5">
-              <div className="booking-info mt-5">
-                <h5 className="mb-4 fw-bold ">Booking Information</h5>
-                <BookingForm />
-              </div>
-            </Col>
-
-            <Col lg="5" className="mt-5">
-              <div className="payment__info mt-5">
-                <h5 className="mb-4 fw-bold ">Payment Information</h5>
-                <PaymentMethod
-                orderData={orderData}
-                itemsData={itemsData} />
-              </div>
-            </Col> */}
-          <div style={{marginBottom:'30px'}}></div>
-              {/* <AboutSection/> */}
           </Row>
-          {/* <Contact/> */}
-          <Row style={{marginTop:'10%', marginBottom:"10%"}}>
+          <section>
+            <Container>
+            {console.log(product)}
+            <DeatailTabs carName={product.carName} imgUrl={product.imgUrl}/>
+
+            </Container>
+          </section>
+          <Row style={{marginTop:'5%', marginBottom:"10%"}}>
             <Col lg="12" className="mb-4 text-center">
               <h6 className="section__subtitle">Why you choose us?</h6>
               <h2 className="section__title">Services List</h2>
@@ -298,7 +287,7 @@ const CarDetails = () => {
           </Row>
           <section>
         <Container>
-          <div style={{marginBottom:'2%'}}></div>
+          {/* <div style={{marginBottom:'2%'}}></div> */}
           <Row>
             <Col lg="12" className="mb-4 text-center">
               <h6 className="section__subtitle">Our clients says</h6>
