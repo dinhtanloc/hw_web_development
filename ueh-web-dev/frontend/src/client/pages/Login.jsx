@@ -18,9 +18,6 @@ import { faFacebookF, faGoogle, faGithub } from '@fortawesome/free-brands-svg-ic
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 // axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
 
 const Login = () => {
   const {loginUser} = useContext(AuthContext);

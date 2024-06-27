@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/car-detail.css"
-
-import carData from "../assets/data/carData";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
-import BookingForm from "../components/UI/BookingForm";
-import PaymentMethod from "../components/UI/PaymentMethod";
 import { useCart } from "../utils/cartContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";  
 import RadioButton from "../components/UI/RadioButton";
-import AboutSection from "../components/UI/AboutSection";
 import ServicesList from "../components/UI/ServicesList";
 import Testimonial from "../components/UI/Testimonial";
-import BlogList from "../components/UI/BlogList";
 import BecomeDriverSection from "../components/UI/BecomeDriverSection";
-import Contact from './Contact'
 import DeatailTabs from "../components/UI/DeatailTabs";
 const CarDetails = () => {
   const { slug } = useParams();
@@ -30,13 +23,16 @@ const CarDetails = () => {
   // const product = carData.find((item) => item.id == slug);
   // const [carData, setCarData] = useState("");
   const [changecolorImage, setSelectedCar]=useState("")
-  const [quantity, setQuantity] = useState(1); // Sử dụng state để quản lý giá trị quantity
+  const [quantity, setQuantity] = useState(1);
+  const cars = axios.create({
+    baseURL: import.meta.env.VITE_DOMAIN_BACKEND
+  });
 
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/categories/${slug}/`);
+        const response = await cars.get(`/categories/${slug}/`);
         console.log(response.data)
         setProduct(response.data);
         // defaultColor(response.data.imgUrl)
@@ -70,8 +66,8 @@ const CarDetails = () => {
     setSelectedColor(newColor);
     setTheme({ red: false, white: false, black: false, [newColor]: true });
     try {
-      const response = await axios.post(
-        `http://localhost:8000/categories/${product.id}/change-color/`,
+      const response = await cars.post(
+        `/categories/${product.id}/change-color/`,
         {
           carName: product.carName,
           color: newColor,
@@ -118,8 +114,8 @@ const CarDetails = () => {
     setTheme({ red: false, white: false, black: false, [value]: true });
     setSelectedColor(name);
     try {
-      const response = await axios.post(
-        `http://localhost:8000/categories/${product.id}/change-color/`,
+      const response = await cars.post(
+        `/categories/${product.id}/change-color/`,
         {
           carName: product.carName,
           color: name,
@@ -162,18 +158,6 @@ const CarDetails = () => {
                     ({product.rating} ratings)
                   </span>
                 </div>
-                  {/* <select
-                    style={{backgroundColor:"gray"}}
-                    value={selectedColor}
-                    onChange={handleColorChange}
-                    // className="w-100"
-                  >
-                  
-                    <option className="black-option" value="black">Black</option>
-                    <option className="white-option" value="white">White</option>
-                    <option className="red-option" value="red">Red</option>
-                  </select> */}
-
                   <RadioButton
                       name="colorTheme"
                       id="red"
@@ -198,11 +182,6 @@ const CarDetails = () => {
                       onChange={handleColorChange}
                       checked={selectedColor === "black"}
                     />
-
-                  {/* <div className="col-span-2 sm:col-span-1">
-                      <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                      <input value={product.quantity} onChange={(e) => setQuantity(Number(e.target.value))}  type="number" name="quantity" id="quantity" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Quantity" required=""/>
-                  </div>  */}
 
                 <p className="section__description">
                   {product.description}
@@ -287,7 +266,6 @@ const CarDetails = () => {
           </Row>
           <section>
         <Container>
-          {/* <div style={{marginBottom:'2%'}}></div> */}
           <Row>
             <Col lg="12" className="mb-4 text-center">
               <h6 className="section__subtitle">Our clients says</h6>

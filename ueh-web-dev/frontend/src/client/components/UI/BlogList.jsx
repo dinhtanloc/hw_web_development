@@ -3,19 +3,23 @@ import axios from "axios";
 import { Col } from "reactstrap";
 import "../../styles/blog-item.css";
 import { Link } from "react-router-dom";
-// import blogData from "../../assets/data/blogData";
 
 const BlogList = ({searchTerm}) => {
   const [blogData, setBlogdata] = useState([]);
+  const blog = axios.create({
+    baseURL: import.meta.env.VITE_DOMAIN_BACKEND
+  });
   useEffect(() => {
-    axios.get('http://localhost:8000/blogs/')
-        .then(response => {
-            setBlogdata(response.data)
-       
-        })
-        .catch(error => {
-            console.error("There was an error fetching the data!", error);
-        });
+    const fetchData = async () => {
+      try {
+          const response = await blog.get('/blogs/');
+          setBlogdata(response.data);
+      } catch (error) {
+          console.error("There was an error fetching the data!", error);
+      }
+  };
+
+  fetchData();
 }, []);
   const filteredBlogs = searchTerm
   ? blogData.filter((blog) =>{
@@ -36,7 +40,8 @@ const BlogList = ({searchTerm}) => {
 
 const BlogItem = ({ item }) => {
   const { imgUrl, title, author, date, description, time } = item;
-  const img =imgUrl.replace("http://localhost:8000/media", "")
+  console.log(imgUrl)
+  const img =imgUrl.replace("http://localhost:8000/media", "") && imgUrl.replace("http://127.0.0.1:8000/media", "")
 
   return (
     <Col lg="4" md="6" sm="6" className="mb-5">

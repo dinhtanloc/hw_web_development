@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import React, { useEffect, useState, useCallback } from "react";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 import useAxios from "../../client/utils/useAxios";
-import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const ProductPage = () => {
@@ -12,9 +11,9 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const colors = tokens(theme.palette.mode);
   const [products, setProducts] = useState([]);
-  const [editRowIndex, setEditRowIndex] = useState(null);
+  const [updatedProduct, setUpdatedProduct] = useState(null);
   const productList = useAxios();
-
+ 
   useEffect(() => {
     fetchProductList();
   }, []);
@@ -29,19 +28,16 @@ const ProductPage = () => {
   };
 
   const handleCellDoubleClick = (params) => {
-    const rowIndex = params.id;
-    setEditRowIndex(rowIndex);
+    const rowIndex = params.id - 1; // Adjust index based on your data structure
+    setUpdatedProduct(products[rowIndex]);
   };
-
-  const GotoAddproductPage = () => {
-    navigate("create-products/");
-  };
-
   const updateProduct = async (product) => {
     try {
+      console.log('patch',product)
+      const { imgUrl, ...productWithoutImgUrl } = product;
       const response = await productList.patch(
         `categories/admin/products/${product.id}/`,
-        product
+        productWithoutImgUrl
       );
       return response.data;
     } catch (error) {
@@ -61,26 +57,38 @@ const ProductPage = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const updatedProduct = await updateProduct(products[editRowIndex]);
-      const updatedProducts = [...products];
-      updatedProducts[editRowIndex] = updatedProduct;
-      setProducts(updatedProducts);
-      setEditRowIndex(null);
+      if (updatedProduct !== null) {
+        const updatedProductData = await updateProduct(updatedProduct);
+        const updatedProducts = products.map((product) =>
+          product.id === updatedProductData.id ? updatedProductData : product
+        );
+        setProducts(updatedProducts);
+        setUpdatedProduct(null);
+      }
     } catch (error) {
       console.error("Error updating product:", error);
     }
   };
 
+  const handleCancelChanges = () => {
+    setUpdatedProduct(null);
+  };
+
+  const handleProcessRowUpdateError = (error) => {
+    console.error('Row update error: ', error);
+  };
+
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     { field: "brand", editable: true, headerName: "Brand", flex: 1, cellClassName: "name-column--cell" },
-    { field: "carName", editable: true, headerName: "Name", flex: 1, cellClassName: "name-column--cell" },
+    { field: "carName", editable: true, headerName: "Name", flex: 2, cellClassName: "name-column--cell" },
     { field: "model", editable: true, headerName: "Model", flex: 1, cellClassName: "name-column--cell" },
     { field: "price", editable: true, headerName: "Price", type: "number", headerAlign: "left", align: "left" },
     { field: "speed", editable: true, headerName: "Speed", flex: 1 },
     { field: "gps", editable: true, headerName: "GPS", flex: 1 },
     { field: "seatType", editable: true, headerName: "Seat Type", flex: 1 },
     { field: "automatic", editable: true, headerName: "Automatic", flex: 1 },
+    { field: "quantity", editable: true, headerName: "Quantity", flex: 1 },
     {
       field: "delete",
       headerName: "Delete",
@@ -126,28 +134,33 @@ const ProductPage = () => {
           },
         }}
       >
-      {console.log(products)}
         <DataGrid
-          key={products.length} // Ensure DataGrid updates when products change
           rows={products}
           columns={columns}
+          editMode="row"
           components={{ Toolbar: GridToolbar }}
           onCellDoubleClick={handleCellDoubleClick}
-          editRowsModel={{
-            id: editRowIndex,
+          processRowUpdate={(updatedRow) => {
+            console.log(updatedRow);
+            setUpdatedProduct(updatedRow);
+            return updatedRow;
           }}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
         />
       </Box>
 
-      {editRowIndex !== null && (
-        <Button variant="contained" color="primary" onClick={handleSaveChanges}>
-          Save
-        </Button>
+      {updatedProduct !== null && (
+        <Box mt={2}>
+          <Button variant="contained" color="primary" onClick={handleSaveChanges} style={{ marginRight: "0.5%" }}>
+            Save
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleCancelChanges} style={{ marginRight: "0.5%" }}>
+            Cancel
+          </Button>
+        </Box>
       )}
 
-      <Button variant="contained" color="primary" onClick={GotoAddproductPage}>
-        Add
-      </Button>
+      
     </Box>
   );
 };

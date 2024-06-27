@@ -27,10 +27,11 @@ const OrderDetails = () =>{
     const [totalPrice, setTotalPrice] = useState(0);
     const navigate = useNavigate();
     const getOrderItems = useAxios()
+
  
     const fetchOrderItems = async () => {
         try {
-            const response = await getOrderItems.get(`http://localhost:8000/orders/${orderId}/items/`);
+            const response = await getOrderItems.get(`/orders/${orderId}/items/`);
             console.log(response)
             setOrderItems(response.data.items);
             setOrderInfo(response.data.info);

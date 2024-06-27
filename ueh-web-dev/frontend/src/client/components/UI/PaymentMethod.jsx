@@ -8,10 +8,13 @@ import "../../styles/payment-method.css";
 
 const PaymentMethod = (orderData, itemsData) => {
   const navigate = useNavigate();
+  const createorder = axios.create({
+    baseURL: import.meta.env.VITE_DOMAIN_BACKEND
+  });
 
   const handleCreateOrder = async () => {
     try {
-        const response = await axios.post('http://localhost:8000/orders/create-order/', {
+        const response = await createorder.post('/orders/create-order/', {
             order: orderData,
             items: itemsData
         });

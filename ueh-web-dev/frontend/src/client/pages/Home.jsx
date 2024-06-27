@@ -42,8 +42,8 @@ const Home = () => {
     e.preventDefault()
     try {
       const combinedPrompt = color ? `${prompt} with ${color}`: prompt;
-      const response = await axios.post('http://localhost:8000/categories/find-car/', {
-        prompt: prompt,
+      const response = await instance.post('/categories/find-car/', {
+        prompt: combinedPrompt,
       });
       const { products } = response.data;
       // Chuyển đến trang CarListing với dữ liệu được lọc

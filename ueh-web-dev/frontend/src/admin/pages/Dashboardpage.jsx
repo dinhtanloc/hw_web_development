@@ -19,6 +19,7 @@ import numeral from 'numeral';
 // import downloadExcel from "../utils/downloadExcel";
 
 const Dashboard = () => {
+  // window.location.reload()
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [OrderInfo, checkOrderInfo] = useState([]);
@@ -64,7 +65,7 @@ const Dashboard = () => {
 
   const handleDownload = async () => {
     try {
-        const response = await fetch('http://localhost:8000/orders/download-excel/', {
+        const response = await fetch(`${import.meta.env.VITE_DOMAIN_BACKEND}/orders/download-excel/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -14,11 +14,6 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
-
 const Layout = () => {
   const location = useLocation();
   const {logined} = useContext(AuthContext);
@@ -76,22 +71,7 @@ const Layout = () => {
             <ChatPopup/>
             <Footer />
           </Fragment>
-        )}
-        {/* {isLoginPage && (
-          <div className="login_outside" style={{ 
-            width: '100vw', 
-            height: '100vh',
-            background: `linear-gradient(rgba(0, 13, 107, 0.5), rgba(0, 13, 107, 0.5)), url("${backgroundImage}")`,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-             }}>
-            <Login />
-          </div>
-        )} */}
-  
-        {/* Sử dụng toán tử ba ngôi để kiểm tra điều kiện */}
-        
+        )}  
         </>
 
       ):(

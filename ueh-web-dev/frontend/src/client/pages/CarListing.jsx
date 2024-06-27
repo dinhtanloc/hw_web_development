@@ -17,96 +17,97 @@ const CarListing = ({searchTerm}) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const carList = axios.create({
+    baseURL: import.meta.env.VITE_DOMAIN_BACKEND
+  });
   
   useEffect(() => {
     fetchCars(currentPage, sortBy, searchTerm);
   }, [currentPage, sortBy, searchTerm]);
  
               
-              const fetchCars = async (page, sort, search) => {
-                try {
-                  const response = await axios.get('http://localhost:8000/categories/', {
-                    params: {
-                      page: page,
-                      sort: sort,
-                      search: search,
-                    },
-                  });
+    const fetchCars = async (page, sort, search) => {
+      try {
+        const response = await carList.get('/categories/', {
+          params: {
+            page: page,
+            sort: sort,
+            search: search,
+          },
+        });
 
-                //   const cardata=stateProducts
-                // ? response.data.results.filter((car) =>
-                //   stateProducts.some((product) => product.carName === car.carName)
-                //   )
-                // : response.data.results
+      //   const cardata=stateProducts
+      // ? response.data.results.filter((car) =>
+      //   stateProducts.some((product) => product.carName === car.carName)
+      //   )
+      // : response.data.results
 
-                let filteredCars = response.data.results;
+      let filteredCars = response.data.results;
 
-                if (stateProducts) {
-                  filteredCars = filteredCars.filter((car) =>
-                    stateProducts.some((product) => product.carName === car.carName)
-                  );
-                }
-                  setCardata(filteredCars);
-                  // location.state.products?setCardata(location.state.products):setCardata(response.data.results);
-                  setTotalPages(Math.ceil(response.data.count / 9)); // Giả sử mỗi trang có 5 sản phẩm
-                } catch (error) {
-                  console.error("There was an error fetching the data!", error);
-                }
-              };
-              
-              
-              
-              // Hàm để sắp xếp danh sách xe dựa trên giá
-              const sortCarsByPrice = (cars, order) => {
-                return cars.sort((a, b) => {
-                  if (order === "low") {
-                    return a.price - b.price;
-                  } else {
-                    return b.price - a.price;
-                  }
-                });
-              };
-              
-              const handleChangeColor = (productId,carName, color) => {
-                axios
-                .post(`http://localhost:8000/categories/${productId}/change-color/`, {
-                  carName:carName,
-                  color: color,
-                })
-                .then((response) => {
-                  // Xử lý phản hồi từ backend nếu cần
-                  console.log(response)
-                })
-                .catch((error) => {
-                  // Xử lý lỗi nếu có
-                });
-              };
-              
-              const resetCars = () => {
-                setCurrentPage(1); // Đặt lại trang hiện tại về 1
-                setSortBy(''); // Đặt lại cách sắp xếp
-                // setSearchTerm(''); // Đặt lại từ khóa tìm kiếm
-                fetchCars(1, '', ''); // Gọi API để lấy danh sách xe ban đầu
-                setStateProducts(null);
-                
-              };
-              
-              const filteredCars = searchTerm
-              ? (
-                carData.filter((car) =>{
-                const match =car.carName && car.carName.toLowerCase().includes(searchTerm.toLowerCase());
-            
-                return match;
-              }
-            ))
-            : (carData);
+      if (stateProducts) {
+        filteredCars = filteredCars.filter((car) =>
+          stateProducts.some((product) => product.carName === car.carName)
+        );
+      }
+        setCardata(filteredCars);
+        // location.state.products?setCardata(location.state.products):setCardata(response.data.results);
+        setTotalPages(Math.ceil(response.data.count / 9)); 
+      } catch (error) {
+        console.error("There was an error fetching the data!", error);
+      }
+    };
+    
+    
+    const sortCarsByPrice = (cars, order) => {
+      return cars.sort((a, b) => {
+        if (order === "low") {
+          return a.price - b.price;
+        } else {
+          return b.price - a.price;
+        }
+      });
+    };
+    
+    const handleChangeColor = (productId,carName, color) => {
+      carList
+      .post(`/categories/${productId}/change-color/`, {
+        carName:carName,
+        color: color,
+      })
+      .then((response) => {
+        // Xử lý phản hồi từ backend nếu cần
+        console.log(response)
+      })
+      .catch((error) => {
+        // Xử lý lỗi nếu có
+      });
+    };
+    
+    const resetCars = () => {
+      setCurrentPage(1); 
+      setSortBy(''); 
+      // setSearchTerm(''); 
+      fetchCars(1, '', ''); 
+      setStateProducts(null);
+      
+    };
+    
+    const filteredCars = searchTerm
+    ? (
+      carData.filter((car) =>{
+      const match =car.carName && car.carName.toLowerCase().includes(searchTerm.toLowerCase());
+  
+      return match;
+    }
+  ))
+  : (carData);
 
-           
-            const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
+  
+  const sortedCars = sortBy ? sortCarsByPrice(filteredCars, sortBy) : filteredCars;
 
-         
-            return (
-              <Helmet title="Cars">
+
+  return (
+    <Helmet title="Cars">
       <CommonSection title="Car Listing" />
 
       <section>
@@ -137,7 +138,7 @@ const CarListing = ({searchTerm}) => {
           <Button
                   size="sm"
                   variant="flat"
-                  color="secondary"
+                  color="warning"
                   onClick={resetCars}
                 >
                   Reset Filter
@@ -145,10 +146,10 @@ const CarListing = ({searchTerm}) => {
           <Row>
             <Col lg="12" className="d-flex justify-content-center mt-4">
               <div className="flex flex-col gap-5">
-              <p className="text-small text-default-500">Selected Page: {currentPage}</p>
+              <p className="text-small text-default-500" style={{paddingLeft:'15%'}}>Selected Page: {currentPage}</p>
                 <Pagination
                   total={totalPages}
-                  color="secondary"
+                  color="warning"
                   page={currentPage}
                   onChange={setCurrentPage}
                 />
@@ -156,7 +157,7 @@ const CarListing = ({searchTerm}) => {
                   <Button
                     size="sm"
                     variant="flat"
-                    color="secondary"
+                    color="warning"
                     onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
                   >
                     Previous
@@ -164,7 +165,7 @@ const CarListing = ({searchTerm}) => {
                   <Button
                     size="sm"
                     variant="flat"
-                    color="secondary"
+                    color="warning"
                     onPress={() => setCurrentPage((prev) => (prev < 10 ? prev + 1 : prev))}
                   >
                     Next
@@ -172,30 +173,6 @@ const CarListing = ({searchTerm}) => {
                 </div>
 
               </div>
-              {/* <Pagination
-                total={totalPages}
-                color="secondary"
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-              <div className="flex gap-2 mt-3">
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="secondary"
-                  onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
-                >
-                  Previous
-                </Button>
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="secondary"
-                  onPress={() => setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev))}
-                >
-                  Next
-                </Button>
-              </div> */}
             </Col>
           </Row>
         </Container>
