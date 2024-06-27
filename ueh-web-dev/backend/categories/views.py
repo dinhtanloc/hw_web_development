@@ -13,7 +13,6 @@ from accounts.permissions import IsStaffUser
 from rest_framework.response import Response
 
 
-# Create your views here.
 if not Product.objects.exists():
     for car in car_data:
         Product.objects.create(**car)
@@ -37,17 +36,8 @@ class ProductViewSet(viewsets.ModelViewSet):
         product = self.get_object()
         if color in ['red', 'white', 'black']:
             product.color = color
-            # product.imgUrl = f"/media/car_images/car_{color}.png"  # Update imgUrl
-            imgUrl = f"/media/all-images/cars-img/car_{nameId}_{color}.png"  # Update imgUrl
+            imgUrl = f"/media/all-images/cars-img/car_{nameId}_{color}.png"  
             return Response({'response': imgUrl}, status=status.HTTP_200_OK) 
-
-            # product.save()
-        # else:
-        #     # Nếu màu không hợp lệ, sử dụng màu mặc định là 'white' và imgUrl mặc định
-        #     product.color = 'white'
-        #     product.imgUrl = "/media/car_images/car_white.png"  # Set default imgUrl
-        #     product.save()
-
         serializer = self.get_serializer(product)
         return Response(serializer.data)
     
@@ -93,7 +83,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ProductAdminViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
-    # permission_classes = [IsAuthenticated, IsStaffUser]
+    permission_classes = [IsAuthenticated, IsStaffUser]
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -138,7 +128,6 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], url_path='cancelled-orders-product-quantity')
     def cancelled_orders_product_quantity(self, request):
-        # Calculate the total quantity of products in order items of cancelled orders
         total_quantity = OrdersItem.objects.filter(order__status='cancelled').aggregate(
             total_quantity=Sum('quantity')
         )['total_quantity'] or 0
@@ -157,10 +146,7 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
 
 class PieChartDataViewSet(viewsets.ViewSet):
     def list(self, request):
-        # Tính tổng quantity theo brand của Product từ OrderItem
         queryset = Product.objects.values('brand').annotate(total_quantity=Sum('quantity'))
-
-        # Chuẩn bị dữ liệu cho pie chart
         pie_data = []
         for item in queryset:
             pie_data.append({

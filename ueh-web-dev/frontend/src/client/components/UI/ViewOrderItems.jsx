@@ -31,34 +31,25 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
   const [isActive, setIsActive] = useState(false);
   const {removeFromCart, updateCartItemQuantity} =useCart();
   const{carName, color, imgUrl, quantity,total_price ,unit_price ,brand}=item
-  const [amount, setQuantity] = useState(1); // Khởi tạo state cho số lượng, ban đầu là 1
+  const [amount, setQuantity] = useState(1); 
 
   const handleClick = () => {
     setLiked(!liked)
-      // Nếu chưa được thích trước đó, tăng lượt rating lên 1
-    // setLiked(true);
+     
     setIsActive(true);
     setTimeout(() => setIsActive(false), 800);
     handleLikeClick()
-      // Cập nhật lượt rating của sản phẩm
-      // Nếu đã được thích trước đó, giảm lượt rating đi 1
 
-    // setLiked(!liked);
-    // setIsActive(true);
-    // setTimeout(() => setIsActive(false), 800);
-    // updateProductRating(item.productId);
-    
   };
 
   const handleRemove = () => {
-    // Gọi hàm removeFromCart để xóa mục khỏi giỏ hàng khi người dùng click vào biểu tượng xóa
     removeFromCart(item.product);
   };
 
   // Hàm tăng số lượng
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
-    updateCartItemQuantity(item.product, amount + 1); // Gọi hàm xử lý từ props để cập nhật số lượng
+    updateCartItemQuantity(item.product, amount + 1); 
     
   };
 
@@ -66,45 +57,17 @@ const ViewOrderItems = ({ item,handleLikeClick, isOrderDetail=false  }) => {
     if (amount > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
      
-      updateCartItemQuantity(item.product, amount-1); // Gọi hàm xử lý từ props để cập nhật số lượng
+      updateCartItemQuantity(item.product, amount-1); 
 
     } else{return;}
   };
-    // <div className="cart-item my-1">
-    //     <div className="row">
-    //       <div className="col-4 col-lg-2">
-    //         <img src={imgUrl} alt="Car" height="45" width="65" />
-    //       </div>
-    //       <div className="col-5 col-lg-6">
-    //         <a href="#">{carName}</a>
-    //       </div>
-    //       <div className="col-3 col-lg-4 mt-4 mt-lg-0">
-    //         <p>{quantity} x ${unit_price} = <b>${total_price}</b></p>
-    //       </div>
-    //     </div>
-    //     <button onClick={removeFromCart}>Delete</button>
-
-    //   </div>
+  
     if (!item) {
       return <div>Invalid item</div>;
       }
 
     if(isOrderDetail){
       return(
-      
-        // <div className="item">
-        //     <div className="image">
-        //       <img src={imgUrl} alt="" />
-        //     </div>
-         
-        //     <div className="description">
-        //       <span style={{fontWeight:'bold',fontSize:'13px', color:'#96630b'}}>{brand}</span>
-        //       <span>{carName}</span>
-        //       <span style={{fontSize:'12px',fontWeight:'bolder',color:'gray'}} >{color}</span>
-        //     </div>
-        //     <div className="total-price">{unit_price*amount}</div>
-        //   {/* <div ></div> */}
-        //   </div>
           <MDBCard className="shadow-0 border mb-4">
             <MDBCardBody>
               <MDBRow>

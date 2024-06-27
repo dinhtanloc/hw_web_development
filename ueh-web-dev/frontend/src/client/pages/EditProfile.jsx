@@ -4,13 +4,11 @@ import useAxios from "../utils/useAxios"
 import moment from 'moment';
 import Swal from "sweetalert2";  
 
-
-
-
 const EditProfile = () => {
     const [errors, setErrors] = useState(null);
     const [dateString, setDateString] = useState("");
     const [fDate, setfDate] = useState("");
+    const [userName, setuserName] = useState("")
 
     const profileAPI = useAxios();
     const navigate =useNavigate()
@@ -39,6 +37,7 @@ const EditProfile = () => {
     const fetchUserProfile = async () => {
         try {
             const response = await profileAPI.get('accounts/profile/');
+            setuserName(response.data.username)
             setFormData(prevFormData => ({
                 ...prevFormData,
                 full_name: response.data.full_name,
@@ -94,15 +93,25 @@ const EditProfile = () => {
             formDataToSubmit.append('full_name', formData.full_name);
             formDataToSubmit.append('username', formData.username);
             formDataToSubmit.append('email', formData.email);
-            formDataToSubmit.append('password', formData.current_password);
             formDataToSubmit.append('phone', formData.phone);
             formDataToSubmit.append('job', formData.job);
             formDataToSubmit.append('address', formData.address);
-            formDataToSubmit.append('image', formData.image); 
+            // formDataToSubmit.append('image', formData.image); 
             formDataToSubmit.append('bio', formData.bio); 
+            formDataToSubmit.append('current_password', formData.current_password);
+            formDataToSubmit.append('confirm_password', formData.confirm_password); 
+            formDataToSubmit.append('new_password', formData.new_password); 
+
+            if (formData.image instanceof File) {
+                formDataToSubmit.append('image', formData.image);
+            }
+
+            for (const [key, value] of formDataToSubmit.entries()) {
+                console.log(`${key}: ${value}`);
+              }
           
             
-            await profileAPI.patch('/profile/', formDataToSubmit, {
+            await profileAPI.patch('accounts/profile/', formDataToSubmit, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -117,6 +126,7 @@ const EditProfile = () => {
                 timerProgressBar: true,
                 showConfirmButton: false,
             })
+            setuserName(formData.full_name)
             navigate('/profile/')
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -155,7 +165,7 @@ const EditProfile = () => {
                                         </div>
                                         <div className="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                             <div className="text-center text-sm-left mb-2 mb-sm-0">
-                                                <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">{formData.full_name && formData.full_name}</h4>
+                                                <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">{userName}</h4>
                                                 {/* <p className="mb-0">{nickname && nickname}</p> */}
                                                 <div className="text-muted">
                                                     <small>Last seen 2 hours ago</small>

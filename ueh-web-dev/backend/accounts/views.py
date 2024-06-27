@@ -37,17 +37,6 @@ def getRoutes(request):
     return Response(routes)
 
 
-# @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
-# def testEndPoint(request):
-#     if request.method == 'GET':
-#         data = f"Congratulation {request.user}, your API just responded to GET request"
-#         return Response({'response': JsonResponse(request.user)}, status=status.HTTP_200_OK)
-#     elif request.method == 'POST':
-#         text = "Hello buddy"
-#         data = f'Congratulation your API just responded to POST request with text: {text}'
-#         return Response({'response': data}, status=status.HTTP_200_OK)
-#     return Response({}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -57,7 +46,6 @@ def testEndPoint(request):
             'id': request.user.id,
             'username': request.user.username,
             'email': request.user.email,
-            # Thêm các thông tin khác của người dùng mà bạn muốn hiển thị
         }
         data = f"Congratulations {request.user}, your API just responded to GET request"
         return Response({'response': user_info}, status=status.HTTP_200_OK)
@@ -73,43 +61,20 @@ def isStaffEndpoint(request):
     if request.method == 'GET':
         is_staff = request.user.is_staff
         serializer = UserSerializer(request.user)
-        # Bạn có thể sử dụng giá trị is_staff ở đây để thực hiện các xử lý phù hợp.
         return Response({"is_staff": is_staff, "staff":serializer.data})
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated, IsStaffUser])  # Chỉ cho phép nhân viên truy cập
+@permission_classes([IsAuthenticated, IsStaffUser])  
 def staff_list_view(request):
     if request.method == 'GET':
         staff_users = User.objects.filter(is_staff=True)
         serializer = UserSerializer(staff_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def get_profile(request):
-#     try:
-#         profile = Profile.objects.get(user=request.user)
-#         serializer = ProfileSerializer(profile)
-#         return Response(serializer.data)
-#     except Profile.DoesNotExist:
-#         return Response({"error": "Profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-    
-# class UserProfileView(APIView):
-#     def get(self, request):
-#         user_profile = Profile.objects.get(user=request.user)
-#         serializer = ProfileSerializer(user_profile)
-#         return Response(serializer.data)
 
-#     def put(self, request):
-#         user_profile = Profile.objects.get(user=request.user)
-#         serializer = ProfileSerializer(user_profile, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PATCH'])
-@permission_classes([IsAuthenticated])    
+@permission_classes([IsAuthenticated])
 def profileView(request):
     if request.method == "GET":
         user_profile = Profile.objects.get(user=request.user)
@@ -117,38 +82,29 @@ def profileView(request):
         return Response(serializer.data)
     elif request.method == "PATCH":
         user_profile = Profile.objects.get(user=request.user)
-        serializer = ProfileSerializer(user_profile, data=request.data,partial=True)
+        serializer = ProfileSerializer(user_profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:print(serializer.data)
-        if request.FILES.get('image'):
+        if 'image' in request.FILES:
             image_file = request.FILES.get('image')
-            user_profile = Profile.objects.get(id=request.user.id)
             user_profile.image = image_file
             user_profile.save()
-        # if 'current_password' in request.data and 'new_password' in request.data and 'confirm_password' in request.data:
-        #     password_serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
-        #     if password_serializer.is_valid():
-        #         request.user.set_password(request.data['new_password'])
-        #         request.user.save()
-        #         return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
-        #     else:
-        #         return Response(password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if 'current_password' in request.data and 'new_password' in request.data and 'confirm_password' in request.data:
+            current_password = request.data['current_password']
+            new_password = request.data['new_password']
+            confirm_password = request.data['confirm_password']
+            if not request.user.check_password(current_password):
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+            if new_password != confirm_password:
+                return Response({'error': 'New password and confirm password do not match'}, status=status.HTTP_400_BAD_REQUEST)
+            request.user.set_password(new_password)
+            request.user.save()
 
-       
+            return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])    
-# def upload_image(request):
-#     image_file = request.FILES.get('image')
-#     if image_file:
-#         user_profile = Profile.objects.get(id=request.user.id)
-#         user_profile.image = image_file
-#         user_profile.save()
-#         return Response({'message': 'Image uploaded successfully.'}, status=status.HTTP_200_OK)
-#     return Response({'message': 'No image uploaded.'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 

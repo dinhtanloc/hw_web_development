@@ -3,6 +3,7 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register(r'order-history', views.OrderHistoryViewSet, basename='order-history')
 router.register(r'admin/orders', views.OrderAdminViewSet, basename='order')
 router.register(r'admin/monthly-brand-data', views.MonthlyBrandDataViewSet, basename='monthly-brand-data')
 router.register(r'admin/barH-data', views.BarHChartDataViewSet, basename='barH-data')

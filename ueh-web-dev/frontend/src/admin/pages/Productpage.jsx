@@ -28,7 +28,7 @@ const ProductPage = () => {
   };
 
   const handleCellDoubleClick = (params) => {
-    const rowIndex = params.id - 1; // Adjust index based on your data structure
+    const rowIndex = params.id - 1; 
     setUpdatedProduct(products[rowIndex]);
   };
   const updateProduct = async (product) => {
