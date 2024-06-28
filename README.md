@@ -1,5 +1,5 @@
 # Web Project: Car Retailer 
-(project.png)
+[!The project's web diagram and accompanying technologies.](project.png)
 This project is a fullstack web product primarily programmed in Python and JavaScript. The project consists of two parts: the frontend is developed using React + Vite.js, and the backend is developed using the Django framework. Some additional technologies are clearly displayed in the diagram as described.
 ## install
 ### Frontend
