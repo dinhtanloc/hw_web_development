@@ -2,18 +2,19 @@ import React from "react";
 import "../../styles/our-member.css";
 import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
-import ava01 from "../../assets/all-images/ava-1.jpg";
-import ava02 from "../../assets/all-images/ava-2.jpg";
-import ava03 from "../../assets/all-images/ava-3.jpg";
+import ava01 from "/media/Loc_Dinh.jpg";
+import ava02 from "/media/chatGPT.jpg";
+import ava03 from "/media/Stack_overflow.jpg";
+import ava04 from "/media/google_web.jpg";
 
 const OUR__MEMBERS = [
   {
     name: "Loc Tan Dinh",
     experience: "Fullstack developer",
-    fbUrl: "#",
+    fbUrl: import.meta.env.VITE_FACEBOOK,
     instUrl: "#",
     twitUrl: "#",
-    linkedinUrl: "#",
+    linkedinUrl: import.meta.env.VITE_LINKEDIN,
     imgUrl: ava01,
   },
 
@@ -29,7 +30,7 @@ const OUR__MEMBERS = [
 
   {
     name: "Stack Overflow",
-    experience: "Bugs advisor",
+    experience: "Debug advisor",
     fbUrl: "#",
     instUrl: "#",
     twitUrl: "#",
@@ -38,13 +39,13 @@ const OUR__MEMBERS = [
   },
 
   {
-    name: "Github",
-    experience: "Open source development",
+    name: "Google",
+    experience: "Frontend development",
     fbUrl: "#",
     instUrl: "#",
     twitUrl: "#",
     linkedinUrl: "#",
-    imgUrl: ava01,
+    imgUrl: ava04,
   },
 ];
 

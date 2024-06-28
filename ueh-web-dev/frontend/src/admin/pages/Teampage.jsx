@@ -28,6 +28,7 @@ const Teampage = () => {
         // setUserProfile(response.data);
         // checkStaff(response.data.is_staff)
         Makestafflist(response.data)
+        console.log(response.data)
     } catch (error) {
         console.error('Error fetching user profile:', error);
     }

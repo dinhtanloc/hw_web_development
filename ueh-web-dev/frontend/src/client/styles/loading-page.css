@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+
+.loading_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff; /* Màu nền mặc định */
+    animation: changeColor 5s infinite alternate;
+}
+
+@keyframes changeColor {
+    0% { background-color: #253bbb; }
+    50% { background-color: #f0f0f0; }
+    100% { background-color: #7936c5; }
+}

@@ -18,7 +18,7 @@
 }
 
 .tab-buttons button:hover {
-    color: red;
+    color: #000d6b;
 }
 
 .tab-buttons button::after {
@@ -26,7 +26,7 @@
     position: absolute;
     width: 100%;
     height: 2px;
-    background-color: red;
+    background-color: #000d6b;
     bottom: -10px;
     left: 0;
     transform: scaleX(0);
@@ -38,7 +38,7 @@
 }
 
 .tab-buttons button.active {
-    color: red;
+    color: #000d6b;
 }
 
 .tab-buttons button.active::after {

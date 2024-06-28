@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation  } from "react-router-dom";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import CarListing from "../pages/CarListing";
@@ -15,8 +15,26 @@ import PrivateRoute from "../utils/PrivateRoute";
 import Confirmation from "../pages/Confirmation";
 import OrderDetails from "../pages/OrderDetails";
 import Dashboard from "../../admin/pages/Dashboardpage";
+import LoadingPage from "../components/UI/LoadingComponent";
 
 const Routers = ({ searchTerm }) => {
+      const [isLoading, setIsLoading] = useState(true);
+      const location = useLocation();
+
+      useEffect(() => {
+            setIsLoading(true);
+        
+            const timer = setTimeout(() => {
+              setIsLoading(false);
+            }, 1000); // Giả lập thời gian tải trang
+        
+            return () => clearTimeout(timer);
+          }, [location]);
+        
+          if (isLoading) {
+            return <LoadingPage />;
+          }
+        
   return (
     <Routes>
 

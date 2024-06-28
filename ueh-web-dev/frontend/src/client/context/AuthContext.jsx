@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
                 title: "Login Successful",
                 icon: "success",
                 toast: true,
-                timer: 6000,
+                timer: 2000,
                 position: 'top-right',
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
                 title: "Username or passowrd does not exists",
                 icon: "error",
                 toast: true,
-                timer: 6000,
+                timer: 2000,
                 position: 'top-right',
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
                 title: "Registration Successful, Login Now",
                 icon: "success",
                 toast: true,
-                timer: 6000,
+                timer: 2000,
                 position: 'top-right',
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
                 title: "An Error Occured " + response.status,
                 icon: "error",
                 toast: true,
-                timer: 6000,
+                timer: 2000,
                 position: 'top-right',
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -116,12 +116,11 @@ export const AuthProvider = ({ children }) => {
             title: "You have been logged out...",
             icon: "success",
             toast: true,
-            timer: 6000,
+            timer: 2000,
             position: 'top-right',
             timerProgressBar: true,
             showConfirmButton: false,
         })
-        window.location.reload();
 
     }
 

@@ -154,7 +154,7 @@ DATABASES = {
     }
 }
 
-DATA_GENERATION = True
+DATA_GENERATION = False
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Tải mô hình và processor từ Hugging Face

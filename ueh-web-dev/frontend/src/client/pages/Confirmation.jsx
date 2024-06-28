@@ -76,7 +76,7 @@ const Confirmation = () => {
     address: "",
     total_price:0,
     paymentMethod: "",
-    notes: "",
+    note: "",
   });
  
 
@@ -105,7 +105,7 @@ const Confirmation = () => {
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
-        note: formData.notes,
+        note: formData.note,
         payment_method: formData.paymentMethod,
 
       },
@@ -198,7 +198,7 @@ const Confirmation = () => {
                           className="textarea"
                           placeholder="Write"
                           name="note" 
-                          value={formData.notes} 
+                          value={formData.note} 
                           onChange={handleInputChange}
                         ></textarea>
                       </FormGroup>
