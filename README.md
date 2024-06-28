@@ -2,6 +2,12 @@
 ![The project's web diagram and accompanying technologies.](project.png)
 This project is a fullstack web product primarily programmed in Python and JavaScript. The project consists of two parts: the frontend is developed using React + Vite.js, and the backend is developed using the Django framework. Some additional technologies are clearly displayed in the diagram as described.
 ## install
+### Clone repo into your space
+```
+git clone https://github.com/dinhtanloc/hw_web_development.git
+code hw_web_development
+cd ueh-web-dev
+```
 ### Frontend
 ```
 cd frontend
