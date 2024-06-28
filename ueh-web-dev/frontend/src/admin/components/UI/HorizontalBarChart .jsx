@@ -1,109 +1,101 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import { tokens } from "../../theme";
-import { mockBarHData as data } from "../../assets/data/mockData";
 import useAxios from "../../../client/utils/useAxios";
-// import useAxios from "../../../client/utils/useAxios";
+import * as d3 from 'd3';
 
-const HorizontalBarChart = ( ) => {
-
+const HorizontalBarChart = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const [chartData, setChartData] = useState([]);
-    const [productList, MakeproductList] = useState([]);
-    const isProducts=useAxios()
+    const [productList, setProductList] = useState([]);
+    const isProducts = useAxios();
 
-    const mockTopProducts = [
-      { product__carName: 'A B', total_revenue: 729810000 },
-      { product__carName: 'CD', total_revenue: 701190000 },
-      { product__carName: 'DS', total_revenue: 651430000 },
-      { product__carName: 'GB', total_revenue: 286200000 },
-      { product__carName: 'Fry', total_revenue: 128790000 },
-      { product__carName: 'Toyota', total_revenue: 71550000 },
-    ];
+    useEffect(() => {
+        fetchToplist();
+    }, []);
 
-  //     
-  useEffect(() => {
-    fetchToplist();
+    const fetchToplist = async () => {
+        try {
+            const response = await isProducts.get('categories/admin/products/top-selling');
+            setProductList(response.data.top_products);
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
 
-  }, []);
+    // Tạo một hàm để tính toán màu sắc dựa trên giá trị của thanh
+    const getColor = d => {
+        const maxValue = Math.max(...productList.map(item => item.total_revenue));
+        const colorScale = d3.scaleLinear()
+            .domain([0, maxValue])
+            .range(['#d3e5ff', '#08306b']); // màu xanh từ nhạt đến đậm
+        return colorScale(d.total_revenue);
+    };
 
-
-
-const fetchToplist = async () => {
-    try {
-        const response = await isProducts.get('categories/admin/products/top-selling');
-        // setUserProfile(response.data);
-        // checkStaff(response.data.is_staff)
-        MakeproductList(response.data.top_products)
-        // Makestafflist(response.data)
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-    }
+    return (
+        <ResponsiveBar
+            data={productList}
+            theme={{
+                axis: {
+                    domain: {
+                        line: {
+                            stroke: colors.grey[100],
+                        },
+                    },
+                    legend: {
+                        text: {
+                            fill: colors.grey[100],
+                        },
+                    },
+                    ticks: {
+                        line: {
+                            stroke: colors.grey[100],
+                            strokeWidth: 1,
+                        },
+                        text: {
+                            fill: colors.grey[100],
+                        },
+                    },
+                },
+                legends: {
+                    text: {
+                        fill: colors.grey[100],
+                    },
+                },
+                tooltip: {
+          container: {
+            color: colors.primary[500],
+          },
+        },
+            }}
+            keys={['total_revenue']}
+            indexBy='product__carName'
+            margin={{ top: 30, right: 50, bottom: 50, left: 100 }}
+            padding={0.3}
+            layout="horizontal"
+            valueScale={{ type: 'linear' }}
+            indexScale={{ type: 'band', round: true }}
+            colors={d => getColor(d.data)} // sử dụng hàm getColor để tính toán màu sắc
+            borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 45,
+            }}
+            axisLeft={{
+                tickSize: 5,
+                tickPadding: 1,
+                tickRotation: 0,
+            }}
+            labelSkipWidth={100}
+            labelSkipHeight={100}
+            labelTextColor="inherit:darker(1.6)"
+            label={d => ''}
+        />
+    );
 };
-
-    return(
-  <ResponsiveBar
-    data={productList}
-    theme={{
-        // added
-        axis: {
-          domain: {
-            line: {
-              stroke: colors.grey[100],
-            },
-          },
-          legend: {
-            text: {
-              fill: colors.grey[100],
-            },
-          },
-          ticks: {
-            line: {
-              stroke: colors.grey[100],
-              strokeWidth: 1,
-            },
-            text: {
-              fill: colors.grey[100],
-            },
-          },
-        },
-        legends: {
-          text: {
-            fill: colors.grey[100],
-          },
-        },
-      }}
-    keys={['total_revenue']}
-    indexBy='product__carName'
-    margin={{ top: 50, right: 50, bottom: 50, left: 100 }}
-    padding={0.3}
-    layout="horizontal"
-    valueScale={{ type: 'linear' }}
-    indexScale={{ type: 'band', round: true }}
-    colors={{ scheme: 'nivo' }}
-    borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 45,
-      // legend: 'Value',
-      // legendPosition: 'middle',
-      // legendOffset: 32
-    }}
-    axisLeft={{
-      tickSize: 5,
-      tickPadding: 1,
-      tickRotation: 0,
-      // legend: 'Label',
-      // legendPosition: 'middle',
-      // legendOffset: -40
-    }}
-  />
-);
-}
 
 export default HorizontalBarChart;

@@ -366,7 +366,7 @@ class TimeSeriesDataViewSet(viewsets.ViewSet):
             Orders.objects.filter(created_at__gte=start_date)
             .values('ordersitem__product__brand')
             .annotate(total_sales=Sum('total_price'))
-            .order_by('-total_sales')[:3]
+            .order_by('-total_sales')[:6]
         )
 
         top_brands = [item['ordersitem__product__brand'] for item in brand_totals]

@@ -1,40 +1,43 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
-// import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
-import { mockAreaData as data } from "../../assets/data/mockData";
 import useAxios from "../../../client/utils/useAxios";
-import React, {useEffect, useState} from "react";
-const AreaChart = () => {
+import React, { useEffect, useState } from "react";
+import { formatDefaultLocale } from 'd3-format'; // Import thư viện d3-format
+import { ResponsiveBump } from '@nivo/bump'
+
+
+const LineChart = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const isProducts=useAxios()
-    const [ProductData, checkProductdata] = useState([])
+    const isProducts = useAxios();
+    const [productData, setProductData] = useState([]);
 
-
+    // Thiết lập định dạng cho số người dùng hiện tại
     useEffect(() => {
-      fetchToplist();
-  
+        fetchTimeSeries();
     }, []);
-  
-  
-  
-  const fetchToplist = async () => {
-      try {
-          const response = await isProducts.get('orders/admin/time-series/');
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-         
-          checkProductdata(response.data)
-          // Makestafflist(response.data)
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
-  };
-    return(
-  <ResponsiveLine
-    data={ProductData}
-    theme={{
+
+    const fetchTimeSeries = async () => {
+        try {
+            const response = await isProducts.get('orders/admin/time-series/');
+            setProductData(response.data);
+        } catch (error) {
+            console.error('Error fetching time series data:', error);
+        }
+    };
+
+    // Thiết lập định dạng số người dùng
+    const enUs = formatDefaultLocale({
+        thousands: ",",
+        grouping: [3],
+        currency: ["$", ""]
+    });
+
+    return (
+      <ResponsiveBump
+      data={productData}
+      theme={{
         axis: {
           domain: {
             line: {
@@ -67,37 +70,50 @@ const AreaChart = () => {
           },
         },
       }}
-    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-    xScale={{ type: 'point' }}
-    yScale={{ type: 'linear', stacked: true, min: 'auto', max: 'auto' }}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      orient: 'bottom',
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'Time',
-      legendOffset: 36,
-      legendPosition: 'middle'
-    }}
-    axisLeft={{
-      orient: 'left',
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'Value',
-      legendOffset: -40,
-      legendPosition: 'middle'
-    }}
-    enableGridX={false}
-    enableGridY={true}
-    enableArea={true}
-    areaOpacity={0.1}
-    colors={{ scheme: 'nivo' }}
-  />
-);
+      colors={{ scheme: 'spectral' }}
+        lineWidth={3}
+        activeLineWidth={6}
+        inactiveLineWidth={3}
+        inactiveOpacity={0.15}
+        pointSize={10}
+        activePointSize={16}
+        inactivePointSize={0}
+        pointColor={{ theme: 'background' }}
+        pointBorderWidth={3}
+        activePointBorderWidth={3}
+        pointBorderColor={{ from: 'serie.color' }}
+        axisTop={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: '',
+            legendPosition: 'middle',
+            legendOffset: -36,
+            truncateTickAt: 0
+        }}
+        axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: '',
+            legendPosition: 'middle',
+            legendOffset: 32,
+            truncateTickAt: 0
+        }}
+        axisLeft={{
+            tickSize: 5,
+            tickPadding: 100,
+            tickRotation: 0,
+            legend: 'ranking',
+            legendPosition: 'middle',
+            legendOffset: -40,
+            truncateTickAt: 0
+        }}
+        margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
+        axisRight={null}
+        
+        />
+    );
+};
 
-}
-
-export default AreaChart;
+export default LineChart;

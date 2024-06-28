@@ -72,13 +72,13 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 79, bottom: 50, left: 100 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
         min: "auto",
         max: "auto",
-        stacked: true,
+        stacked: false,
         reverse: false,
       }}
       yFormat=" >-.2f"
@@ -90,7 +90,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         tickSize: 0,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "transportation", // added
+        legend: "month", // added
         legendOffset: 36,
         legendPosition: "middle",
       }}
@@ -114,11 +114,11 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
       useMesh={true}
       legends={[
         {
-          anchor: "bottom-right",
-          direction: "column",
+          anchor: "top",
+          direction: "row",
           justify: false,
           translateX: 100,
-          translateY: 0,
+          translateY: -50,
           itemsSpacing: 0,
           itemDirection: "left-to-right",
           itemWidth: 80,
@@ -126,12 +126,12 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           itemOpacity: 0.75,
           symbolSize: 12,
           symbolShape: "circle",
-          symbolBorderColor: "rgba(0, 0, 0, .5)",
+          symbolBorderColor: "rgba(255, 255, 255, .5)",
           effects: [
             {
               on: "hover",
               style: {
-                itemBackground: "rgba(0, 0, 0, .03)",
+                itemBackground: "rgba(255, 255, 255)",
                 itemOpacity: 1,
               },
             },
@@ -207,7 +207,7 @@ export const SummaryLineChart = ({ isCustomLineColors = false, isDashboard = fal
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 75, bottom: 50, left: 100 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
@@ -247,32 +247,32 @@ export const SummaryLineChart = ({ isCustomLineColors = false, isDashboard = fal
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
       useMesh={true}
-      legends={[
-        {
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 100,
-          translateY: 0,
-          itemsSpacing: 0,
-          itemDirection: "left-to-right",
-          itemWidth: 80,
-          itemHeight: 20,
-          itemOpacity: 0.75,
-          symbolSize: 12,
-          symbolShape: "circle",
-          symbolBorderColor: "rgba(0, 0, 0, .5)",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemBackground: "rgba(0, 0, 0, .03)",
-                itemOpacity: 1,
-              },
-            },
-          ],
-        },
-      ]}
+      // legends={[
+      //   {
+      //     anchor: "top",
+      //     direction: "row",
+      //     justify: false,
+      //     translateX: -100,
+      //     translateY: -50,
+      //     itemsSpacing: 0,
+      //     itemDirection: "left-to-right",
+      //     itemWidth: 80,
+      //     itemHeight: 20,
+      //     itemOpacity: 0.75,
+      //     symbolSize: 12,
+      //     symbolShape: "circle",
+      //     symbolBorderColor: "rgba(255, 255, 255, .5)",
+      //     effects: [
+      //       {
+      //         on: "hover",
+      //         style: {
+      //           itemBackground: "rgba(255, 255, 255)",
+      //           itemOpacity: 1,
+      //         },
+      //       },
+      //     ],
+      //   },
+      // ]}
     />
   );
 };

@@ -58,11 +58,17 @@ export const ProductPieChart = () => {
             fill: colors.grey[100],
           },
         },
+        tooltip: {
+          container: {
+            color: colors.primary[500],
+          },
+        },
       }}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+      margin={{ top: 100, right: 80, bottom: 80, left: 80 }}
       innerRadius={0.5}
       padAngle={0.7}
       cornerRadius={3}
+      color={{ scheme: 'category10' }}
       activeOuterRadiusOffset={8}
       borderColor={{
         from: "color",
@@ -80,35 +86,85 @@ export const ProductPieChart = () => {
         modifiers: [["darker", 2]],
       }}
       defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
+            {
+                id: 'dots',
+                type: 'patternDots',
+                background: 'inherit',
+                color: 'rgba(255, 255, 255, 0.3)',
+                size: 4,
+                padding: 1,
+                stagger: true
+            },
+            {
+                id: 'lines',
+                type: 'patternLines',
+                background: 'inherit',
+                color: 'rgba(255, 255, 255, 0.3)',
+                rotation: -45,
+                lineWidth: 6,
+                spacing: 10
+            }
+        ]}
+        fill={[
+            {
+                match: {
+                    id: 'Vinfast'
+                },
+                id: 'dots'
+            },
+            {
+                match: {
+                    id: 'Nissan'
+                },
+                id: 'dots'
+            },
+            {
+                match: {
+                    id: 'Audi'
+                },
+                id: 'dots'
+            },
+            {
+                match: {
+                    id: 'Mercedes'
+                },
+                id: 'dots'
+            },
+            {
+                match: {
+                    id: 'Ferrari'
+                },
+                id: 'lines'
+            },
+            {
+                match: {
+                    id: 'lisp'
+                },
+                id: 'lines'
+            },
+            {
+                match: {
+                    id: 'Tesla'
+                },
+                id: 'lines'
+            },
+            {
+                match: {
+                    id: 'Toyota'
+                },
+                id: 'lines'
+            }
+        ]}
       legends={[
         {
           anchor: "bottom",
-          direction: "row",
+          direction: "column",
           justify: false,
-          translateX: 0,
-          translateY: 56,
+          translateX: 225,
+          translateY: -300,
           itemsSpacing: 0,
-          itemWidth: 100,
-          itemHeight: 18,
+          itemWidth: 70,
+          itemHeight: 20,
           itemTextColor: "#999",
           itemDirection: "left-to-right",
           itemOpacity: 1,
@@ -182,6 +238,11 @@ export const OrderPieChart = () => {
             fill: colors.grey[100],
           },
         },
+        tooltip: {
+          container: {
+            color: colors.primary[500],
+          },
+        },
       }}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
       innerRadius={0.5}
@@ -217,12 +278,34 @@ export const OrderPieChart = () => {
           id: "lines",
           type: "patternLines",
           background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
+          color: "rgba(0, 0, 255, 0.3)",
           rotation: -45,
           lineWidth: 6,
           spacing: 10,
         },
       ]}
+      fill={[
+            {
+                match: {
+                    id: 'completed'
+                },
+                id: 'dots'
+            },
+            {
+                match: {
+                    id: 'cancelled'
+                },
+                id: 'line'
+            },
+            {
+                match: {
+                    id: 'pending'
+                },
+                id: 'dots'
+            },
+          
+           
+        ]}
       legends={[
         {
           anchor: "bottom",

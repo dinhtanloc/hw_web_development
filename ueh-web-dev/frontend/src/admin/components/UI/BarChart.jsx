@@ -59,6 +59,11 @@ const BarChart = ({ isDashboard = false }) => {
             fill: colors.grey[100],
           },
         },
+        tooltip: {
+          container: {
+            color: colors.primary[500],
+          },
+        },
       }}
       keys={["BMW", "Tesla", "Toyota", "Nissan", "Ferrari", "Mercedes",'Audi']}
       indexBy="month"
@@ -204,10 +209,15 @@ export const PaymentBarChart = ({ isDashboard = false }) => {
             fill: colors.grey[100],
           },
         },
+        tooltip: {
+          container: {
+            color: colors.primary[500],
+          },
+        },
       }}
       keys={["bank_transfer", "cheque", "mastercard", "paypal"]}
       indexBy="month"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
