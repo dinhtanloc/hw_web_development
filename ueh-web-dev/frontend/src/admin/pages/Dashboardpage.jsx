@@ -3,10 +3,11 @@ import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { mockTransactions } from "../assets/data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
+import InventoryIcon from '@mui/icons-material/Inventory';
 import Header from "./Header";
 import {SummaryLineChart} from "../components/UI/LineChart";
 import GeographyChart from "../components/UI/GeographyChart";
@@ -14,6 +15,7 @@ import BarChart from "../components/UI/BarChart";
 import StatBox from "../components/UI/StatBox";
 import ProgressCircle from "../components/UI/ProgressCircle";
 import useAxios from "../../client/utils/useAxios"
+import RecentTransactions from "../components/UI/RecentTransactions";
 import numeral from 'numeral';
 
 // import downloadExcel from "../utils/downloadExcel";
@@ -24,12 +26,26 @@ const Dashboard = () => {
   const colors = tokens(theme.palette.mode);
   const [OrderInfo, checkOrderInfo] = useState([]);
   const [ProductInfo, checkProductInfo] = useState([]);
+  const [orderRecent,setorderRecent] = useState([]);
   const api = useAxios();
   
   useEffect(() => {
     fetchTotalOrder();
     fetchProductInventory();
+    fetchOrderList();
   }, []);
+
+  const fetchOrderList = async () => {
+    try {
+        const response = await api.get('orders/admin/orders/first-ten-orders');
+        const orders = response.data;
+        const firstFiveOrders = orders.slice(0, 5);
+        setorderRecent(firstFiveOrders)
+        
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+    }
+};
   
   const fetchTotalOrder = async () => {
       try {
@@ -38,7 +54,6 @@ const Dashboard = () => {
           // checkStaff(response.data.is_staff)
           console.log(response.data)
           checkOrderInfo(response.data)
-          console.log(OrderInfo)
           
           
       } catch (error) {
@@ -138,7 +153,7 @@ const Dashboard = () => {
             progress="0.75"
             increase="+14%"
             icon={
-              <EmailIcon
+              <MonetizationOnIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -151,7 +166,6 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
-          {console.log(OrderInfo)}
           <StatBox
             title={new Intl.NumberFormat('en-US').format(OrderInfo.total_orders)}
             subtitle="Transactions"
@@ -177,7 +191,7 @@ const Dashboard = () => {
             progress="0.30"
             increase="+5%"
             icon={
-              <PersonAddIcon
+              <ProductionQuantityLimitsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -196,7 +210,7 @@ const Dashboard = () => {
             progress="0.80"
             increase="+43%"
             icon={
-              <TrafficIcon
+              <InventoryIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -229,7 +243,7 @@ const Dashboard = () => {
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                $59,342.32
+                {numeral(OrderInfo.total_revenue).format('0.00a $')}
               </Typography>
             </Box>
             <Box>
@@ -262,36 +276,17 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
-            <Box
-              key={`${transaction.txId}-${i}`}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
-            >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="h5"
-                  fontWeight="600"
-                >
-                  {transaction.txId}
-                </Typography>
-                <Typography color={colors.grey[100]}>
-                  {transaction.user}
-                </Typography>
-              </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
-              <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
-              >
-                ${transaction.cost}
-              </Box>
-            </Box>
+          {orderRecent.map((item, i) => (
+            <RecentTransactions
+              key={`${item.id}`}
+              item = {item}
+              // display="flex"
+              // justifyContent="space-between"
+              // alignItems="center"
+              // borderBottom={`4px solid ${colors.primary[500]}`}
+              // p="15px"
+            />
+            
           ))}
         </Box>
 

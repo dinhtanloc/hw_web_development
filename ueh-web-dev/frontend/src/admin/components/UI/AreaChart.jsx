@@ -111,6 +111,7 @@ const LineChart = () => {
         }}
         margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
         axisRight={null}
+        enableGridY={false}
         
         />
     );

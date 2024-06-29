@@ -55,7 +55,7 @@ const CarItem = (props) => {
           </select> */}
 
           <button className=" w-50 car__item-btn car__btn-rent">
-            <Link to={`/cars/${props.item.id}`}>Rent</Link>
+            <Link to={`/cars/${props.item.id}`}>Buy</Link>
           </button>
 
           <button className=" w-50 car__item-btn car__btn-details" onClick={gotoProductPage}>

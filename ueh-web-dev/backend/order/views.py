@@ -147,6 +147,12 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
             'order': order_serializer.data,
             'items': items_serializer.data
         })
+    
+    @action(detail=False, methods=['get'], url_path='first-ten-orders')
+    def first_ten_orders(self, request):
+        orders = Orders.objects.all().order_by('-created_at')[:10]
+        order_serializer = self.get_serializer(orders, many=True)
+        return Response(order_serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='cancel')
     def cancel_order(self, request, pk=None):

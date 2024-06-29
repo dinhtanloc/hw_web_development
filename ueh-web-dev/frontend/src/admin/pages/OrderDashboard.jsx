@@ -7,10 +7,15 @@ import { Button, IconButton, Typography, useTheme } from "@mui/material";
 import StatBox from "../components/UI/StatBox";
 import { tokens } from "../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
+// import EmailIcon from "@mui/icons-material/Email";
+// import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+// import PersonAddIcon from "@mui/icons-material/PersonAdd";
+// import TrafficIcon from "@mui/icons-material/Traffic";
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
+import InventoryIcon from '@mui/icons-material/Inventory';
 import Header from "./Header";
 import GeographyChart from "../components/UI/GeographyChart";
 import {OrderPieChart} from "../components/UI/PieChart"
@@ -122,7 +127,7 @@ const OrderDashboard = () =>{
             progress="0.75"
             increase="+14%"
             icon={
-              <EmailIcon
+              <MonetizationOnIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -160,7 +165,7 @@ const OrderDashboard = () =>{
             progress="0.30"
             increase="+5%"
             icon={
-              <PersonAddIcon
+              <ProductionQuantityLimitsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -179,7 +184,7 @@ const OrderDashboard = () =>{
             progress="0.80"
             increase="+43%"
             icon={
-              <TrafficIcon
+              <InventoryIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
