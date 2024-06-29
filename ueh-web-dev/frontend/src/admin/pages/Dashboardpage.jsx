@@ -1,7 +1,6 @@
 import React, { useEffect, useContext,useState } from "react";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockTransactions } from "../assets/data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';

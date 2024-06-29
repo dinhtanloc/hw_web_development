@@ -10,7 +10,6 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import InventoryIcon from '@mui/icons-material/Inventory';
-import { mockTransactions } from "../assets/data/mockData";
 import HorizontalBarChart from "../components/UI/HorizontalBarChart ";
 import Header from "./Header";
 import LineChart from "../components/UI/LineChart";
