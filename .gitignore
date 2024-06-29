@@ -5,3 +5,5 @@ test
 __pycache__
 # migrations
 node_modules
+*.pt
+*.jsonl
