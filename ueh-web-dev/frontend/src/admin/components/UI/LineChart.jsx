@@ -3,7 +3,6 @@ import React, {useState, useEffect} from "react";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 // import useAxios from "../../../client/utils/useAxios";
-import { mockLineData as data } from "../../assets/data/mockData";
 import useAxios from "../../../client/utils/useAxios";
 // import React, {useEffect, useState} from "react";
 

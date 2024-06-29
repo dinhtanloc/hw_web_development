@@ -3,7 +3,6 @@ import Slider from "react-slick";
 
 import "../../styles/testimonial.css";
 
-// import ava01 from "../../assets/all-images/ava-1.jpg";
 import ava01 from "/media/Loc_Dinh.jpg"
 import ava02 from "/media/ban_xoi.jpg";
 import ava03 from "/media/IT_Ando.jpg";

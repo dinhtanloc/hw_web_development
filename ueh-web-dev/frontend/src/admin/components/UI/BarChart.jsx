@@ -1,7 +1,6 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
-import { mockBarData as data } from "../../assets/data/mockData";
 import useAxios from "../../../client/utils/useAxios";
 import React, {useEffect, useState} from "react";
 

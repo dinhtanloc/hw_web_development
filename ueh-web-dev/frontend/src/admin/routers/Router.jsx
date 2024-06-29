@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "../pages/Dashboardpage";
 import Teampage from "../pages/Teampage";
 import Invoicespage from "../pages/Invoicespage";
@@ -15,7 +15,24 @@ import Addproduct from "../pages/Addproduct";
 import OrderDashboard from "../pages/OrderDashboard";
 import ProductDashboard from "../pages/ProductDashboard";
 import StaffDashboard from "../pages/StaffDashboard";
+import LoadingPage from "../components/UI/LoadingComponent";
 const Routers = () => {
+  const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
+
+      useEffect(() => {
+            setIsLoading(true);
+        
+            const timer = setTimeout(() => {
+              setIsLoading(false);
+            }, 1000); // Giả lập thời gian tải trang
+        
+            return () => clearTimeout(timer);
+          }, [location]);
+        
+          if (isLoading) {
+            return <LoadingPage />;
+          }
     return (
       <Routes>
               <Route path="/" element={<Navigate to="/admin" />} />

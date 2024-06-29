@@ -2,7 +2,7 @@ import { ResponsivePie } from "@nivo/pie";
 import React, {useState, useEffect} from 'react'
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
-import { mockPieData as data } from "../../assets/data/mockData";
+// import { mockPieData as data } from "../../assets/data/mockData";
 import useAxios from "../../../client/utils/useAxios";
 
 export const ProductPieChart = () => {
