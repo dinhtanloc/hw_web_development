@@ -34,9 +34,7 @@ const OrderDashboard = () =>{
     const [orderInfo, checkOrderInfo] = useState([]);
     const [orderFigure, checkorderFigure] = useState([]);
     const [Productquantity, Cancelproduct] =useState([])
-    // const [orderList, MakeorderList] = useState([]);
-    // const [orderList, MakeorderList] = useState([]);
-    // const [orderList, MakeorderList] = useState([]);
+    
     useEffect(() => {
       fetchOrderInfo();
         fetchTotalOrder();
@@ -110,7 +108,7 @@ const OrderDashboard = () =>{
       <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="140px"
+        gridAutoRows="129px"
         gap="20px"
       >
         {/* ROW 1 */}
@@ -257,7 +255,7 @@ const OrderDashboard = () =>{
                 <Typography
                 variant="h5"
                 fontWeight="600"
-                sx={{ padding: "30px 30px 0 30px" }}
+                sx={{ padding: "0px 0px 0 30px" }}
                 >
                 Percentage cancelled Orders
                 </Typography>

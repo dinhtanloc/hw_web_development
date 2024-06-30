@@ -47,7 +47,7 @@ const Sidebar = (data) => {
    
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
-          height:`140vh`,
+          height:`100vh`,
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",

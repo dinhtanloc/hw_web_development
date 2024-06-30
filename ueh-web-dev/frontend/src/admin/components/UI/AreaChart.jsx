@@ -22,6 +22,7 @@ const LineChart = () => {
         try {
             const response = await isProducts.get('orders/admin/time-series/');
             setProductData(response.data);
+            console.log(response.data)
         } catch (error) {
             console.error('Error fetching time series data:', error);
         }

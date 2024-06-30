@@ -5,7 +5,7 @@ export const styles = {
         // Border
         borderRadius: '50%',
         // Background 
-        backgroundImage: `url(https://miro.medium.com/v2/resize:fit:612/1*C_LFPy6TagD1SEN5SwmVRQ.jpeg)`, 
+        backgroundImage: `url(https://www.shutterstock.com/image-vector/chatbot-robo-advisor-adviser-chat-600nw-1127293046.jpg)`, 
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: '84px',

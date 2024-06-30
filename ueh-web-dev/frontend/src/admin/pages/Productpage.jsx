@@ -5,6 +5,7 @@ import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 import useAxios from "../../client/utils/useAxios";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 
 const ProductPage = () => {
   const theme = useTheme();
@@ -102,6 +103,7 @@ const ProductPage = () => {
 
   return (
     <Box m="20px">
+      <Header title="Products" subtitle="Inventory category out of stock" />
       <Box
         m="40px 0 0 0"
         height="75vh"

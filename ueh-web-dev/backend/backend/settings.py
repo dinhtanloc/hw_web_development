@@ -154,7 +154,7 @@ DATABASES = {
     }
 }
 
-DATA_GENERATION = False
+DATA_GENERATION = True
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
