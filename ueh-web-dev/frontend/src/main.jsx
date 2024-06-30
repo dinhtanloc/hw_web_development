@@ -20,6 +20,8 @@ import {NextUIProvider} from '@nextui-org/react'
 const url = window.location.pathname;
 
 
+
+
 if (url.startsWith('/admin')) {
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

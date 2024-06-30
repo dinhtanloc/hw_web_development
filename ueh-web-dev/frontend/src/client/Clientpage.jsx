@@ -1,6 +1,6 @@
 import Layout from "./components/Layout/Layout";
 
-function Clientpage() {
+const Clientpage=()=> {
   return <Layout />;
 }
 
