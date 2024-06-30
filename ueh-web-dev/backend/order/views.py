@@ -1,5 +1,6 @@
 import random
 from django.utils import timezone
+from rest_framework.permissions import AllowAny
 from .populate_data import orders_data, create_initial_orders, replace_color_in_image_url
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view,permission_classes, action
@@ -140,6 +141,11 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
     serializer_class = OrdersSerializer
     permission_classes = [IsAuthenticated, IsStaffUser]
 
+    def get_permissions(self):
+        if self.action == 'recent_car_orders':
+            return [AllowAny()]
+        return super().get_permissions()
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         order_items = OrdersItem.objects.filter(order=instance)
@@ -237,7 +243,7 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_200_OK)
     
 
-    @action(detail=False, methods=['get'], url_path='recent-car-orders')
+    @action(detail=False, methods=['get'], url_path='recent-car-orders', permission_classes=[AllowAny])
     def recent_car_orders(self, request):
         thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
         recent_orders = OrdersItem.objects.filter(order__created_at__gte=thirty_days_ago)

@@ -3,6 +3,6 @@ import React from 'react'
 export default function Avatar() {
 
     return (
-        <div className='ADE' >ADE</div>
+        <div className='ADE' >LBot</div>
     )
 }

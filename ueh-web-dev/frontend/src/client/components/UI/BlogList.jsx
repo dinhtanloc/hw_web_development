@@ -40,7 +40,6 @@ const BlogList = ({searchTerm}) => {
 
 const BlogItem = ({ item }) => {
   const { imgUrl, title, author, date, description, time } = item;
-  console.log(imgUrl)
   const img =imgUrl.replace("http://localhost:8000/media", "") && imgUrl.replace("http://127.0.0.1:8000/media", "")
 
   return (
