@@ -60,7 +60,8 @@ npm run dev
 cd backend
 
 // ./backend
-python manage.py makemigrations accounts blogs categories order
+python manage.py migrate
+python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver //start backend
 
