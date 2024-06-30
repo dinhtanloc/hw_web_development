@@ -1,75 +1,72 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import Header from "./Header";
 import useAxios from "../../client/utils/useAxios";
-import {Button} from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-
+import '../styles/invoices-page.css'; 
 
 const Invoicespage = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectedOrders, setSelectedOrders] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [loadingOrderId, setLoadingOrderId] = useState(null);
 
-
-  const orderList = useAxios()
+  const orderList = useAxios();
 
   useEffect(() => {
     fetchOrderList();
   }, []);
 
   const fetchOrderList = async () => {
-      try {
-          const response = await orderList.get('orders/admin/orders/');
-          setOrders(response.data)
-          
-      } catch (error) {
-          console.error('Error fetching user profile:', error);
-      }
+    try {
+      const response = await orderList.get('orders/admin/orders/');
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
   };
 
   const completeOrder = async (orderId) => {
-      try{
-        const response = await orderList.post(`orders/admin/orders/${orderId}/complete/`);
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-      } catch(error){
-        console.error('Error complete user order:', error);
+    setLoadingOrderId(orderId); 
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
+    try {
+      const response = await orderList.post(`orders/admin/orders/${orderId}/complete/`);
+      setLoadingOrderId(null); 
+      fetchOrderList();
+    } catch (error) {
+      setLoadingOrderId(null); 
+      console.error('Error completing order:', error);
+    }
+  };
 
-      }
-    };
-
-
-    const cancelOrder = async (orderId) => {
-      try{
-        const response = await orderList.post(`orders/admin/orders/${orderId}/cancel/`);
-          // setUserProfile(response.data);
-          // checkStaff(response.data.is_staff)
-      } catch(error){
-        console.error('Error cancel user order:', error);
-
-      }
-
+  const cancelOrder = async (orderId) => {
+    setLoadingOrderId(orderId); 
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
+    try {
+      const response = await orderList.post(`orders/admin/orders/${orderId}/cancel/`);
+      setLoadingOrderId(null); 
+      fetchOrderList();
+    } catch (error) {
+      setLoadingOrderId(null); 
+      console.error('Error canceling order:', error);
+    }
   };
 
   const handleCompleteOrders = async () => {
     for (const orderId of selectedOrders) {
       await completeOrder(orderId);
     }
-    fetchOrderList();
   };
 
   const handleCancelOrders = async () => {
-   
     for (const orderId of selectedOrders) {
       await cancelOrder(orderId);
     }
-    fetchOrderList();
   };
 
   const columns = [
@@ -126,19 +123,21 @@ const Invoicespage = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (params) => {
-        if (params.row.status === "completed") {
+        if (params.row.id === loadingOrderId) {
+          return <HourglassBottomIcon className="slowBlink" style={{ color: 'gray' }} />;
+        } else if (params.row.status === "completed") {
           return <CheckCircleIcon style={{ color: "green" }} />;
         } else if (params.row.status === "cancelled") {
           return <CancelIcon style={{color:"red"}}/>;
         } else {
-          return <HourglassBottomIcon   style={{ color: 'gray' }} />; 
+          return <HourglassBottomIcon style={{ color: 'gray' }} />;
         }
       },
     },
   ];
 
   const columnNames = columns.map(column => column.field);
-    
+
   const OrderFilterlist = orders.map(contact =>
     Object.keys(contact).reduce((acc, key) => {
       if (columnNames.includes(key)) {
@@ -189,15 +188,13 @@ const Invoicespage = () => {
         }}
       >
         <DataGrid 
-        rows={OrderFilterlist} 
-        columns={columns}
-        checkboxSelection 
-     
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectedOrders(newRowSelectionModel);
-        }}
-        rowSelectionModel={selectedOrders}
-          // {...data}
+          rows={OrderFilterlist} 
+          columns={columns}
+          checkboxSelection 
+          onRowSelectionModelChange={(newRowSelectionModel) => {
+            setSelectedOrders(newRowSelectionModel);
+          }}
+          rowSelectionModel={selectedOrders}
         />
       </Box>
     </Box>

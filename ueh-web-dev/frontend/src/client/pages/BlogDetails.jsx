@@ -6,7 +6,7 @@ import blogData from "../assets/data/blogData";
 import Helmet from "../components/Helmet/Helmet";
 import { Link } from "react-router-dom";
 
-import commentImg from "../assets/all-images/ava-1.jpg";
+import commentImg from "/media/Loc_Dinh.jpg";
 
 import "../styles/blog-details.css";
 

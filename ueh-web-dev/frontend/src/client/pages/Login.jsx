@@ -126,7 +126,7 @@ const Login = () => {
           <div className="overlay">
             <div className="overlay-panel overlay-left">
               <h1 className="h1_title">Welcome Back!</h1>
-              <p className='p_title'>To keep connected with us please login with your personal info</p>
+              <p className='p_title'>To inform newest products please login to join with us</p>
               <button className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</button>
             </div>
             <div className="overlay-panel overlay-right">

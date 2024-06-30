@@ -6,6 +6,7 @@ import "../styles/booking-form.css";
 import useAxios from "../utils/useAxios";
 import "../styles/order-details.css"
 import { format } from 'date-fns';
+import { useCart } from "../utils/cartContext";
 
 import {
   MDBCard,
@@ -20,6 +21,7 @@ import {
 
 
 const OrderDetails = () =>{
+    const {clearCart} =useCart();
     const { orderId } = useParams();
     const [orderItems, setOrderItems] = useState([]);
     const [date, setDate]=useState(null);
@@ -37,6 +39,7 @@ const OrderDetails = () =>{
             setOrderInfo(response.data.info);
             setTotalPrice(response.data.info.total_price)
             setDate(response.data.info.created_at)
+            clearCart();
         } catch (error) {
             console.error('Error fetching order items:', error);
         }

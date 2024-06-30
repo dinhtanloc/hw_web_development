@@ -126,6 +126,7 @@ const Confirmation = () => {
           });
           })
           );
+      // localStorage.removeItem('cartItems');
       navigate(`/confirmation/${response.data.id}`);
     } catch (error) {
       console.error("Error updating rating:", error);

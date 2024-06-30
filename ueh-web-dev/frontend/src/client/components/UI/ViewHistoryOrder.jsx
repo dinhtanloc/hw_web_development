@@ -2,6 +2,8 @@ import React, { useState} from "react";
 import { useCart } from "../../utils/cartContext";
 import "../../styles/cart-items.css"
 import styled,{ keyframes } from 'styled-components';
+import { format } from "date-fns";
+
 
 import {
   MDBCard,
@@ -33,8 +35,14 @@ const ViewHistoryOrder = ({ item}) => {
   const [liked, setLiked] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const {removeFromCart, updateCartItemQuantity} =useCart();
-  const{id, status, address,total_price ,payment_method ,note,shipping_deadline}=item
+  const{id, status, address,total_price ,payment_method ,note,created_at}=item
   const [amount, setQuantity] = useState(1); 
+  const formatDate = (isoDateString) => {
+    if(!isoDateString){return;}
+    const date = new Date(isoDateString);
+    return format(date, 'dd MMM, yyyy');
+  };
+
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -63,7 +71,7 @@ const ViewHistoryOrder = ({ item}) => {
                   md="2"
                   className="text-center d-flex justify-content-center align-items-center"
                 >
-                  <p className="text-muted mb-0"><b>{capitalizeFirstLetter(status?status:null)}</b>: {shipping_deadline}</p>
+                  <p className="text-muted mb-0"><b>{capitalizeFirstLetter(status?status:null)}</b>: {formatDate(created_at)}</p>
                 </MDBCol>
                 <MDBCol
                   md="2"
