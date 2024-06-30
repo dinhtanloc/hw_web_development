@@ -13,12 +13,15 @@ from accounts.permissions import IsStaffUser
 from rest_framework.response import Response
 
 
-if not Product.objects.exists():
-    for car in car_data:
-        Product.objects.create(**car)
-    print("Data imported successfully!")
-else:
-    print("Data already exists. No import needed.")
+try:
+    if not Product.objects.exists():
+        for car in car_data:
+            Product.objects.create(**car)
+        print("Data imported successfully!")
+    else:
+        print("Data already exists. No import needed.")
+except Exception as e:
+    print('Database categories_product cần được khởi tạo')
 
 
 class ProductPagination(PageNumberPagination):

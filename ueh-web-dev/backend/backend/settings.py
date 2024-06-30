@@ -478,3 +478,4 @@ JAZZMIN_UI_TWEAKS = {
 
 import django_heroku
 django_heroku.settings(locals())
+

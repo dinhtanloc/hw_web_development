@@ -19,14 +19,16 @@ from django.db import transaction
 
 import io
 
-if DATA_GENERATION:
-    if not Orders.objects.exists():
-        create_initial_orders(orders_data)
+try:
+    if DATA_GENERATION:
+        if not Orders.objects.exists():
+            create_initial_orders(orders_data)
+        else:
+            print('Orders already exist, skipping creation from JSON data.')
     else:
-        print('Orders already exist, skipping creation from JSON data.')
-else:
-    print('Data Generation is turned off')
-
+        print('Data Generation is turned off')
+except Exception as e:
+    print('Database orders_ cần được khởi tạo')
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
